@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: infinity-tower-ecs
+  datasource:
+    url: jdbc:mysql://localhost:3306/infinity_tower?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: "#Sankha1769"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+
+ecs:
+  simulation:
+    tick-interval-ms: 100
+    broadcast-interval-ms: 150
+    log-persist-interval-ms: 5000
