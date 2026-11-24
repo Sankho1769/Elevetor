@@ -23,13 +23,13 @@
   ---------------------------------------------------- */
   :root, body.theme-aubergine, body.theme-orange {
     --theme-name: 'orange-50-40-10';
-    --bg-base: #0B0E14;          /* 50% Dominant Base */
-    --bg-app: #0D1017;
-    --bg-topbar: #141822;        /* 40% Structural Layer */
-    --bg-panel: #131722;        /* 40% Structural Layer */
-    --bg-card: #191E2C;         /* 40% Structural Layer */
-    --bg-card-subtle: #151A26;
-    --bg-input: #0F131C;
+    --bg-base: #0A0B0E;          /* 50% Pure Carbon Base (Zero Blue) */
+    --bg-app: #0D0E11;
+    --bg-topbar: #131417;        /* 40% Structural Graphite Layer */
+    --bg-panel: #121316;        /* 40% Structural Graphite Layer */
+    --bg-card: #18191E;         /* 40% Structural Graphite Layer */
+    --bg-card-subtle: #141519;
+    --bg-input: #0F1013;
 
     --primary: #FF6B00;         /* 10% High-Energy Orange Accent */
     --primary-hover: #FF8533;
@@ -306,9 +306,9 @@
     border-color: rgba(255, 107, 0, 0.3);
   }
   .topbar-controls .btn:not(#pauseBtn):hover:not(:disabled) {
-    border-color: #FF6B00;
-    color: #FFA040;
-    box-shadow: 0 0 10px rgba(255, 107, 0, 0.25);
+    border-color: #FACC15;
+    color: #FACC15;
+    box-shadow: 0 0 10px rgba(250, 204, 21, 0.35);
   }
 
   .conn-indicator {
@@ -350,9 +350,9 @@
     font-weight: 700;
     padding: 5px 12px;
     background: rgba(255, 107, 0, 0.08);
-    border: 1px solid rgba(255, 107, 0, 0.38);
+    border: 1px solid rgba(250, 204, 21, 0.45);
     border-radius: 6px;
-    color: #FFA040;
+    color: #FACC15;
     letter-spacing: 0.04em;
     box-shadow: 0 0 10px rgba(255, 107, 0, 0.12);
   }
@@ -467,9 +467,9 @@
     font-weight: 800;
     padding: 2px 7px;
     border-radius: 4px;
-    background: rgba(255, 107, 0, 0.16);
-    color: #FF6B00;
-    border: 1px solid #FF6B00;
+    background: rgba(250, 204, 21, 0.16);
+    color: #FACC15;
+    border: 1px solid #FACC15;
     box-shadow: 0 0 8px rgba(255, 107, 0, 0.25);
   }
 
@@ -709,8 +709,8 @@
     font-size: 11.5px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    color: #FACC15; /* High-contrast Electric Yellow section title */
   }
 
   /* Form Elements */
@@ -1737,7 +1737,7 @@
     ctx.lineWidth = 1;
     ctx.strokeRect(labelW, topMargin, w - labelW - 16, machineRoomH);
 
-    ctx.fillStyle = machineRoomText;
+    ctx.fillStyle = '#FACC15';
     ctx.font = '700 10px monospace';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
@@ -1861,7 +1861,7 @@
       ctx.fillText(`CAR ${e.label}`, x0 + carW / 2, headerY + 13);
 
       const stateLabel = e.fault ? 'FAULT' : (e.maintenance ? 'MAINT' : (e.inspection ? 'INSPECT' : (e.state === 'moving' ? (e.direction > 0 ? '▲ UP' : '▼ DN') : 'IDLE')));
-      ctx.fillStyle = e.fault ? '#EF4444' : (e.state === 'moving' ? '#FF6B00' : '#9CA3AF');
+      ctx.fillStyle = e.fault ? '#EF4444' : (e.state === 'moving' ? '#FF6B00' : '#FACC15');
       ctx.font = '700 8.5px monospace';
       ctx.fillText(stateLabel, x0 + carW / 2, headerY + 25);
       ctx.textAlign = 'left';
@@ -1895,11 +1895,14 @@
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Counterweight
+      // Counterweight: Electric Safety Yellow (#FACC15)
       const cwY = shaftTop + (1 - frac) * (shaftBottom - shaftTop - 28);
-      ctx.fillStyle = isLight ? '#64748B' : '#475569';
+      ctx.fillStyle = '#FACC15';
       drawRoundRect(ctx, x0 + carW + 1, cwY, 5, 24, 2);
       ctx.fill();
+      ctx.strokeStyle = '#EAB308';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
 
       // Cabin Border & State Color (10% High-Energy Accent)
       let cabinColor = '#FF6B00'; // Default Orange Accent
