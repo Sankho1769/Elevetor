@@ -245,8 +245,9 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    background: var(--bg-topbar);
-    border-bottom: 1px solid var(--border-subtle);
+    background: linear-gradient(180deg, rgba(255, 107, 0, 0.08) 0%, var(--bg-topbar) 100%), var(--bg-topbar);
+    border-bottom: 2px solid #FF6B00;
+    box-shadow: 0 3px 16px rgba(255, 107, 0, 0.18);
     z-index: 50;
     gap: 16px;
   }
@@ -260,12 +261,13 @@
     width: 34px;
     height: 34px;
     border-radius: 8px;
-    background: linear-gradient(135deg, rgba(229, 169, 60, 0.2), rgba(142, 58, 117, 0.3));
-    border: 1px solid var(--border-strong);
+    background: linear-gradient(135deg, #FF6B00 0%, #FF8533 100%);
+    border: 1px solid #FFA040;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--accent);
+    color: #FFFFFF;
+    box-shadow: 0 2px 12px rgba(255, 107, 0, 0.45);
   }
   .brand-text h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -280,7 +282,7 @@
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: #FF6B00;
   }
 
   .topbar-controls {
@@ -288,6 +290,25 @@
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
+  }
+  #pauseBtn {
+    background: #FF6B00 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #FF8533 !important;
+    box-shadow: 0 2px 10px rgba(255, 107, 0, 0.4) !important;
+  }
+  #pauseBtn:hover:not(:disabled) {
+    background: #FF8533 !important;
+    border-color: #FFA040 !important;
+    box-shadow: 0 4px 14px rgba(255, 107, 0, 0.55) !important;
+  }
+  .topbar-controls .btn:not(#pauseBtn) {
+    border-color: rgba(255, 107, 0, 0.3);
+  }
+  .topbar-controls .btn:not(#pauseBtn):hover:not(:disabled) {
+    border-color: #FF6B00;
+    color: #FFA040;
+    box-shadow: 0 0 10px rgba(255, 107, 0, 0.25);
   }
 
   .conn-indicator {
@@ -302,9 +323,13 @@
     border: 1px solid var(--border-subtle);
   }
   .conn-indicator.connected {
-    color: var(--status-success);
-    border-color: rgba(16, 185, 129, 0.35);
-    background: var(--status-success-dim);
+    color: #FFA040;
+    border-color: rgba(255, 107, 0, 0.4);
+    background: rgba(255, 107, 0, 0.12);
+  }
+  .conn-indicator.connected .pulse-dot {
+    background: #FF6B00;
+    box-shadow: 0 0 8px #FF6B00;
   }
   .conn-indicator.disconnected {
     color: var(--status-danger);
@@ -324,11 +349,12 @@
     font-size: 11.5px;
     font-weight: 700;
     padding: 5px 12px;
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid var(--border-subtle);
+    background: rgba(255, 107, 0, 0.08);
+    border: 1px solid rgba(255, 107, 0, 0.38);
     border-radius: 6px;
-    color: #E2E8F0;
+    color: #FFA040;
     letter-spacing: 0.04em;
+    box-shadow: 0 0 10px rgba(255, 107, 0, 0.12);
   }
 
   /* Modern Engineering Buttons */
@@ -415,7 +441,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 18px;
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 1px solid rgba(255, 107, 0, 0.22);
     background: var(--bg-panel);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     z-index: 10;
@@ -441,9 +467,10 @@
     font-weight: 800;
     padding: 2px 7px;
     border-radius: 4px;
-    background: var(--accent-dim);
-    color: var(--accent);
-    border: 1px solid var(--border-strong);
+    background: rgba(255, 107, 0, 0.16);
+    color: #FF6B00;
+    border: 1px solid #FF6B00;
+    box-shadow: 0 0 8px rgba(255, 107, 0, 0.25);
   }
 
   #statOverlay {
