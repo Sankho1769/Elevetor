@@ -37,31 +37,22 @@ Actuator Health: http://localhost:8080/actuator/health
 
 The supervisory interface provides continuous live visualization of elevator car positions, velocity vectors, passenger loads, door cycles, machine room traction hoist states, and hoistway safety sensors.
 
-![Infinity Tower Luxury Claymorphic Supervisory SCADA Deck](docs/images/luxury-clay-dashboard.jpg)
+![Supervisory SCADA Dashboard Preview](docs/images/ui-dashboard-preview.svg)
 
-### SCADA UI/UX Engineering & Luxury Claymorphic Architecture
+### SCADA UI/UX Engineering Modernization
 
-The interface was systematically overhauled from informal prototypes into an ultra-clean, high-visibility luxury claymorphic engineering deck:
+The interface was overhauled from informal "vibe-coded" prototypes into an industrial-grade engineering dashboard:
 
-| Dimension | Previous Layout (Defect) | Modernized SCADA Engineering & Luxury Clay Architecture |
+| Dimension | Previous Layout (Issue) | Modernized SCADA Engineering UI |
 |---|---|---|
-| **Aesthetics & Atmosphere** | Generic dark palette with contrast clashes and visual clutter. | **Pearlescent Light Porcelain Surface** (`#F4F7FB` / `#F8FAFD`) with floating 3D white clay cards, inset specular sheens, and warm golden-amber accents (`#D4902A`). |
-| **Shaft Header Legibility** | Severe text collisions where `OVERHEAD TRACTION MOTORS` overlapped directly onto `CAR A..D` labels at identical y-coordinates. | **3D Brushed Chrome Hoistway Doors** (`CAR A`, `CAR B`, `CAR C`, `CAR D`) with live status indicators, white clay housings, and dedicated mezzanine offsets. |
-| **Elevator Pod Kinematics** | Flat rectangles without depth or passenger load clarity. | **3D Sapphire Metallic Blue Capsules** (`#1E40AF` / `#2563EB`) with glossy specular glass highlights, white car caps (`A`..`D`), animated split doors, passenger icons, and kinetic amber underglow. |
-| **Active Floor & Telemetry** | Monotonous grid without clear spatial awareness. | **Warm Peach Active Layer Bands** (`rgba(254, 215, 170, 0.70)`) with orange call accents, cyan VIP floor badges (`F10`..`F12`), peach Lobby pill (`F1`), and circular directional waiting beacons. |
-| **Floating Telemetry Stats** | Cluttered inline text labels. | **4 Floating Clay Stat Blocks**: Real-time Waiting count, 10.1s Avg Wait, Completed transfers, and Moving Cars fleet ratio. |
-| **Control Deck Navigation** | Overlapping single-line tab row cut off on standard widescreen displays. | Segmented 2-row × 4-column responsive grid (`Config`, `Requests`, `Algorithm`, `Safety`, `Analytics`, `Reports`, `Logs`, `Theme`) with golden-amber pill selection. |
+| **Shaft Header Legibility** | Severe text collisions where `OVERHEAD TRACTION MOTORS` overlapped directly onto `CAR A..D` labels at identical y-coordinates (`y = 33-40px`). | Dedicated overhead machine room mezzanine with decoupled vertical offsets (`y = 20px` for machine room status, `y = 52px` for car telemetry cards). |
+| **Vertical Aspect Scaling** | Cabin pods clipped at the lower boundary; basement floors (B1, B2) cut off on standard viewports. | Dynamic programmatic shaft height normalization (`rowH = shaftH / totalFloors`) guaranteeing 100% visible hoistways from B2 to F12 without viewport scrollbars. |
+| **Control Deck Navigation** | Overlapping single-line tab row cut off on standard widescreen displays. | Segmented 2-row × 4-column responsive grid providing instant one-click access across all 8 control subsystems. |
 | **User Feedback & Errors** | Blocking browser `alert()` modal dialogs interrupting real-time simulation loops. | Non-blocking, animated industrial toast notifications with precise error handling and graceful fallbacks. |
 | **Button State & Handlers** | Fragile pause/resume state binding causing unresponsive controls if clicked before manual start; potential `TypeError` on fault injection bounds. | Fully defensive state handlers with boundary protection (`Math.min(carIndex, elevators.length - 1)`), seamless pause/resume/start toggles, and dedicated topbar emergency reset. |
 | **Animation Fidelity & Lag** | Choppy 6.6 FPS canvas jumps tied directly to 150ms WebSocket packet arrivals; layout thrashing from per-frame `resizeCanvas()` and `innerHTML` reconstruction. | Hardware-accelerated 60/120 FPS `requestAnimationFrame` loop with smooth exponential kinematic interpolation, zero forced layout thrashing, $\mathcal{O}(1)$ pre-bucketed passenger lookups, and CSS containment. |
 
-#### Engineering Defect Audit Record (Before Fix)
-
-Prior to the senior-level architecture overhaul, the telemetry viewport suffered from multiple layout and scaling defects:
-
-![Legacy Vibe-Coded Layout Defect](docs/images/previous-layout-issue.jpg)
-
-*Defect highlights: (1) Machine room title collided with car labels; (2) Basements B1 and B2 clipped off the viewport base; (3) Non-standardized color palette lacking visual hierarchy; (4) Blocking browser alerts.*
+> **Previous Layout Defect Reference**: For defect audit records, see [docs/images/previous-layout-issue.jpg](docs/images/previous-layout-issue.jpg).
 
 ---
 
@@ -167,10 +158,6 @@ sequenceDiagram
 
 The platform embeds ten distinct industrial scheduling algorithms, fully selectable on-the-fly without restarting the simulation:
 
-![Multi-Car Fleet Kinematics & Dispatching in Motion](docs/images/fleet-dispatch-deck.png)
-
-*Live Fleet Dispatching: Visualizing multi-car vertical sweeping, passenger boarding queues, and ETA-minimized floor call allocations.*
-
 | Algorithm | Key Identifier | Strategic Logic | Ideal Traffic Profile | Computational Complexity |
 |---|---|---|---|:---:|
 | **SCAN** | `scan` | Classic bi-directional elevator sweep. Traverses the entire shaft from terminal to terminal before reversing. | Uniform high-density traffic across all floors | $\mathcal{O}(N \log N)$ |
@@ -191,10 +178,6 @@ The platform embeds ten distinct industrial scheduling algorithms, fully selecta
 ## 7. Safety Interlocks, Emergency Protocols & Fault Injection
 
 The simulation engine models rigorous building safety systems conforming to international elevator safety guidelines (EN 81-20/50 and ASME A17.1):
-
-![Safety Interlocks & Active Floor Layers](docs/images/active-floor-telemetry.png)
-
-*Dynamic Telemetry & Safety Layers: High-energy orange active floor bands highlighting floor calls, deceleration proximity zones, and interlock trips.*
 
 ### Building-Wide Emergency Protocols
 
