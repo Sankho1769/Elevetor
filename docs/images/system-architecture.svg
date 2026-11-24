@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" width="1000" height="520" style="background:#090C12; font-family:'Plus Jakarta Sans', -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#182338"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="hiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8E3A75"/>
+      <stop offset="100%" stop-color="#E5A93C"/>
+    </linearGradient>
+  </defs>
+
+  <text x="500" y="40" fill="#FFFFFF" font-size="18" font-weight="800" text-anchor="middle" letter-spacing="1">INFINITY TOWER — SYSTEM ARCHITECTURE</text>
+  <text x="500" y="62" fill="#E5A93C" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="0.5">HIGH-PERFORMANCE ZERO-DATABASE IN-MEMORY SIMULATION ENGINE</text>
+
+  <!-- Frontend Layer -->
+  <rect x="50" y="100" width="240" height="360" rx="10" fill="url(#boxGrad)" stroke="#334155" stroke-width="1.5"/>
+  <rect x="70" y="120" width="200" height="34" rx="6" fill="#8E3A75"/>
+  <text x="170" y="142" fill="#FFFFFF" font-size="12" font-weight="800" text-anchor="middle">SINGLE PAGE UI (SPA)</text>
+  <text x="70" y="180" fill="#94A3B8" font-size="11" font-weight="700">• HTML5 High-DPI Canvas</text>
+  <text x="70" y="202" fill="#94A3B8" font-size="11" font-weight="700">• Auto-Fit Shaft Kinematics</text>
+  <text x="70" y="224" fill="#94A3B8" font-size="11" font-weight="700">• 2×4 Segmented Navigation</text>
+  <text x="70" y="246" fill="#94A3B8" font-size="11" font-weight="700">• 10-Algorithm Selectors</text>
+  <text x="70" y="268" fill="#94A3B8" font-size="11" font-weight="700">• Emergency Matrix &amp; Faults</text>
+  <text x="70" y="290" fill="#94A3B8" font-size="11" font-weight="700">• Real-Time Sparkline Charts</text>
+  <text x="70" y="312" fill="#94A3B8" font-size="11" font-weight="700">• Toast Alert Feedback</text>
+  <text x="70" y="334" fill="#94A3B8" font-size="11" font-weight="700">• CSV / JSON Report Downloader</text>
+  <rect x="70" y="380" width="200" height="60" rx="6" fill="#0E1422" stroke="#25324A" stroke-width="1"/>
+  <text x="170" y="405" fill="#38BDF8" font-family="'JetBrains Mono', monospace" font-size="10.5" font-weight="700" text-anchor="middle">ws://.../ws/simulation</text>
+  <text x="170" y="425" fill="#E5A93C" font-family="'JetBrains Mono', monospace" font-size="10.5" font-weight="700" text-anchor="middle">http://.../api/*</text>
+
+  <!-- Connectors -->
+  <g stroke="#E5A93C" stroke-width="2" stroke-dasharray="4,4">
+    <line x1="290" y1="220" x2="380" y2="220"/>
+    <line x1="290" y1="360" x2="380" y2="360"/>
+  </g>
+  <text x="335" y="212" fill="#E5A93C" font-size="9" font-weight="800" text-anchor="middle">REST HTTP</text>
+  <text x="335" y="352" fill="#38BDF8" font-size="9" font-weight="800" text-anchor="middle">150ms WS</text>
+
+  <!-- Backend Controller & Service Layer -->
+  <rect x="380" y="100" width="260" height="360" rx="10" fill="url(#boxGrad)" stroke="#334155" stroke-width="1.5"/>
+  <rect x="400" y="120" width="220" height="34" rx="6" fill="#2563EB"/>
+  <text x="510" y="142" fill="#FFFFFF" font-size="12" font-weight="800" text-anchor="middle">SPRING BOOT 3.3.4</text>
+  <text x="400" y="180" fill="#94A3B8" font-size="11" font-weight="700">• 8 REST Controllers</text>
+  <text x="410" y="200" fill="#64748B" font-size="10">• SimulationController</text>
+  <text x="410" y="218" fill="#64748B" font-size="10">• RequestController</text>
+  <text x="410" y="236" fill="#64748B" font-size="10">• SafetyController</text>
+  <text x="410" y="254" fill="#64748B" font-size="10">• AlgorithmController</text>
+  <text x="410" y="272" fill="#64748B" font-size="10">• ReportController (CSV/JSON)</text>
+  <text x="410" y="290" fill="#64748B" font-size="10">• LogController (Bounded 5k)</text>
+  <text x="400" y="322" fill="#94A3B8" font-size="11" font-weight="700">• SimulationService</text>
+  <text x="400" y="344" fill="#94A3B8" font-size="11" font-weight="700">• WebSocket Broadcast Engine</text>
+  <text x="400" y="366" fill="#94A3B8" font-size="11" font-weight="700">• Scheduled Tasks (100ms Tick)</text>
+  <rect x="400" y="390" width="220" height="50" rx="6" fill="#0E1422" stroke="#25324A" stroke-width="1"/>
+  <text x="510" y="420" fill="#34D399" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700" text-anchor="middle">27 / 27 Automated Tests</text>
+
+  <!-- Connectors -->
+  <g stroke="#10B981" stroke-width="2">
+    <line x1="640" y1="280" x2="720" y2="280"/>
+  </g>
+  <text x="680" y="272" fill="#10B981" font-size="9" font-weight="800" text-anchor="middle">IN-MEMORY</text>
+
+  <!-- Core Simulation Engine & Schedulers -->
+  <rect x="720" y="100" width="240" height="360" rx="10" fill="url(#boxGrad)" stroke="#334155" stroke-width="1.5"/>
+  <rect x="740" y="120" width="200" height="34" rx="6" fill="#059669"/>
+  <text x="840" y="142" fill="#FFFFFF" font-size="12" font-weight="800" text-anchor="middle">SIMULATION CORE</text>
+  <text x="740" y="180" fill="#F1F5F9" font-size="11" font-weight="800">10 Scheduling Algorithms:</text>
+  <text x="740" y="200" fill="#E5A93C" font-size="10" font-weight="700">1. FCFS · 2. SCAN · 3. LOOK</text>
+  <text x="740" y="218" fill="#E5A93C" font-size="10" font-weight="700">4. SSTF · 5. Collective Control</text>
+  <text x="740" y="236" fill="#E5A93C" font-size="10" font-weight="700">6. Nearest Car · 7. Sector Based</text>
+  <text x="740" y="254" fill="#E5A93C" font-size="10" font-weight="700">8. Destination Dispatch</text>
+  <text x="740" y="272" fill="#E5A93C" font-size="10" font-weight="700">9. Adaptive Flow · 10. AI-Dynamic</text>
+
+  <text x="740" y="304" fill="#F1F5F9" font-size="11" font-weight="800">Kinematics &amp; Safety:</text>
+  <text x="740" y="324" fill="#94A3B8" font-size="10">• Dynamic Speed &amp; Accel/Decel</text>
+  <text x="740" y="342" fill="#94A3B8" font-size="10">• Door Dwell &amp; Load Modeling</text>
+  <text x="740" y="360" fill="#94A3B8" font-size="10">• 6 Building Emergency Modes</text>
+  <text x="740" y="378" fill="#94A3B8" font-size="10">• 6 Injectable Hardware Faults</text>
+
+  <rect x="740" y="398" width="200" height="42" rx="6" fill="#0E1422" stroke="#25324A" stroke-width="1"/>
+  <text x="840" y="424" fill="#F59E0B" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" text-anchor="middle">Zero-DB In-Memory State</text>
+</svg>

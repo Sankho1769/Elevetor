@@ -100,11 +100,25 @@ public final class Dto {
     }
 
     public static class LogEntryDto {
+        public long id;
         public int simDay;
         public String simClock;
         public String category;
         public String level;
         public String message;
+        public String createdAt;
+
+        public LogEntryDto() {}
+
+        public LogEntryDto(long id, int simDay, String simClock, String category, String level, String message, String createdAt) {
+            this.id = id;
+            this.simDay = simDay;
+            this.simClock = simClock;
+            this.category = category;
+            this.level = level;
+            this.message = message;
+            this.createdAt = createdAt;
+        }
     }
 
     public static class SnapshotDto {

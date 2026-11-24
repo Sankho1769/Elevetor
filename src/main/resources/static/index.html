@@ -1,1456 +1,2595 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Infinity Tower — Elevator Control &amp; Monitoring System</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg-0:#0B1220; --bg-1:#121A2B; --bg-2:#182335; --bg-2-hi:#1F2C42;
-    --glass:rgba(24,35,53,0.55); --glass-strong:rgba(24,35,53,0.75); --glass-hi:rgba(255,255,255,0.05);
-    --glass-border:rgba(255,255,255,0.12); --glass-inset:inset 0 1px 0 rgba(255,255,255,0.07);
-    --border:rgba(255,255,255,0.08); --border-strong:rgba(255,255,255,0.14);
-    --accent:#3B82F6; --accent-dim:rgba(59,130,246,0.16);
-    --accent-2:#14B8A6; --accent-2-dim:rgba(20,184,166,0.16);
-    --warning:#F59E0B; --warning-dim:rgba(245,158,11,0.14);
-    --danger:#EF4444; --danger-dim:rgba(239,68,68,0.14);
-    --success:#22C55E; --success-dim:rgba(34,197,94,0.14);
-    --text-0:#F8FAFC; --text-1:#CBD5E1; --text-2:#94A3B8;
-    --p-normal:#94A3B8; --p-staff:#3B82F6; --p-elderly:#F59E0B; --p-disabled:#14B8A6;
-    --p-vip:#A78BFA; --p-medical:#EF4444; --p-emergency:#EF4444; --p-firefighter:#FB7185;
-    --mono:'JetBrains Mono', ui-monospace, monospace;
-    --sans:'Inter','Poppins','Segoe UI', sans-serif;
-    --shadow-soft: 0 4px 24px rgba(0,0,0,0.28); --radius:10px;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;height:100%;background:var(--bg-0);color:var(--text-0);font-family:var(--sans);overflow:hidden;}
-  ::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:4px;}
-  .icon{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
-
-  #app{display:grid;grid-template-columns:1fr 420px;grid-template-rows:58px 1fr;height:100vh;width:100vw;grid-template-areas:"topbar topbar" "sim panel";}
-  @media (max-width:980px){ #app{grid-template-columns:1fr;grid-template-rows:58px 44vh 1fr;grid-template-areas:"topbar" "sim" "panel";} }
-
-  #topbar{grid-area:topbar;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:var(--glass);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--glass-border);box-shadow:var(--glass-inset);flex-wrap:wrap;gap:8px;}
-  .brand{display:flex;align-items:center;gap:11px;}
-  .brand .mark{width:32px;height:32px;border-radius:8px;background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;}
-  .brand-text{font-weight:700;font-size:15.5px;} .brand-sub{font-size:10px;color:var(--text-2);letter-spacing:.14em;text-transform:uppercase;font-weight:600;}
-  .topbar-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-  .clock{font-family:var(--mono);font-size:12.5px;color:var(--accent-2);background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--glass-border);border-radius:8px;padding:7px 10px;}
-  .conn-badge{font-size:10.5px;font-weight:700;border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px;border:1px solid var(--border);backdrop-filter:blur(10px);}
-  .conn-badge.connected{color:var(--success);border-color:var(--success);background:var(--success-dim);}
-  .conn-badge.disconnected{color:var(--danger);border-color:var(--danger);background:var(--danger-dim);}
-  .conn-dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
-  .btn{position:relative;background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--glass-border);color:var(--text-1);border-radius:8px;padding:8px 13px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.12s;box-shadow:var(--glass-inset);}
-  .btn:hover{border-color:var(--border-strong);background:var(--glass-strong);transform:translateY(-1px);box-shadow:var(--shadow-soft), var(--glass-inset);}
-  .btn:active{transform:translateY(1px) scale(.97);}
-  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
-  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
-  .btn.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
-  .btn.small{padding:6px 10px;font-size:11px;}
-
-  #sim{grid-area:sim;position:relative;background:radial-gradient(ellipse 900px 500px at 30% -8%, rgba(59,130,246,0.05), transparent 60%), var(--bg-0);overflow:hidden;display:flex;flex-direction:column;}
-  #simHeader{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 0 20px;gap:10px;flex-wrap:wrap;}
-  #simHeader h1{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:700;margin:0;display:flex;align-items:center;gap:8px;}
-  #statOverlay{display:flex;gap:10px;flex-wrap:wrap;}
-  .stat-chip{background:var(--glass);backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);border:1px solid var(--glass-border);border-radius:9px;padding:7px 13px;min-width:74px;box-shadow:var(--shadow-soft), var(--glass-inset);}
-  .stat-chip .v{font-family:var(--mono);font-size:16px;font-weight:700;} .stat-chip .l{font-size:9px;color:var(--text-2);text-transform:uppercase;font-weight:600;margin-top:3px;}
-  #shaftWrap{flex:1;position:relative;overflow:auto;padding:10px 20px 20px 20px;}
-  #alertBar{position:absolute;top:0;left:0;right:0;padding:9px 20px;background:rgba(239,68,68,0.85);backdrop-filter:blur(10px);color:#fff;font-size:12px;font-weight:700;display:none;align-items:center;gap:10px;z-index:30;}
-  #startOverlay{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(11,18,32,0.55);backdrop-filter:blur(14px);transition:opacity .3s,visibility .3s;}
-  #startOverlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
-  .start-card{background:var(--glass-strong);backdrop-filter:blur(20px) saturate(1.4);border:1px solid var(--glass-border);border-radius:14px;padding:32px 36px;text-align:center;max-width:340px;box-shadow:var(--shadow-soft), var(--glass-inset);}
-  .start-card h2{font-size:16px;margin:0 0 6px 0;} .start-card p{font-size:12px;color:var(--text-2);margin:0 0 22px 0;line-height:1.5;}
-  .fab-start{background:var(--accent);border:none;color:#fff;border-radius:10px;padding:13px 26px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:9px;box-shadow:0 8px 30px rgba(59,130,246,0.4);}
-
-  #panel{grid-area:panel;background:var(--glass);backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3);border-left:1px solid var(--glass-border);display:flex;flex-direction:column;overflow:hidden;}
-  #tabs{display:flex;border-bottom:1px solid var(--glass-border);overflow-x:auto;background:rgba(18,26,43,0.35);flex-shrink:0;}
-  .tab{flex:0 0 auto;padding:13px 14px;font-size:11px;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-weight:700;text-transform:uppercase;}
-  .tab:hover{color:var(--text-0);background:var(--bg-2);} .tab.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--accent-dim);}
-  #tabContent{flex:1;overflow-y:auto;padding:18px;}
-  .panel-section{margin-bottom:22px;} .panel-section h3{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-2);margin:0 0 12px 0;display:flex;gap:8px;font-weight:700;}
-  .panel-section h3::after{content:'';flex:1;height:1px;background:var(--border);align-self:center;}
-  .field-row{display:flex;gap:10px;margin-bottom:10px;} .field{flex:1;display:flex;flex-direction:column;gap:5px;}
-  .field label{font-size:10.5px;color:var(--text-2);font-weight:600;}
-  .field input,.field select{background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--glass-border);color:var(--text-0);border-radius:8px;padding:8px 10px;font-size:12.5px;font-family:var(--mono);width:100%;}
-  .checkline{display:flex;align-items:center;gap:9px;font-size:12px;margin-bottom:6px;cursor:pointer;}
-  .algo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;} .algo-card{position:relative;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:9px;padding:10px 11px;cursor:pointer;font-size:11px;color:var(--text-1);box-shadow:var(--glass-inset);}
-  .algo-card:hover{border-color:var(--border-strong);transform:translateY(-2px);box-shadow:var(--shadow-soft), var(--glass-inset);} .algo-card.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
-  .algo-card .name{font-weight:700;display:block;margin-bottom:3px;} .algo-card .desc{font-size:9.5px;color:var(--text-2);line-height:1.35;}
-  .analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;} .metric-card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:10px;padding:12px;box-shadow:var(--glass-inset);}
-  .metric-card .mc-top{display:flex;justify-content:space-between;margin-bottom:8px;} .metric-card .mc-value{font-family:var(--mono);font-size:19px;font-weight:700;}
-  .metric-card .mc-label{font-size:9.5px;color:var(--text-2);text-transform:uppercase;font-weight:600;margin-top:2px;}
-  .safety-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;} .safety-btn{position:relative;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:9px;padding:10px;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:8px;font-weight:600;box-shadow:var(--glass-inset);}
-  .safety-btn:hover{border-color:var(--border-strong);transform:translateY(-1px);} .safety-btn.active{border-color:var(--danger);color:var(--danger);background:var(--danger-dim);}
-  .elevator-select{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;} .es-btn{border:1px solid var(--glass-border);background:var(--glass);backdrop-filter:blur(8px);border-radius:7px;padding:6px 10px;font-size:11px;cursor:pointer;font-family:var(--mono);font-weight:700;}
-  .es-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
-  .hint{font-size:10px;color:var(--text-2);line-height:1.5;margin-top:6px;}
-  .log-filters{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;} .chip-filter{border:1px solid var(--glass-border);background:var(--glass);backdrop-filter:blur(8px);color:var(--text-2);border-radius:14px;padding:4px 11px;font-size:10px;cursor:pointer;font-weight:600;}
-  .chip-filter.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
-  #logSearch{width:100%;margin-bottom:10px;background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--glass-border);color:var(--text-0);border-radius:8px;padding:7px 10px;font-size:11.5px;}
-  #logList{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:10.5px;}
-  .log-entry{padding:7px 9px;border-radius:7px;border-left:3px solid var(--border-strong);background:var(--glass);backdrop-filter:blur(8px);color:var(--text-1);}
-  .log-entry.dispatch{border-left-color:var(--accent);} .log-entry.passenger{border-left-color:var(--accent-2);}
-  .log-entry.safety{border-left-color:var(--warning);} .log-entry.fault{border-left-color:var(--danger);} .log-entry.system{border-left-color:var(--accent-2);}
-  .log-entry .t{color:var(--text-2);margin-right:6px;}
-  .bar-track{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);border-radius:5px;height:14px;overflow:hidden;margin-top:4px;} .bar-fill{height:100%;background:var(--accent);}
-</style>
-</head>
-<body>
-<div id="app">
-  <div id="topbar">
-    <div class="brand">
-      <div class="mark"><svg class="icon" style="width:20px;height:20px;stroke:var(--accent)" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="1.5"/><path d="M9 8h6M9 12h6M9 16h2"/></svg></div>
-      <div><div class="brand-text" id="buildingNameDisplay">Infinity Tower</div><div class="brand-sub">Live Backend · Elevator Control System</div></div>
-    </div>
-    <div class="topbar-right">
-      <div class="conn-badge disconnected" id="connBadge"><span class="conn-dot"></span><span id="connText">Connecting…</span></div>
-      <div class="clock" id="simClock">DAY 1 · 00:00:00</div>
-      <button class="btn" id="pauseBtn">Pause</button>
-      <button class="btn" id="speedBtn">1×</button>
-    </div>
-  </div>
-  <div id="sim">
-    <div id="startOverlay">
-      <div class="start-card">
-        <h2>Infinity Tower Control System</h2>
-        <p>Connected to the live backend. Start the simulation to begin dispatching elevators server-side.</p>
-        <button class="fab-start" id="startFab">Start Simulation</button>
-      </div>
-    </div>
-    <div id="alertBar"><span id="alertText"></span></div>
-    <div id="simHeader"><h1>Live Building Monitor</h1><div id="statOverlay"></div></div>
-    <div id="shaftWrap"><canvas id="shaftCanvas"></canvas></div>
-  </div>
-  <div id="panel">
-    <div id="tabs">
-      <div class="tab active" data-tab="config">Config</div>
-      <div class="tab" data-tab="requests">Requests</div>
-      <div class="tab" data-tab="algorithm">Algorithm</div>
-      <div class="tab" data-tab="safety">Safety</div>
-      <div class="tab" data-tab="analytics">Analytics</div>
-      <div class="tab" data-tab="reports">Reports</div>
-      <div class="tab" data-tab="logs">Logs</div>
-    </div>
-    <div id="tabContent"></div>
-  </div>
-</div>
-<script>
-(function(){
-const API = window.location.origin;
-const WS_URL = (window.location.protocol==='https:'?'wss':'ws')+'://'+window.location.host+'/ws/simulation';
-
-const ui = {
-  activeTab:'config', theme:'dark', started:false,
-  logFilter:'all', logSearch:'', selectedElevatorForFault:0,
-  algoStats:{}, history:{waitTime:[],travelTime:[],utilization:[],energy:[],requestsPerMin:[],faults:[]}, lastSampleSec:0, lastTotalRequests:0
-};
-let snapshot = null;
-let ws = null;
-
-const ALGO_META = {
-  fcfs:'First request, first served, in arrival order.',
-  scan:'Sweeps to the end of the shaft, then reverses.',
-  look:'Reverses at the last request, not the shaft end.',
-  sstf:'Always serves the physically closest request.',
-  collective:'Picks up same-direction calls along the way.',
-  nearest:'Hall call goes to the nearest idle-capable car.',
-  sector:'Each car owns a floor band; calls route by sector.',
-  destination:'Groups riders by destination before boarding.',
-  adaptive:'Switches strategy with live traffic conditions.',
-  ai:'Weighted multi-factor scoring per elevator.'
-};
-const PRIORITY_COLOR = {normal:'var(--p-normal)',staff:'var(--p-staff)',elderly:'var(--p-elderly)',disabled:'var(--p-disabled)',vip:'var(--p-vip)',medical:'var(--p-medical)',emergency:'var(--p-emergency)',firefighter:'var(--p-firefighter)'};
-
-async function api(path, method, body){
-  const res = await fetch(API+path, {
-    method: method||'GET',
-    headers: body ? {'Content-Type':'application/json'} : undefined,
-    body: body ? JSON.stringify(body) : undefined
-  });
-  if(!res.ok) throw new Error('API error '+res.status+' on '+path);
-  const ct = res.headers.get('content-type')||'';
-  return ct.includes('application/json') ? res.json() : res.text();
-}
-
-function connectWebSocket(){
-  ws = new WebSocket(WS_URL);
-  ws.onopen = ()=>{ setConn(true); };
-  ws.onclose = ()=>{ setConn(false); setTimeout(connectWebSocket, 2000); };
-  ws.onerror = ()=>{ setConn(false); };
-  ws.onmessage = (evt)=>{
-    snapshot = JSON.parse(evt.data);
-    onSnapshot();
-  };
-}
-function setConn(connected){
-  const badge = document.getElementById('connBadge');
-  badge.className = 'conn-badge '+(connected?'connected':'disconnected');
-  document.getElementById('connText').textContent = connected? 'Live · Connected' : 'Reconnecting…';
-}
-
-function onSnapshot(){
-  if(!snapshot) return;
-  document.getElementById('buildingNameDisplay').textContent = snapshot.building.name;
-  renderClock();
-  renderStatOverlay();
-  drawShaft();
-  sampleHistory();
-  if(ui.activeTab==='analytics') renderAnalyticsTab();
-  if(ui.activeTab==='requests') renderHallCallList();
-  if(ui.activeTab==='algorithm') renderAlgoBars();
-  if(ui.activeTab==='safety') renderTab('safety');
-  syncPauseButton();
-}
-
-function sampleHistory(){
-  if(snapshot.simSeconds - ui.lastSampleSec < 2) return;
-  const elapsedMin = Math.max(0.033, (snapshot.simSeconds - ui.lastSampleSec) / 60);
-  const requestsDelta = snapshot.analytics.totalRequests - (ui.lastTotalRequests||0);
-  ui.lastTotalRequests = snapshot.analytics.totalRequests;
-  ui.lastSampleSec = snapshot.simSeconds;
-  push('waitTime', snapshot.analytics.avgWaitTime);
-  push('travelTime', snapshot.analytics.avgTravelTime);
-  push('requestsPerMin', requestsDelta / elapsedMin);
-  push('utilization', snapshot.analytics.utilizationPct);
-  push('energy', snapshot.analytics.energy);
-  push('faults', snapshot.analytics.faultCount);
-  if(!ui.algoStats[snapshot.algorithm]) ui.algoStats[snapshot.algorithm] = [];
-  ui.algoStats[snapshot.algorithm].push(snapshot.analytics.avgWaitTime);
-  if(ui.algoStats[snapshot.algorithm].length>20) ui.algoStats[snapshot.algorithm].shift();
-}
-function push(key,val){ const a=ui.history[key]; a.push(val); if(a.length>60) a.shift(); }
-
-function fmtClock(sec){
-  const s=Math.floor(sec); const hh=String(Math.floor(s/3600)%24).padStart(2,'0');
-  const mm=String(Math.floor(s/60)%60).padStart(2,'0'); const ss=String(s%60).padStart(2,'0');
-  return hh+':'+mm+':'+ss;
-}
-function floorLabel(f){
-  if(!snapshot) return String(f);
-  if(f===snapshot.building.lobby) return 'LOBBY';
-  if(f<0) return 'B'+Math.abs(f);
-  return 'F'+f;
-}
-function floorTag(f){
-  const b = snapshot.building;
-  if(f===b.lobby) return 'Reception';
-  if(b.vipFloors.includes(f)) return 'VIP Floor';
-  if(b.serviceFloors.includes(f)) return 'Service';
-  if(b.mechanicalFloors.includes(f)) return 'Mechanical';
-  if(b.parkingFloors.includes(f)) return 'Parking';
-  if(f<0) return snapshot.safety.flood? 'Basement · LOCKED' : 'Basement';
-  return '';
-}
-function floorRange(){
-  const b=snapshot.building; const floors=[];
-  const bottom = b.basements>0? -b.basements : 1;
-  for(let f=b.floors; f>=bottom; f--){ if(f===0) continue; floors.push(f); }
-  return floors;
-}
-
-function renderClock(){
-  document.getElementById('simClock').textContent = 'DAY '+snapshot.simDay+' · '+fmtClock(snapshot.simSeconds);
-}
-function renderStatOverlay(){
-  const a = snapshot.analytics;
-  const chips = [['Waiting', a.waitingPassengers], ['Avg Wait', a.avgWaitTime.toFixed(1)+'s'], ['Completed', a.completed],
-    ['Active Cars', snapshot.elevators.filter(e=>e.state==='moving').length+'/'+snapshot.elevators.length]];
-  document.getElementById('statOverlay').innerHTML = chips.map(c=>`<div class="stat-chip"><div class="v">${c[1]}</div><div class="l">${c[0]}</div></div>`).join('');
-  const s = snapshot.safety; const alerts=[];
-  if(s.fire) alerts.push('FIRE ALARM ACTIVE'); if(s.smoke) alerts.push('SMOKE DETECTED');
-  if(s.estop) alerts.push('EMERGENCY STOP'); if(s.power) alerts.push('POWER OUTAGE');
-  if(s.earthquake) alerts.push('EARTHQUAKE PROTOCOL'); if(s.flood) alerts.push('FLOOD PROTOCOL — BASEMENTS LOCKED');
-  const bar = document.getElementById('alertBar');
-  if(alerts.length){ bar.style.display='flex'; document.getElementById('alertText').textContent = alerts.join(' · '); }
-  else bar.style.display='none';
-}
-
-const canvas = document.getElementById('shaftCanvas'); const ctx = canvas.getContext('2d');
-function resizeCanvas(){
-  const wrap = document.getElementById('shaftWrap');
-  const floors = snapshot? floorRange() : [1];
-  const elCount = snapshot? snapshot.elevators.length : 4;
-  const w = Math.max(wrap.clientWidth-20, elCount*140+150);
-  const h = Math.max(wrap.clientHeight-20, (floors.length+1)*48+70);
-  canvas.width=w*devicePixelRatio; canvas.height=h*devicePixelRatio;
-  canvas.style.width=w+'px'; canvas.style.height=h+'px';
-  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-}
-window.addEventListener('resize', resizeCanvas);
-function cssVar(n){ return getComputedStyle(document.body).getPropertyValue(n).trim(); }
-function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
-function drawPersonIcon(x,y,color,scale){ ctx.fillStyle=color; ctx.beginPath(); ctx.arc(x,y-scale*1.2,scale*0.62,0,7); ctx.fill(); roundRect(ctx,x-scale*0.75,y-scale*0.5,scale*1.5,scale*1.5,scale*0.5); ctx.fill(); }
-
-function drawShaft(){
-  if(!snapshot) return;
-  resizeCanvas();
-  const floors = floorRange().sort((a,b)=>b-a);
-  const w=canvas.width/devicePixelRatio, h=canvas.height/devicePixelRatio;
-  ctx.clearRect(0,0,w,h);
-  const labelW=78, roofRowH=34, rowH=(h-40-roofRowH)/floors.length;
-  const carW = Math.min(104, (w-labelW-24)/snapshot.elevators.length - 12);
-  const text1=cssVar('--text-1'), text2=cssVar('--text-2'), border=cssVar('--border-strong');
-  const accent=cssVar('--accent'), danger=cssVar('--danger'), warning=cssVar('--warning'), success=cssVar('--success'), vip=cssVar('--p-vip'), bg2=cssVar('--bg-2');
-
-  ctx.fillStyle=bg2; ctx.fillRect(labelW,16,w-labelW-14,roofRowH-2);
-  ctx.strokeStyle=border; ctx.strokeRect(labelW,16,w-labelW-14,roofRowH-2);
-  ctx.fillStyle=text2; ctx.font='700 10px sans-serif'; ctx.textAlign='left'; ctx.textBaseline='middle';
-  ctx.fillText('◤ ROOF · MECHANICAL DECK', labelW+10, 16+roofRowH/2-1);
-
-  floors.forEach((f,i)=>{
-    const y=20+roofRowH+i*rowH;
-    const activeFloor = snapshot.elevators.some(e=>Math.round(e.currentFloor)===f && (e.doorState==='open'||e.doorState==='opening'));
-    if(activeFloor){ ctx.fillStyle=accent+'14'; ctx.fillRect(labelW,y,w-labelW-14,rowH); }
-    ctx.strokeStyle=border; ctx.beginPath(); ctx.moveTo(labelW,y+rowH); ctx.lineTo(w-10,y+rowH); ctx.stroke();
-    ctx.fillStyle = f===snapshot.building.lobby? accent : (snapshot.building.vipFloors.includes(f)? vip : text1);
-    ctx.font='700 12px monospace'; ctx.fillText(floorLabel(f), 8, y+rowH/2-6);
-    const tag = floorTag(f);
-    if(tag){ ctx.fillStyle=text2; ctx.font='600 8.5px sans-serif'; ctx.fillText(tag, 8, y+rowH/2+8); }
-    const waitCount = snapshot.passengers.filter(p=>p.state==='waiting' && p.origin===f).length;
-    if(waitCount>0){
-      ctx.fillStyle=warning; ctx.beginPath(); ctx.arc(labelW-12,y+rowH/2-10,7,0,7); ctx.fill();
-      ctx.fillStyle='#1a1206'; ctx.font='700 9px monospace'; ctx.textAlign='center';
-      ctx.fillText(waitCount, labelW-12, y+rowH/2-9); ctx.textAlign='left';
-    }
-  });
-
-  snapshot.elevators.forEach((e,ei)=>{
-    const x0=labelW+24+ei*(carW+16), shaftTop=16+roofRowH, shaftBottom=shaftTop+floors.length*rowH-4;
-    ctx.strokeStyle=border; ctx.strokeRect(x0-4,shaftTop,carW+8,shaftBottom-shaftTop);
-    ctx.fillStyle=text2; ctx.font='700 10px sans-serif'; ctx.textAlign='center'; ctx.fillText('CAR '+e.label, x0+carW/2, shaftTop-10); ctx.textAlign='left';
-
-    const topFloor=floors[0], botFloor=floors[floors.length-1];
-    const frac=(topFloor-e.currentFloor)/(topFloor-botFloor);
-    const carY = shaftTop+frac*(shaftBottom-shaftTop-rowH*0.82);
-    const carH = rowH*0.82, carCenterX = x0+carW/2;
-
-    ctx.strokeStyle=border; ctx.lineWidth=1.2; ctx.setLineDash([2,4]);
-    ctx.lineDashOffset = -((snapshot.simSeconds*40)%6)*e.direction;
-    ctx.beginPath(); ctx.moveTo(carCenterX,shaftTop); ctx.lineTo(carCenterX,carY); ctx.stroke(); ctx.setLineDash([]);
-
-    let color=accent;
-    if(e.fault) color=danger; else if(e.maintenance||e.inspection) color=warning;
-    else if(e.state==='moving') color=success; else if(e.fault||e.maintenance) color=danger;
-
-    ctx.save(); ctx.shadowColor=color; ctx.shadowBlur=10;
-    const grad=ctx.createLinearGradient(x0,carY,x0,carY+carH); grad.addColorStop(0,color+'2A'); grad.addColorStop(1,color+'10');
-    ctx.fillStyle=grad; ctx.strokeStyle=color; ctx.lineWidth=1.6;
-    roundRect(ctx,x0,carY,carW,carH,6); ctx.fill(); ctx.stroke(); ctx.restore();
-
-    const doorGap = e.doorState==='closed'? 0 : (e.doorState==='open'?1:e.doorProgress) * (carW*0.42);
-    ctx.fillStyle=cssVar('--bg-0');
-    if(e.doorState!=='closed'){ ctx.fillRect(x0+2,carY+2,Math.max(0,doorGap),carH-4); ctx.fillRect(x0+carW-2-doorGap,carY+2,Math.max(0,doorGap),carH-4); }
-    ctx.strokeStyle=color+'70'; ctx.beginPath(); ctx.moveTo(x0+carW/2,carY+2); ctx.lineTo(x0+carW/2,carY+carH-2); ctx.stroke();
-
-    ctx.fillStyle=cssVar('--bg-1'); ctx.strokeStyle=border; roundRect(ctx,x0+carW/2-19,carY-24,38,16,4); ctx.fill(); ctx.stroke();
-    ctx.fillStyle=color; ctx.font='700 12px monospace'; ctx.textAlign='center'; ctx.fillText(floorLabel(Math.round(e.currentFloor)), x0+carW/2, carY-16);
-    ctx.font='11px sans-serif'; ctx.fillStyle=e.direction!==0?color:text2;
-    ctx.fillText(e.direction>0?'▲':e.direction<0?'▼':'—', x0+carW/2, carY-30); ctx.textAlign='left';
-
-    const onboard = snapshot.passengers.filter(p=>p.state==='riding' && p.assignedElevatorId===e.id);
-    const dotsPerRow=Math.ceil(Math.sqrt(snapshot.building.capacity));
-    onboard.forEach((p,pi)=>{
-      const col=pi%dotsPerRow, row=Math.floor(pi/dotsPerRow);
-      drawPersonIcon(x0+10+col*9, carY+11+row*9, cssVar(PRIORITY_COLOR[p.priority]||'--p-normal'), 3.1);
-    });
-
-    const occFrac=e.passengerCount/snapshot.building.capacity, weightFrac=e.weight/snapshot.building.weightLimit;
-    const barY=carY+carH+6;
-    ctx.fillStyle=border; ctx.fillRect(x0,barY,carW,3);
-    ctx.fillStyle= occFrac>0.9?danger:occFrac>0.7?warning:cssVar('--accent-2');
-    ctx.fillRect(x0,barY,carW*Math.min(1,occFrac),3);
-    ctx.font='600 8px monospace'; ctx.fillStyle=text2; ctx.fillText(e.passengerCount+'/'+snapshot.building.capacity, x0, barY+13);
-    ctx.textAlign='right'; ctx.fillStyle= weightFrac>0.95?danger:weightFrac>0.75?warning:text2;
-    ctx.fillText(Math.round(e.weight)+'kg', x0+carW, barY+13); ctx.textAlign='left';
-  });
-
-  floors.forEach((f,i)=>{
-    const y=20+roofRowH+i*rowH;
-    const waiting = snapshot.passengers.filter(p=>p.state==='waiting' && p.origin===f);
-    waiting.slice(0,8).forEach((p,pi)=>{
-      const px=labelW-8-((pi%4)*10), py=y+rowH/2+10+Math.floor(pi/4)*10;
-      drawPersonIcon(px,py, cssVar(PRIORITY_COLOR[p.priority]||'--p-normal'), 2.6);
-    });
-  });
-}
-
-function tabConfig(){
-  const b = snapshot? snapshot.building : {name:'Infinity Tower',floors:12,basements:2,lobby:1,idleFloor:1,parkingFloors:[-1,-2],vipFloors:[10,11,12],serviceFloors:[-2],mechanicalFloors:[],elevatorCount:4,capacity:8,weightLimit:900,maxSpeed:2.2,acceleration:1.1,deceleration:1.1,doorOpenTime:1.6,doorCloseTime:1.6,loadTime:1.2,unloadTime:1.0,energySaving:false};
-  return `
-  <div class="panel-section"><h3>Building Identity</h3>
-    <div class="field-row"><div class="field"><label>Building Name</label><input id="cfgName" value="${b.name}"/></div></div>
-    <div class="field-row"><div class="field"><label>Floors</label><input id="cfgFloors" type="number" value="${b.floors}"/></div><div class="field"><label>Basements</label><input id="cfgBasements" type="number" value="${b.basements}"/></div></div>
-    <div class="field-row"><div class="field"><label>Lobby Floor</label><input id="cfgLobby" type="number" value="${b.lobby}"/></div><div class="field"><label>Idle Floor</label><input id="cfgIdle" type="number" value="${b.idleFloor}"/></div></div>
-    <div class="field-row"><div class="field"><label>Parking (csv)</label><input id="cfgParking" value="${b.parkingFloors.join(',')}"/></div><div class="field"><label>VIP (csv)</label><input id="cfgVip" value="${b.vipFloors.join(',')}"/></div></div>
-    <div class="field-row"><div class="field"><label>Service (csv)</label><input id="cfgService" value="${b.serviceFloors.join(',')}"/></div><div class="field"><label>Mechanical (csv)</label><input id="cfgMechanical" value="${b.mechanicalFloors.join(',')}"/></div></div>
-  </div>
-  <div class="panel-section"><h3>Elevator Fleet</h3>
-    <div class="field-row"><div class="field"><label>Elevators</label><input id="cfgElevators" type="number" value="${b.elevatorCount}"/></div><div class="field"><label>Capacity</label><input id="cfgCapacity" type="number" value="${b.capacity}"/></div></div>
-    <div class="field-row"><div class="field"><label>Weight Limit</label><input id="cfgWeight" type="number" value="${b.weightLimit}"/></div><div class="field"><label>Max Speed</label><input id="cfgMaxSpeed" type="number" step="0.1" value="${b.maxSpeed}"/></div></div>
-    <div class="field-row"><div class="field"><label>Accel</label><input id="cfgAccel" type="number" step="0.1" value="${b.acceleration}"/></div><div class="field"><label>Decel</label><input id="cfgDecel" type="number" step="0.1" value="${b.deceleration}"/></div></div>
-    <div class="field-row"><div class="field"><label>Door Open (s)</label><input id="cfgDoorOpen" type="number" step="0.1" value="${b.doorOpenTime}"/></div><div class="field"><label>Door Close (s)</label><input id="cfgDoorClose" type="number" step="0.1" value="${b.doorCloseTime}"/></div></div>
-    <div class="field-row"><div class="field"><label>Load Time (s)</label><input id="cfgLoadTime" type="number" step="0.1" value="${b.loadTime}"/></div><div class="field"><label>Unload Time (s)</label><input id="cfgUnloadTime" type="number" step="0.1" value="${b.unloadTime}"/></div></div>
-    <label class="checkline"><input type="checkbox" id="cfgEnergySaving" ${b.energySaving?'checked':''}/> Energy-saving mode</label>
-  </div>
-  <div class="btn-row" style="display:flex;gap:8px;"><button class="btn primary" id="applyConfigBtn">Apply &amp; Rebuild</button><button class="btn" id="resetSimBtn">Reset Simulation</button></div>
-  `;
-}
-function tabRequests(){
-  const floors = snapshot? floorRange().sort((a,b)=>b-a) : [1];
-  const floorOpts = floors.map(f=>`<option value="${f}">${floorLabel(f)}</option>`).join('');
-  const priorityOpts = ['normal','elderly','disabled','vip','staff','emergency','firefighter','medical'].map(p=>`<option value="${p}">${p}</option>`).join('');
-  return `
-  <div class="panel-section"><h3>Manual Request</h3>
-    <div class="field-row"><div class="field"><label>Origin</label><select id="reqOrigin">${floorOpts}</select></div><div class="field"><label>Destination</label><select id="reqDest">${floorOpts}</select></div></div>
-    <div class="field-row"><div class="field"><label>Priority</label><select id="reqPriority">${priorityOpts}</select></div><div class="field"><label>Group Size</label><input id="reqGroup" type="number" min="1" value="1"/></div></div>
-    <div class="btn-row" style="display:flex;gap:8px;"><button class="btn primary" id="spawnBtn">Generate Request</button><button class="btn" id="spawnBatchBtn">Batch ×10 Random</button></div>
-  </div>
-  <div class="panel-section"><h3>Automatic Generation</h3>
-    <div class="field-row"><div class="field"><label>Traffic Mode</label><select id="autoGenMode">
-      <option value="off">Off</option><option value="random">Random</option><option value="peak">Peak-hour</option><option value="rush">Rush-hour</option>
-      <option value="office">Office</option><option value="residential">Residential</option><option value="mall">Shopping Mall</option>
-      <option value="hospital">Hospital</option><option value="hotel">Hotel</option><option value="airport">Airport</option></select></div>
-      <div class="field"><label>Rate / min</label><input id="autoGenRate" type="number" value="6"/></div></div>
-  </div>
-  <div class="panel-section"><h3>Active Hall Calls</h3><div id="hallCallList" style="display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto;"></div></div>
-  `;
-}
-function tabAlgorithm(){
-  return `<div class="panel-section"><h3>Scheduling Algorithm</h3><div class="algo-grid" id="algoGrid"></div></div>
-  <div class="panel-section"><h3>Performance Comparison</h3><div id="algoBars" style="display:flex;flex-direction:column;gap:8px;"></div></div>`;
-}
-function tabSafety(){
-  const s = snapshot? snapshot.safety : {};
-  const els = snapshot? snapshot.elevators : [];
-  const sel = els[ui.selectedElevatorForFault] || els[0] || {};
-  return `
-  <div class="panel-section"><h3>Building-Wide Emergencies</h3><div class="safety-grid">
-    <div class="safety-btn ${s.fire?'active':''}" data-safety="fire">Fire Alarm</div>
-    <div class="safety-btn ${s.smoke?'active':''}" data-safety="smoke">Smoke Alarm</div>
-    <div class="safety-btn ${s.estop?'active':''}" data-safety="estop">Emergency Stop</div>
-    <div class="safety-btn ${s.power?'active':''}" data-safety="power">Power Outage</div>
-    <div class="safety-btn ${s.earthquake?'active':''}" data-safety="earthquake">Earthquake Mode</div>
-    <div class="safety-btn ${s.flood?'active':''}" data-safety="flood">Flood Mode</div>
-  </div>
-  <div class="btn-row" style="margin-top:10px;"><button class="btn small" id="clearAllSafetyBtn">Clear All Alarms — Return to Normal</button></div></div>
-  <div class="panel-section"><h3>Per-Elevator Fault Injection</h3>
-    <div class="elevator-select" id="faultElevatorSelect">${els.map(e=>`<div class="es-btn ${ui.selectedElevatorForFault===e.id?'active':''}" data-id="${e.id}">CAR ${e.label}</div>`).join('')}</div>
-    <div class="hint" style="margin:-2px 0 10px 0;">Car ${sel.label||'-'}${sel.fault?(' — fault: '+sel.fault):(sel.maintenance?' — maintenance':sel.inspection?' — inspection':sel.independentService?' — independent service':' — normal')}</div>
-    <div class="safety-grid">
-      <div class="safety-btn ${sel.fault==='sensor'?'active':''}" data-fault="sensor">Sensor Failure</div>
-      <div class="safety-btn ${sel.fault==='motor'?'active':''}" data-fault="motor">Motor Failure</div>
-      <div class="safety-btn ${sel.fault==='comm'?'active':''}" data-fault="comm">Comm Failure</div>
-      <div class="safety-btn ${sel.fault==='cable'?'active':''}" data-fault="cable">Cable Failure</div>
-      <div class="safety-btn ${sel.fault==='brake'?'active':''}" data-fault="brake">Brake Failure</div>
-      <div class="safety-btn ${sel.fault==='door'?'active':''}" data-fault="door">Door Obstruction</div>
-    </div>
-    <div class="btn-row" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
-      <button class="btn small" id="clearFaultBtn" ${sel.fault?'':'disabled'}>Clear Fault</button>
-      <button class="btn small ${sel.maintenance?'active':''}" id="toggleMaintenanceBtn">Toggle Maintenance</button>
-      <button class="btn small ${sel.inspection?'active':''}" id="toggleInspectionBtn">Toggle Inspection</button>
-      <button class="btn small ${sel.independentService?'active':''}" id="toggleIndependentBtn">Toggle Independent Service</button>
-    </div>
-  </div>`;
-}
-function tabAnalytics(){ return `<div class="panel-section"><h3>Live Metrics</h3><div class="analytics-grid" id="analyticsGrid"></div></div>
-  <div class="panel-section"><h3>Live Charts</h3><div id="chartsBox"></div></div>`; }
-function tabReports(){ return `
-  <div class="panel-section"><h3>Generate Report</h3>
-    <div class="field-row"><div class="field"><label>Type</label><select id="reportType">
-      <option value="simulation">Simulation</option><option value="performance">Performance</option><option value="energy">Energy</option>
-      <option value="fault">Fault</option><option value="passenger">Passenger</option><option value="daily">Daily</option>
-      <option value="weekly">Weekly</option><option value="monthly">Monthly</option></select></div>
-      <div class="field"><label>Format</label><select id="reportFormat"><option value="json">JSON</option><option value="csv">CSV</option></select></div></div>
-    <div class="btn-row"><button class="btn primary" id="exportBtn">Export Report</button></div>
-    <div class="hint">Reports are generated server-side and persisted to MySQL for audit history.</div></div>`; }
-function tabLogs(){ return `
-  <input id="logSearch" placeholder="Search logs…" value="${ui.logSearch}"/>
-  <div class="log-filters" id="logFilters">${['all','dispatch','passenger','elevator','safety','fault','system'].map(f=>`<div class="chip-filter ${ui.logFilter===f?'active':''}" data-filter="${f}">${f}</div>`).join('')}</div>
-  <div id="logList"></div>`; }
-
-const TAB_RENDER = {config:tabConfig, requests:tabRequests, algorithm:tabAlgorithm, safety:tabSafety, analytics:tabAnalytics, reports:tabReports, logs:tabLogs};
-
-function renderTab(name){
-  document.getElementById('tabContent').innerHTML = TAB_RENDER[name]();
-  bindTabEvents(name);
-  if(name==='algorithm') renderAlgoGrid();
-  if(name==='requests') renderHallCallList();
-  if(name==='analytics') renderAnalyticsTab();
-  if(name==='logs') refreshLogs();
-}
-
-function renderAlgoGrid(){
-  const grid = document.getElementById('algoGrid'); if(!grid) return;
-  const current = snapshot? snapshot.algorithm : 'look';
-  grid.innerHTML = Object.entries(ALGO_META).map(([id,desc])=>`<div class="algo-card ${current===id?'active':''}" data-algo="${id}"><span class="name">${id.toUpperCase()}</span><span class="desc">${desc}</span></div>`).join('');
-  grid.querySelectorAll('.algo-card').forEach(c=>c.addEventListener('click', async ()=>{
-    await api('/api/algorithm','POST',{algorithm:c.dataset.algo});
-    renderAlgoGrid();
-  }));
-}
-function renderAlgoBars(){
-  const box = document.getElementById('algoBars'); if(!box) return;
-  const entries = Object.entries(ui.algoStats).map(([k,v])=>[k, v.length? v.reduce((a,b)=>a+b,0)/v.length : 0]);
-  const max = Math.max(1, ...entries.map(e=>e[1]));
-  box.innerHTML = entries.length? entries.map(([k,v])=>`<div>${k.toUpperCase()} — ${v.toFixed(1)}s avg wait<div class="bar-track"><div class="bar-fill" style="width:${(v/max*100).toFixed(0)}%"></div></div></div>`).join('') : '<div class="hint">No data yet.</div>';
-}
-function renderHallCallList(){
-  const box = document.getElementById('hallCallList'); if(!box || !snapshot) return;
-  box.innerHTML = snapshot.hallCalls.slice(-30).reverse().map(h=>{
-    const car = snapshot.elevators.find(e=>e.id===h.elevatorId);
-    return `<div class="log-entry ${h.assigned?'passenger':'safety'}">#${h.id} ${floorLabel(h.floor)} (${h.dir}) — ${h.assigned?'Car '+(car?car.label:'?'):'unassigned'} · ${h.priority}</div>`;
-  }).join('') || '<div class="hint">No active hall calls.</div>';
-}
-function renderAnalyticsTab(){
-  const grid = document.getElementById('analyticsGrid'); if(!grid || !snapshot) return;
-  const a = snapshot.analytics;
-  const items = [['Active Passengers',a.activePassengers],['Waiting Passengers',a.waitingPassengers],
-    ['Avg Wait Time',a.avgWaitTime.toFixed(1)+'s'],['Avg Travel Time',a.avgTravelTime.toFixed(1)+'s'],
-    ['Elevator Utilization',a.utilizationPct.toFixed(0)+'%'],['Queue Length',a.queueLength],
-    ['Completed Requests',a.completed],['Rejected Requests',a.rejected],
-    ['Trips (Completed Journeys)',a.trips],['Stops',a.stops],
-    ['Energy Consumption',a.energy.toFixed(0)+' kWh'],['Fault Count',a.faultCount]];
-  grid.innerHTML = items.map(([l,v])=>`<div class="metric-card"><div class="mc-value">${v}</div><div class="mc-label">${l}</div></div>`).join('');
-  renderCharts();
-}
-const CHART_DEFS=[['waitTime','Wait Time (s)'],['travelTime','Travel Time (s)'],['requestsPerMin','Requests / Minute'],['utilization','Utilization (%)'],['energy','Energy (kWh)'],['faults','Fault Count']];
-let chartCtxs={};
-function renderCharts(){
-  const box=document.getElementById('chartsBox'); if(!box) return;
-  if(!box.dataset.built){
-    box.innerHTML = CHART_DEFS.map(([k,t])=>`<div style="background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:10px;padding:12px;margin-bottom:10px;box-shadow:var(--glass-inset);"><div style="font-size:10.5px;font-weight:700;color:var(--text-1);margin-bottom:6px;">${t}</div><canvas id="cc-${k}" width="360" height="70" style="width:100%;height:70px;"></canvas></div>`).join('');
-    box.dataset.built='1'; chartCtxs={}; CHART_DEFS.forEach(([k])=>chartCtxs[k]=document.getElementById('cc-'+k).getContext('2d'));
-  }
-  CHART_DEFS.forEach(([k])=>{
-    const data=ui.history[k]; const cvs=chartCtxs[k].canvas; const cctx=chartCtxs[k];
-    const w=cvs.clientWidth||360,h=70;
-    if(cvs.width!==w*devicePixelRatio){ cvs.width=w*devicePixelRatio; cvs.height=h*devicePixelRatio; cctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); }
-    cctx.clearRect(0,0,w,h); if(data.length<2) return;
-    const max=Math.max(1,...data); const color=cssVar('--accent');
-    cctx.beginPath();
-    data.forEach((v,i)=>{ const x=(i/59)*w, y=h-6-(v/max)*(h-14); if(i===0) cctx.moveTo(x,y); else cctx.lineTo(x,y); });
-    cctx.strokeStyle=color; cctx.lineWidth=2; cctx.stroke();
-  });
-}
-async function refreshLogs(){
-  const params = new URLSearchParams();
-  if(ui.logFilter!=='all') params.set('category', ui.logFilter);
-  if(ui.logSearch) params.set('search', ui.logSearch);
-  params.set('limit','150');
-  try{
-    const logs = await api('/api/logs?'+params.toString());
-    const list = document.getElementById('logList'); if(!list) return;
-    list.innerHTML = logs.slice().reverse().map(l=>`<div class="log-entry ${l.category}"><span class="t">Day ${l.simDay} ${l.simClock}</span>${escapeHtml(l.message)}</div>`).join('');
-  }catch(e){}
-}
-function escapeHtml(s){ return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
-
-function bindTabEvents(name){
-  if(name==='config'){
-    document.getElementById('applyConfigBtn').addEventListener('click', async function(){
-      this.disabled=true;
-      const cur = snapshot ? snapshot.building : {name:'Infinity Tower',floors:12,basements:2,lobby:1,idleFloor:1,elevatorCount:4,capacity:8,weightLimit:900,maxSpeed:2.2,acceleration:1.1,deceleration:1.1,doorOpenTime:1.6,doorCloseTime:1.6,loadTime:1.2,unloadTime:1.0};
-      const num = (id, fallback) => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? fallback : v; };
-      const intVal = (id, fallback) => { const v = parseInt(document.getElementById(id).value); return isNaN(v) ? fallback : v; };
-      const b = {
-        name: document.getElementById('cfgName').value || cur.name,
-        floors: intVal('cfgFloors', cur.floors),
-        basements: intVal('cfgBasements', cur.basements),
-        lobby: intVal('cfgLobby', cur.lobby),
-        idleFloor: intVal('cfgIdle', cur.idleFloor),
-        parkingFloors: csvToInts(document.getElementById('cfgParking').value),
-        vipFloors: csvToInts(document.getElementById('cfgVip').value),
-        serviceFloors: csvToInts(document.getElementById('cfgService').value),
-        mechanicalFloors: csvToInts(document.getElementById('cfgMechanical').value),
-        elevatorCount: Math.max(1, Math.min(16, intVal('cfgElevators', cur.elevatorCount))),
-        capacity: intVal('cfgCapacity', cur.capacity),
-        weightLimit: intVal('cfgWeight', cur.weightLimit),
-        maxSpeed: num('cfgMaxSpeed', cur.maxSpeed),
-        acceleration: num('cfgAccel', cur.acceleration),
-        deceleration: num('cfgDecel', cur.deceleration),
-        doorOpenTime: num('cfgDoorOpen', cur.doorOpenTime),
-        doorCloseTime: num('cfgDoorClose', cur.doorCloseTime),
-        loadTime: num('cfgLoadTime', cur.loadTime),
-        unloadTime: num('cfgUnloadTime', cur.unloadTime),
-        energySaving: document.getElementById('cfgEnergySaving').checked,
-        algorithm: snapshot? snapshot.algorithm : 'look'
-      };
-      try {
-        await api('/api/config','PUT', b);
-      } catch(err) {
-        console.error('Apply config failed', err);
-        alert('Could not apply configuration — check the backend is running and reachable.');
-      } finally {
-        this.disabled=false;
-      }
-    });
-    document.getElementById('resetSimBtn').addEventListener('click', ()=>api('/api/simulation/reset','POST'));
-  }
-  if(name==='requests'){
-    document.getElementById('spawnBtn').addEventListener('click', async function(){
-      const origin = parseInt(document.getElementById('reqOrigin').value);
-      const dest = parseInt(document.getElementById('reqDest').value);
-      if(origin===dest){ alert('Origin and destination must differ.'); return; }
-      this.disabled=true;
-      try {
-        await api('/api/requests/spawn','POST', {
-          origin, dest,
-          priority: document.getElementById('reqPriority').value,
-          group: parseInt(document.getElementById('reqGroup').value)||1
-        });
-      } catch(err) {
-        console.error('Spawn request failed', err);
-      } finally {
-        this.disabled=false;
-      }
-    });
-    document.getElementById('spawnBatchBtn').addEventListener('click', ()=>api('/api/requests/batch?count=10','POST'));
-    document.getElementById('autoGenMode').addEventListener('change', e=>{
-      api('/api/requests/autogen','POST', {mode:e.target.value, ratePerMinute: parseFloat(document.getElementById('autoGenRate').value)||6});
-    });
-    document.getElementById('autoGenRate').addEventListener('change', e=>{
-      api('/api/requests/autogen','POST', {mode:document.getElementById('autoGenMode').value, ratePerMinute: parseFloat(e.target.value)||6});
-    });
-  }
-  if(name==='safety'){
-    document.querySelectorAll('[data-safety]').forEach(btn=>btn.addEventListener('click', async ()=>{
-      await api('/api/safety/toggle','POST', {key:btn.dataset.safety});
-      renderTab('safety');
-    }));
-    document.getElementById('clearAllSafetyBtn').addEventListener('click', async ()=>{
-      await api('/api/safety/clear-all','POST'); renderTab('safety');
-    });
-    document.querySelectorAll('#faultElevatorSelect .es-btn').forEach(btn=>btn.addEventListener('click', ()=>{
-      ui.selectedElevatorForFault=parseInt(btn.dataset.id); renderTab('safety');
-    }));
-    document.querySelectorAll('[data-fault]').forEach(btn=>btn.addEventListener('click', async ()=>{
-      const id = snapshot.elevators[ui.selectedElevatorForFault].id;
-      await api('/api/safety/fault','POST', {elevatorId:id, action:'inject', faultType:btn.dataset.fault});
-      renderTab('safety');
-    }));
-    document.getElementById('clearFaultBtn').addEventListener('click', async ()=>{
-      const id = snapshot.elevators[ui.selectedElevatorForFault].id;
-      await api('/api/safety/fault','POST', {elevatorId:id, action:'clear'}); renderTab('safety');
-    });
-    document.getElementById('toggleMaintenanceBtn').addEventListener('click', async ()=>{
-      const id = snapshot.elevators[ui.selectedElevatorForFault].id;
-      await api('/api/safety/fault','POST', {elevatorId:id, action:'maintenance'}); renderTab('safety');
-    });
-    document.getElementById('toggleInspectionBtn').addEventListener('click', async ()=>{
-      const id = snapshot.elevators[ui.selectedElevatorForFault].id;
-      await api('/api/safety/fault','POST', {elevatorId:id, action:'inspection'}); renderTab('safety');
-    });
-    document.getElementById('toggleIndependentBtn').addEventListener('click', async ()=>{
-      const id = snapshot.elevators[ui.selectedElevatorForFault].id;
-      await api('/api/safety/fault','POST', {elevatorId:id, action:'independent'}); renderTab('safety');
-    });
-  }
-  if(name==='reports'){
-    document.getElementById('exportBtn').addEventListener('click', async function(){
-      this.disabled=true;
-      try {
-        const type=document.getElementById('reportType').value, format=document.getElementById('reportFormat').value;
-        const res = await fetch(API+'/api/reports?type='+type+'&format='+format);
-        if(!res.ok) throw new Error('Report request failed: '+res.status);
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href=url; a.download=type+'-report.'+format; a.click();
-        URL.revokeObjectURL(url);
-      } catch(err) {
-        console.error('Export failed', err);
-        alert('Could not generate the report — check the backend is running.');
-      } finally {
-        this.disabled=false;
-      }
-    });
-  }
-  if(name==='logs'){
-    document.querySelectorAll('#logFilters .chip-filter').forEach(chip=>chip.addEventListener('click', ()=>{ ui.logFilter=chip.dataset.filter; renderTab('logs'); }));
-    document.getElementById('logSearch').addEventListener('input', e=>{ ui.logSearch=e.target.value; refreshLogs(); });
-  }
-}
-function csvToInts(s){ return s.split(',').map(x=>parseInt(x.trim())).filter(n=>!isNaN(n)); }
-
-function syncPauseButton(){
-  const btn = document.getElementById('pauseBtn');
-  btn.textContent = (snapshot && snapshot.running) ? 'Pause' : 'Resume';
-}
-
-document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click', ()=>{
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  tab.classList.add('active'); ui.activeTab=tab.dataset.tab; renderTab(tab.dataset.tab);
-}));
-document.getElementById('pauseBtn').addEventListener('click', async ()=>{
-  if(!ui.started) return;
-  if(snapshot && snapshot.running) await api('/api/simulation/pause','POST'); else await api('/api/simulation/resume','POST');
-});
-document.getElementById('speedBtn').addEventListener('click', async function(){
-  const speeds=[1,2,4,8]; const cur=parseInt(this.textContent)||1;
-  const next = speeds[(speeds.indexOf(cur)+1)%speeds.length];
-  await api('/api/simulation/speed','POST', {multiplier: next});
-  this.textContent = next+'×';
-});
-document.getElementById('startFab').addEventListener('click', async ()=>{
-  ui.started = true;
-  await api('/api/simulation/start','POST');
-  document.getElementById('startOverlay').classList.add('hidden');
-});
-
-renderTab('config');
-resizeCanvas();
-connectWebSocket();
-setInterval(()=>{ if(ui.activeTab==='logs') refreshLogs(); }, 4000);
-})();
-</script>
-</body>
-</html> -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Infinity Tower — Elevator Control &amp; Monitoring System</title>
+<title>Infinity Tower — Industrial Elevator Simulation &amp; Dispatch System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg-0:#0A0B0D; --bg-1:#121317; --bg-2:#191B20; --bg-2-hi:#22252C;
-    --glass:rgba(23,25,30,0.62); --glass-strong:rgba(23,25,30,0.82); --glass-hi:rgba(255,255,255,0.04);
-    --glass-border:rgba(232,163,61,0.14); --glass-inset:inset 0 1px 0 rgba(255,255,255,0.05);
-    --border:rgba(255,255,255,0.07); --border-strong:rgba(255,255,255,0.13);
-    --accent:#E8A33D; --accent-dim:rgba(232,163,61,0.15);
-    --accent-2:#3FBFA6; --accent-2-dim:rgba(63,191,166,0.15);
-    --warning:#E8A33D; --warning-dim:rgba(232,163,61,0.13);
-    --danger:#E5484D; --danger-dim:rgba(229,72,77,0.14);
-    --success:#3FBFA6; --success-dim:rgba(63,191,166,0.14);
-    --text-0:#EDEEF0; --text-1:#C4C8D0; --text-2:#82868F;
-    --p-normal:#82868F; --p-staff:#7C9CBF; --p-elderly:#E8A33D; --p-disabled:#3FBFA6;
-    --p-vip:#C9A15C; --p-medical:#E5484D; --p-emergency:#E5484D; --p-firefighter:#E8763D;
-    --mono:'JetBrains Mono', ui-monospace, monospace;
-    --sans:'DM Sans','Segoe UI', sans-serif;
-    --display:'Syne','DM Sans', sans-serif;
-    --shadow-soft: 0 4px 24px rgba(0,0,0,0.4); --radius:6px;
+  /* ----------------------------------------------------
+     SENIOR INDUSTRIAL TELEMETRY DESIGN SYSTEM
+     Themes:
+       1. Aubergine & Marigold Executive (Default theme-aubergine)
+       2. Industrial Obsidian SCADA (theme-obsidian)
+       3. Industrial Slate Control Center (theme-slate)
+  ---------------------------------------------------- */
+  :root, body.theme-aubergine {
+    --theme-name: 'aubergine';
+    --bg-base: #130E14;
+    --bg-app: #19131A;
+    --bg-topbar: #231724;
+    --bg-panel: #1D151F;
+    --bg-card: #251C27;
+    --bg-card-subtle: #1F1722;
+    --bg-input: #18111B;
+
+    --primary: #8E3A75;
+    --primary-hover: #A34587;
+    --primary-contrast: #FFFFFF;
+    --accent: #E5A93C;
+    --accent-hover: #F2B74B;
+    --accent-contrast: #18111B;
+    --accent-dim: rgba(229, 169, 60, 0.15);
+
+    --text-main: #F5EEF6;
+    --text-muted: #9E8E9F;
+    --text-dim: #6D5F6E;
+
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(229, 169, 60, 0.28);
+    --border-focus: #E5A93C;
+
+    --shaft-bg: #140E15;
+    --shaft-grid: rgba(255, 255, 255, 0.03);
+    --shaft-rail: rgba(255, 255, 255, 0.12);
+
+    --status-success: #10B981;
+    --status-success-dim: rgba(16, 185, 129, 0.15);
+    --status-warning: #F59E0B;
+    --status-warning-dim: rgba(245, 158, 11, 0.15);
+    --status-danger: #EF4444;
+    --status-danger-dim: rgba(239, 68, 68, 0.18);
+    --status-info: #38BDF8;
+    --status-info-dim: rgba(56, 189, 248, 0.15);
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.6);
   }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;height:100%;background:var(--bg-0);color:var(--text-0);font-family:var(--sans);overflow:hidden;}
-  ::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px;}
-  .icon{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
 
-  #app{display:grid;grid-template-columns:1fr 420px;grid-template-rows:58px 1fr;height:100vh;width:100vw;grid-template-areas:"topbar topbar" "sim panel";}
-  @media (max-width:980px){ #app{grid-template-columns:1fr;grid-template-rows:58px 44vh 1fr;grid-template-areas:"topbar" "sim" "panel";} }
+  body.theme-obsidian {
+    --theme-name: 'obsidian';
+    --bg-base: #0B0E14;
+    --bg-app: #0F131D;
+    --bg-topbar: #141926;
+    --bg-panel: #121722;
+    --bg-card: #18202F;
+    --bg-card-subtle: #131A26;
+    --bg-input: #0E141F;
 
-  #topbar{grid-area:topbar;position:relative;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:var(--glass);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--glass-border);box-shadow:var(--glass-inset);flex-wrap:wrap;gap:8px;}
-  #topbar::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--accent) 15%,var(--accent) 85%,transparent);opacity:.55;}
-  .brand{display:flex;align-items:center;gap:11px;}
-  .brand .mark{width:32px;height:32px;border-radius:4px;background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;}
-  .brand-text{font-family:var(--display);font-weight:700;font-size:16.5px;letter-spacing:.01em;} .brand-sub{font-size:10px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;font-weight:600;}
-  .topbar-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-  .clock{font-family:var(--mono);font-size:12.5px;color:var(--accent-2);background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--glass-border);border-radius:4px;padding:7px 10px;}
-  .conn-badge{font-size:10.5px;font-weight:700;border-radius:4px;padding:6px 10px;display:flex;align-items:center;gap:6px;border:1px solid var(--border);backdrop-filter:blur(10px);}
-  .conn-badge.connected{color:var(--success);border-color:var(--success);background:var(--success-dim);}
-  .conn-badge.disconnected{color:var(--danger);border-color:var(--danger);background:var(--danger-dim);}
-  .conn-dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
-  .btn{position:relative;background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--glass-border);color:var(--text-1);border-radius:4px;padding:8px 13px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.12s;box-shadow:var(--glass-inset);}
-  .btn:hover{border-color:var(--border-strong);background:var(--glass-strong);transform:translateY(-1px);box-shadow:var(--shadow-soft), var(--glass-inset);}
-  .btn:active{transform:translateY(1px) scale(.97);}
-  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
-  .btn.primary{background:var(--accent);border-color:var(--accent);color:#1a1206;font-weight:800;}
-  .btn.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
-  .btn.small{padding:6px 10px;font-size:11px;}
+    --primary: #E5A93C;
+    --primary-hover: #F2B74B;
+    --primary-contrast: #0B0E14;
+    --accent: #E5A93C;
+    --accent-hover: #F2B74B;
+    --accent-contrast: #0B0E14;
+    --accent-dim: rgba(229, 169, 60, 0.16);
 
-  #sim{grid-area:sim;position:relative;background:radial-gradient(ellipse 900px 500px at 30% -8%, rgba(59,130,246,0.05), transparent 60%), var(--bg-0);overflow:hidden;display:flex;flex-direction:column;}
-  #simHeader{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 0 20px;gap:10px;flex-wrap:wrap;}
-  #simHeader h1{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:700;margin:0;display:flex;align-items:center;gap:8px;}
-  #statOverlay{display:flex;gap:10px;flex-wrap:wrap;}
-  .stat-chip{position:relative;background:var(--glass);backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);border:1px solid var(--glass-border);border-top:2px solid var(--accent);border-radius:5px;padding:8px 13px 6px;min-width:74px;box-shadow:var(--shadow-soft), var(--glass-inset);}
-  .stat-chip .v{font-family:var(--mono);font-size:17px;font-weight:700;color:var(--text-0);} .stat-chip .l{font-size:9px;color:var(--text-2);text-transform:uppercase;font-weight:600;margin-top:3px;letter-spacing:.06em;}
-  #shaftWrap{flex:1;position:relative;overflow:auto;padding:10px 20px 20px 20px;}
-  .zoom-controls{display:flex;align-items:center;gap:6px;background:var(--glass);border:1px solid var(--glass-border);border-radius:5px;padding:3px;box-shadow:var(--glass-inset);}
-  .zoom-controls .btn.small{padding:4px 10px;font-size:13px;font-weight:700;}
-  .zoom-label{font-family:var(--mono);font-size:10.5px;color:var(--text-2);min-width:36px;text-align:center;}
-  #alertBar{position:absolute;top:0;left:0;right:0;padding:9px 20px;background:rgba(239,68,68,0.85);backdrop-filter:blur(10px);color:#fff;font-size:12px;font-weight:700;display:none;align-items:center;gap:10px;z-index:30;}
-  #startOverlay{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(11,18,32,0.55);backdrop-filter:blur(14px);transition:opacity .3s,visibility .3s;}
-  #startOverlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
-  .start-card{background:var(--glass-strong);backdrop-filter:blur(20px) saturate(1.4);border:1px solid var(--glass-border);border-radius:8px;padding:32px 36px;text-align:center;max-width:340px;box-shadow:var(--shadow-soft), var(--glass-inset);}
-  .start-card h2{font-family:var(--display);font-size:19px;font-weight:700;margin:0 0 6px 0;} .start-card p{font-size:12px;color:var(--text-2);margin:0 0 22px 0;line-height:1.5;}
-  .fab-start{background:var(--accent);border:none;color:#1a1206;font-weight:800;border-radius:6px;padding:13px 26px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:9px;box-shadow:0 8px 30px rgba(232,163,61,0.35);}
+    --text-main: #F1F5F9;
+    --text-muted: #94A3B8;
+    --text-dim: #64748B;
 
-  #panel{grid-area:panel;background:var(--glass);backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3);border-left:1px solid var(--glass-border);display:flex;flex-direction:column;overflow:hidden;}
-  #tabs{display:flex;border-bottom:1px solid var(--glass-border);overflow-x:auto;background:rgba(18,26,43,0.35);flex-shrink:0;}
-  .tab{flex:0 0 auto;padding:13px 14px;font-size:10.5px;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-weight:700;text-transform:uppercase;font-family:var(--mono);letter-spacing:.06em;}
-  .tab:hover{color:var(--text-0);background:var(--bg-2);} .tab.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--accent-dim);}
-  #tabContent{flex:1;overflow-y:auto;padding:18px;}
-  .panel-section{margin-bottom:22px;} .panel-section h3{font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--text-2);margin:0 0 12px 0;display:flex;align-items:center;gap:8px;font-weight:700;}
-  .panel-section h3::before{content:'';width:8px;height:2px;background:var(--accent);flex-shrink:0;}
-  .panel-section h3::after{content:'';flex:1;height:1px;background:var(--border);align-self:center;}
-  .field-row{display:flex;gap:10px;margin-bottom:10px;} .field{flex:1;display:flex;flex-direction:column;gap:5px;}
-  .field label{font-size:10.5px;color:var(--text-2);font-weight:600;}
-  .field input,.field select{background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--glass-border);color:var(--text-0);border-radius:4px;padding:8px 10px;font-size:12.5px;font-family:var(--mono);width:100%;}
-  .checkline{display:flex;align-items:center;gap:9px;font-size:12px;margin-bottom:6px;cursor:pointer;}
-  .algo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;} .algo-card{position:relative;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:5px;padding:10px 11px;cursor:pointer;font-size:11px;color:var(--text-1);box-shadow:var(--glass-inset);}
-  .algo-card:hover{border-color:var(--border-strong);transform:translateY(-2px);box-shadow:var(--shadow-soft), var(--glass-inset);} .algo-card.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
-  .algo-card .name{font-weight:700;display:block;margin-bottom:3px;} .algo-card .desc{font-size:9.5px;color:var(--text-2);line-height:1.35;}
-  .analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;} .metric-card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:6px;padding:12px;box-shadow:var(--glass-inset);}
-  .metric-card .mc-top{display:flex;justify-content:space-between;margin-bottom:8px;} .metric-card .mc-value{font-family:var(--mono);font-size:19px;font-weight:700;}
-  .metric-card .mc-label{font-size:9.5px;color:var(--text-2);text-transform:uppercase;font-weight:600;margin-top:2px;}
-  .safety-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;} .safety-btn{position:relative;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:5px;padding:10px;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:8px;font-weight:600;box-shadow:var(--glass-inset);}
-  .safety-btn:hover{border-color:var(--border-strong);transform:translateY(-1px);} .safety-btn.active{border-color:var(--danger);color:var(--danger);background:var(--danger-dim);}
-  .elevator-select{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;} .es-btn{border:1px solid var(--glass-border);background:var(--glass);backdrop-filter:blur(8px);border-radius:4px;padding:6px 10px;font-size:11px;cursor:pointer;font-family:var(--mono);font-weight:700;}
-  .es-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
-  .hint{font-size:10px;color:var(--text-2);line-height:1.5;margin-top:6px;}
-  .log-filters{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;} .chip-filter{border:1px solid var(--glass-border);background:var(--glass);backdrop-filter:blur(8px);color:var(--text-2);border-radius:8px;padding:4px 11px;font-size:10px;cursor:pointer;font-weight:600;}
-  .chip-filter.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
-  #logSearch{width:100%;margin-bottom:10px;background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--glass-border);color:var(--text-0);border-radius:4px;padding:7px 10px;font-size:11.5px;}
-  #logList{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:10.5px;}
-  .log-entry{padding:7px 9px;border-radius:4px;border-left:3px solid var(--border-strong);background:var(--glass);backdrop-filter:blur(8px);color:var(--text-1);}
-  .log-entry.dispatch{border-left-color:var(--accent);} .log-entry.passenger{border-left-color:var(--accent-2);}
-  .log-entry.safety{border-left-color:var(--warning);} .log-entry.fault{border-left-color:var(--danger);} .log-entry.system{border-left-color:var(--accent-2);}
-  .log-entry .t{color:var(--text-2);margin-right:6px;}
-  .bar-track{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);border-radius:3px;height:14px;overflow:hidden;margin-top:4px;} .bar-fill{height:100%;background:var(--accent);}
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(229, 169, 60, 0.3);
+    --border-focus: #E5A93C;
+
+    --shaft-bg: #090C12;
+    --shaft-grid: rgba(255, 255, 255, 0.025);
+    --shaft-rail: rgba(255, 255, 255, 0.1);
+
+    --status-success: #10B981;
+    --status-success-dim: rgba(16, 185, 129, 0.15);
+    --status-warning: #F59E0B;
+    --status-warning-dim: rgba(245, 158, 11, 0.15);
+    --status-danger: #EF4444;
+    --status-danger-dim: rgba(239, 68, 68, 0.18);
+    --status-info: #38BDF8;
+    --status-info-dim: rgba(56, 189, 248, 0.15);
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.75);
+  }
+
+  body.theme-slate {
+    --theme-name: 'slate';
+    --bg-base: #090E17;
+    --bg-app: #0D1424;
+    --bg-topbar: #111A30;
+    --bg-panel: #10182C;
+    --bg-card: #15223D;
+    --bg-card-subtle: #111B30;
+    --bg-input: #0B1222;
+
+    --primary: #2563EB;
+    --primary-hover: #3B82F6;
+    --primary-contrast: #FFFFFF;
+    --accent: #38BDF8;
+    --accent-hover: #60A5FA;
+    --accent-contrast: #090E17;
+    --accent-dim: rgba(56, 189, 248, 0.16);
+
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --text-dim: #64748B;
+
+    --border-subtle: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(56, 189, 248, 0.35);
+    --border-focus: #38BDF8;
+
+    --shaft-bg: #070B14;
+    --shaft-grid: rgba(56, 189, 248, 0.04);
+    --shaft-rail: rgba(255, 255, 255, 0.12);
+
+    --status-success: #10B981;
+    --status-success-dim: rgba(16, 185, 129, 0.15);
+    --status-warning: #F59E0B;
+    --status-warning-dim: rgba(245, 158, 11, 0.15);
+    --status-danger: #EF4444;
+    --status-danger-dim: rgba(239, 68, 68, 0.18);
+    --status-info: #38BDF8;
+    --status-info-dim: rgba(56, 189, 248, 0.15);
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.75);
+  }
+
+  /* Universal reset & base typography */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    width: 100%;
+    background-color: var(--bg-base);
+    color: var(--text-main);
+    font-family: 'DM Sans', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.15); }
+  ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.16); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* Main Workspace Layout */
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 440px;
+    grid-template-rows: 56px 1fr;
+    grid-template-areas:
+      "topbar topbar"
+      "sim panel";
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--bg-base);
+    overflow: hidden;
+  }
+
+  /* ----------------------------------------------------
+     COMMAND TOPBAR
+  ---------------------------------------------------- */
+  #topbar {
+    grid-area: topbar;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background: var(--bg-topbar);
+    border-bottom: 1px solid var(--border-subtle);
+    z-index: 50;
+    gap: 16px;
+  }
+
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(229, 169, 60, 0.2), rgba(142, 58, 117, 0.3));
+    border: 1px solid var(--border-strong);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+  }
+  .brand-text h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: #FFFFFF;
+    line-height: 1.15;
+  }
+  .brand-text span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .topbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .conn-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 11px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-subtle);
+  }
+  .conn-indicator.connected {
+    color: var(--status-success);
+    border-color: rgba(16, 185, 129, 0.35);
+    background: var(--status-success-dim);
+  }
+  .conn-indicator.disconnected {
+    color: var(--status-danger);
+    border-color: rgba(239, 68, 68, 0.35);
+    background: var(--status-danger-dim);
+  }
+  .pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+  }
+
+  .sim-clock-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 5px 12px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    color: #E2E8F0;
+    letter-spacing: 0.04em;
+  }
+
+  /* Modern Engineering Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 6px 13px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    box-shadow: var(--shadow-sm);
+  }
+  .btn:hover:not(:disabled) {
+    border-color: var(--border-strong);
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  .btn:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: none;
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .btn.primary {
+    background: var(--primary);
+    color: var(--primary-contrast);
+    border-color: var(--primary);
+  }
+  .btn.primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+  }
+  .btn.accent {
+    background: var(--accent);
+    color: var(--accent-contrast);
+    border-color: var(--accent);
+  }
+  .btn.accent:hover:not(:disabled) {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
+  .btn.danger {
+    background: var(--status-danger);
+    color: #FFFFFF;
+    border-color: var(--status-danger);
+  }
+  .btn.danger:hover:not(:disabled) {
+    filter: brightness(1.1);
+  }
+  .btn.small {
+    padding: 4px 9px;
+    font-size: 11px;
+    border-radius: 5px;
+  }
+
+  /* ----------------------------------------------------
+     SHAFT TELEMETRY VIEWPORT
+  ---------------------------------------------------- */
+  #sim {
+    grid-area: sim;
+    position: relative;
+    background: var(--shaft-bg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-subtle);
+  }
+
+  #simTopBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .sim-view-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .sim-view-title h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+  }
+  .sim-view-title .badge-tag {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid var(--border-strong);
+  }
+
+  #statOverlay {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .stat-chip {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 4px 10px;
+    min-width: 78px;
+    text-align: left;
+  }
+  .stat-chip .v {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.1;
+  }
+  .stat-chip .l {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .zoom-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 2px 4px;
+  }
+  .zoom-toolbar span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-main);
+    min-width: 42px;
+    text-align: center;
+  }
+
+  #alertBanner {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px 16px;
+    background: var(--status-danger);
+    color: #FFFFFF;
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
+    z-index: 20;
+    animation: alertFlash 1.6s infinite ease-in-out;
+  }
+  @keyframes alertFlash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+  }
+
+  #shaftViewport {
+    flex: 1;
+    position: relative;
+    overflow: auto;
+    padding: 10px 14px 20px 14px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  #shaftCanvas {
+    display: block;
+    border-radius: 4px;
+  }
+
+  /* Start Simulation Hero Modal */
+  #startOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 10, 15, 0.82);
+    backdrop-filter: blur(10px);
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+  #startOverlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .start-hero-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    padding: 36px 40px;
+    text-align: center;
+    max-width: 420px;
+    box-shadow: var(--shadow-lg);
+    color: var(--text-main);
+  }
+  .start-hero-card .hero-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: var(--primary);
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  }
+  .start-hero-card h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 19px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .start-hero-card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+  .btn-start-large {
+    background: var(--accent);
+    color: var(--accent-contrast);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(229, 169, 60, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    transition: all 0.15s ease;
+  }
+  .btn-start-large:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(229, 169, 60, 0.45);
+  }
+
+  /* ----------------------------------------------------
+     CONTROL PANEL & 2x4 SEGMENTED NAVIGATION
+  ---------------------------------------------------- */
+  #panel {
+    grid-area: panel;
+    background: var(--bg-panel);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* 2-row x 4-column Segmented Nav Tabs */
+  #navTabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    padding: 10px 12px;
+    background: var(--bg-card-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+  }
+  .nav-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 4px;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background: transparent;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+    text-align: center;
+    user-select: none;
+  }
+  .nav-tab:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .nav-tab.active {
+    color: #FFFFFF;
+    background: var(--primary);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: var(--shadow-sm);
+  }
+
+  #tabViewport {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+  }
+
+  /* Cards & Sections */
+  .panel-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .panel-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .panel-card-header h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+  }
+
+  /* Form Elements */
+  .form-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .form-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .form-col label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .input-control, .select-control {
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    width: 100%;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .input-control:focus, .select-control:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 2px var(--accent-dim);
+    outline: none;
+  }
+  .input-control[type="number"], .input-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .checkbox-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  .checkbox-control input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  /* ----------------------------------------------------
+     ALGORITHM GRID & COMPARISON
+  ---------------------------------------------------- */
+  .algo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .algo-card {
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 10px 11px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .algo-card:hover {
+    border-color: var(--border-strong);
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .algo-card.active {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+  .algo-card .algo-title {
+    font-weight: 700;
+    font-size: 11.5px;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .algo-card .algo-badge {
+    font-size: 8.5px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    padding: 2px 5px;
+    border-radius: 4px;
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .algo-card .algo-desc {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    line-height: 1.35;
+  }
+
+  /* Performance Bars */
+  .bar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .bar-row {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 11px;
+  }
+  .bar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  /* ----------------------------------------------------
+     SAFETY MATRIX & FAULT INJECTION
+  ---------------------------------------------------- */
+  .safety-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .safety-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 11px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    color: var(--text-main);
+  }
+  .safety-btn:hover {
+    border-color: var(--border-strong);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .safety-btn.active {
+    background: var(--status-danger);
+    border-color: var(--status-danger);
+    color: #FFFFFF;
+    box-shadow: 0 0 14px rgba(239, 68, 68, 0.4);
+  }
+
+  .car-selector-strip {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .car-btn {
+    padding: 5px 11px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-input);
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.15s ease;
+  }
+  .car-btn:hover {
+    color: var(--text-main);
+    border-color: var(--border-strong);
+  }
+  .car-btn.active {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+  }
+
+  /* ----------------------------------------------------
+     METRICS & CHARTS
+  ---------------------------------------------------- */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .metric-tile {
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .metric-tile .m-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.15;
+  }
+  .metric-tile .m-lbl {
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  .charts-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .chart-card {
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .chart-title {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ----------------------------------------------------
+     LOGS & SEARCH
+  ---------------------------------------------------- */
+  .log-filter-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .chip-pill {
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 10.5px;
+    font-weight: 700;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+  .chip-pill:hover {
+    color: var(--text-main);
+    border-color: var(--border-strong);
+  }
+  .chip-pill.active {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+  }
+  .log-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    max-height: 480px;
+    overflow-y: auto;
+  }
+  .log-card {
+    padding: 8px 11px;
+    border-radius: 6px;
+    background: var(--bg-input);
+    border-left: 3px solid var(--border-subtle);
+    color: var(--text-main);
+    line-height: 1.4;
+  }
+  .log-card.dispatch { border-left-color: var(--accent); }
+  .log-card.passenger { border-left-color: var(--status-info); }
+  .log-card.elevator { border-left-color: var(--primary); }
+  .log-card.safety { border-left-color: var(--status-warning); }
+  .log-card.fault { border-left-color: var(--status-danger); }
+  .log-card.system { border-left-color: var(--status-success); }
+  .log-card .time-stamp {
+    color: var(--text-muted);
+    margin-right: 6px;
+    font-weight: 600;
+  }
+
+  /* ----------------------------------------------------
+     PALETTE SELECTOR
+  ---------------------------------------------------- */
+  .palette-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .palette-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: var(--bg-input);
+    border: 1.5px solid var(--border-subtle);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .palette-option:hover {
+    border-color: var(--border-strong);
+  }
+  .palette-option.selected {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+  .palette-option-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .swatch-stack {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .swatch-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .palette-label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+  .palette-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .palette-check-indicator {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+  }
+  .palette-option.selected .palette-check-indicator {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  /* ----------------------------------------------------
+     TOAST NOTIFICATIONS (Senior Engineer Standard)
+  ---------------------------------------------------- */
+  #toastContainer {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+  }
+  .toast {
+    pointer-events: auto;
+    background: #18202F;
+    border: 1px solid var(--border-strong);
+    color: #FFFFFF;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    animation: toastIn 0.25s ease forwards;
+  }
+  .toast.success { border-color: var(--status-success); }
+  .toast.error { border-color: var(--status-danger); }
+  .toast.warning { border-color: var(--status-warning); }
+  @keyframes toastIn {
+    from { transform: translateY(12px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes toastOut {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(12px); opacity: 0; }
+  }
+
+  /* Responsive Rules */
+  @media (max-width: 1024px) {
+    #app { grid-template-columns: 1fr 390px; }
+  }
+  @media (max-width: 840px) {
+    #app {
+      grid-template-columns: 1fr;
+      grid-template-rows: 56px 48vh 1fr;
+      grid-template-areas:
+        "topbar"
+        "sim"
+        "panel";
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
 </style>
 </head>
-<body>
+<body class="theme-aubergine">
 <div id="app">
-  <div id="topbar">
-    <div class="brand">
-      <div class="mark"><svg class="icon" style="width:20px;height:20px;stroke:var(--accent)" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="1.5"/><path d="M9 8h6M9 12h6M9 16h2"/></svg></div>
-      <div><div class="brand-text" id="buildingNameDisplay">Infinity Tower</div><div class="brand-sub">Live Backend · Elevator Control System</div></div>
-    </div>
-    <div class="topbar-right">
-      <div class="conn-badge disconnected" id="connBadge"><span class="conn-dot"></span><span id="connText">Connecting…</span></div>
-      <div class="clock" id="simClock">DAY 1 · 00:00:00</div>
-      <button class="btn" id="pauseBtn">Pause</button>
-      <button class="btn" id="speedBtn">1×</button>
-    </div>
-  </div>
-  <div id="sim">
-    <div id="startOverlay">
-      <div class="start-card">
-        <h2>Infinity Tower Control System</h2>
-        <p>Connected to the live backend. Start the simulation to begin dispatching elevators server-side.</p>
-        <button class="fab-start" id="startFab">Start Simulation</button>
+
+  <!-- TOP BAR -->
+  <header id="topbar">
+    <div class="brand-group">
+      <div class="brand-mark" title="Infinity Tower Elevator Control System">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2"/>
+          <path d="M9 8h6M9 12h6M9 16h3"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1 id="buildingHeaderName">Infinity Tower</h1>
+        <span>Dispatch &amp; Safety Control</span>
       </div>
     </div>
-    <div id="alertBar"><span id="alertText"></span></div>
-    <div id="simHeader"><h1>Live Building Monitor</h1><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;"><div id="statOverlay"></div><div class="zoom-controls"><button class="btn small" id="zoomOutBtn" title="Zoom out">−</button><span id="zoomLabel" class="zoom-label">100%</span><button class="btn small" id="zoomInBtn" title="Zoom in">+</button></div></div></div>
-    <div id="shaftWrap"><canvas id="shaftCanvas"></canvas></div>
-  </div>
-  <div id="panel">
-    <div id="tabs">
-      <div class="tab active" data-tab="config">Config</div>
-      <div class="tab" data-tab="requests">Requests</div>
-      <div class="tab" data-tab="algorithm">Algorithm</div>
-      <div class="tab" data-tab="safety">Safety</div>
-      <div class="tab" data-tab="analytics">Analytics</div>
-      <div class="tab" data-tab="reports">Reports</div>
-      <div class="tab" data-tab="logs">Logs</div>
+
+    <div class="topbar-controls">
+      <div class="conn-indicator disconnected" id="connIndicator">
+        <span class="pulse-dot"></span>
+        <span id="connText">Connecting...</span>
+      </div>
+      <div class="sim-clock-badge" id="simClockBadge">DAY 1 · 00:00:00</div>
+      <button class="btn" id="pauseBtn">Start</button>
+      <button class="btn" id="speedBtn">1×</button>
+      <button class="btn" id="topResetBtn" title="Reset Simulation">Reset</button>
+      <button class="btn" id="themeShortcutBtn" title="Theme Settings">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20v-20z"/></svg>
+        Theme
+      </button>
     </div>
-    <div id="tabContent"></div>
-  </div>
+  </header>
+
+  <!-- SIMULATION DISPLAY -->
+  <main id="sim">
+    <!-- Start Overlay Modal -->
+    <div id="startOverlay">
+      <div class="start-hero-card">
+        <div class="hero-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+        </div>
+        <h2>Infinity Tower Simulation</h2>
+        <p>Industrial standalone elevator control, multi-car dispatching, and monitoring system. Launch the simulation to evaluate 10 scheduling algorithms and safety protocols.</p>
+        <button class="btn-start-large" id="startSimHeroBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Launch Simulation
+        </button>
+      </div>
+    </div>
+
+    <!-- Alert Banner -->
+    <div id="alertBanner">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span id="alertBannerText">EMERGENCY PROTOCOL ACTIVE</span>
+    </div>
+
+    <!-- Simulation Header Bar -->
+    <div id="simTopBar">
+      <div class="sim-view-title">
+        <h2>Shaft Telemetry</h2>
+        <span class="badge-tag" id="activeAlgoBadge">LOOK</span>
+      </div>
+      <div id="statOverlay"></div>
+      <div class="zoom-toolbar">
+        <button class="btn small" id="zoomOutBtn" title="Zoom Out">−</button>
+        <span id="zoomLevelDisplay">100%</span>
+        <button class="btn small" id="zoomInBtn" title="Zoom In">+</button>
+        <button class="btn small" id="zoomResetBtn" title="Fit to Viewport">Fit</button>
+      </div>
+    </div>
+
+    <!-- Shaft Canvas Viewport -->
+    <div id="shaftViewport">
+      <canvas id="shaftCanvas"></canvas>
+    </div>
+  </main>
+
+  <!-- CONTROL PANEL TABS -->
+  <aside id="panel">
+    <nav id="navTabs">
+      <div class="nav-tab active" data-tab="config">Config</div>
+      <div class="nav-tab" data-tab="requests">Requests</div>
+      <div class="nav-tab" data-tab="algorithm">Algorithm</div>
+      <div class="nav-tab" data-tab="safety">Safety</div>
+      <div class="nav-tab" data-tab="analytics">Analytics</div>
+      <div class="nav-tab" data-tab="reports">Reports</div>
+      <div class="nav-tab" data-tab="logs">Logs</div>
+      <div class="nav-tab" data-tab="theme">Theme</div>
+    </nav>
+    <div id="tabViewport"></div>
+  </aside>
+
 </div>
+
+<div id="toastContainer"></div>
+
 <script>
 (function(){
-const API = window.location.origin;
-const WS_URL = (window.location.protocol==='https:'?'wss':'ws')+'://'+window.location.host+'/ws/simulation';
+  const API_ROOT = window.location.origin;
+  const WS_URL = (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + window.location.host + '/ws/simulation';
 
-const ui = {
-  activeTab:'config', theme:'dark', started:false,
-  logFilter:'all', logSearch:'', selectedElevatorForFault:0, zoom:1, lastSafetyKey:'',
-  algoStats:{}, history:{waitTime:[],travelTime:[],utilization:[],energy:[],requestsPerMin:[],faults:[]}, lastSampleSec:0, lastTotalRequests:0
-};
-let snapshot = null;
-let ws = null;
-
-const ALGO_META = {
-  fcfs:'First request, first served, in arrival order.',
-  scan:'Sweeps to the end of the shaft, then reverses.',
-  look:'Reverses at the last request, not the shaft end.',
-  sstf:'Always serves the physically closest request.',
-  collective:'Picks up same-direction calls along the way.',
-  nearest:'Hall call goes to the nearest idle-capable car.',
-  sector:'Each car owns a floor band; calls route by sector.',
-  destination:'Groups riders by destination before boarding.',
-  adaptive:'Switches strategy with live traffic conditions.',
-  ai:'Weighted multi-factor scoring per elevator.'
-};
-const PRIORITY_COLOR = {normal:'var(--p-normal)',staff:'var(--p-staff)',elderly:'var(--p-elderly)',disabled:'var(--p-disabled)',vip:'var(--p-vip)',medical:'var(--p-medical)',emergency:'var(--p-emergency)',firefighter:'var(--p-firefighter)'};
-
-async function api(path, method, body){
-  const res = await fetch(API+path, {
-    method: method||'GET',
-    headers: body ? {'Content-Type':'application/json'} : undefined,
-    body: body ? JSON.stringify(body) : undefined
-  });
-  if(!res.ok) throw new Error('API error '+res.status+' on '+path);
-  const ct = res.headers.get('content-type')||'';
-  return ct.includes('application/json') ? res.json() : res.text();
-}
-
-function connectWebSocket(){
-  ws = new WebSocket(WS_URL);
-  ws.onopen = ()=>{ setConn(true); };
-  ws.onclose = ()=>{ setConn(false); setTimeout(connectWebSocket, 2000); };
-  ws.onerror = ()=>{ setConn(false); };
-  ws.onmessage = (evt)=>{
-    snapshot = JSON.parse(evt.data);
-    onSnapshot();
+  const ui = {
+    activeTab: 'config',
+    started: false,
+    zoom: 1.0,
+    selectedPalette: 'aubergine',
+    selectedElevatorForFault: 0,
+    logFilter: 'all',
+    logSearch: '',
+    algoStats: {},
+    history: { waitTime: [], travelTime: [], utilization: [], energy: [], requestsPerMin: [], faults: [] },
+    lastSampleSec: 0,
+    lastTotalRequests: 0,
+    lastSafetyKey: ''
   };
-}
-function setConn(connected){
-  const badge = document.getElementById('connBadge');
-  badge.className = 'conn-badge '+(connected?'connected':'disconnected');
-  document.getElementById('connText').textContent = connected? 'Live · Connected' : 'Reconnecting…';
-}
 
-function onSnapshot(){
-  if(!snapshot) return;
-  document.getElementById('buildingNameDisplay').textContent = snapshot.building.name;
-  renderClock();
-  renderStatOverlay();
-  drawShaft();
-  sampleHistory();
-  if(ui.activeTab==='analytics') renderAnalyticsTab();
-  if(ui.activeTab==='requests') renderHallCallList();
-  if(ui.activeTab==='algorithm') renderAlgoBars();
-  if(ui.activeTab==='safety'){
-    const key = JSON.stringify({s:snapshot.safety, sel:ui.selectedElevatorForFault,
-      els:snapshot.elevators.map(e=>[e.fault,e.maintenance,e.inspection,e.independentService])});
-    if(key!==ui.lastSafetyKey){ ui.lastSafetyKey=key; renderTab('safety'); }
+  let snapshot = null;
+  let ws = null;
+
+  // Toast Notification System
+  function showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.style.animation = 'toastOut 0.25s ease forwards';
+      setTimeout(() => toast.remove(), 250);
+    }, 2800);
   }
-  syncPauseButton();
-}
 
-function sampleHistory(){
-  if(snapshot.simSeconds - ui.lastSampleSec < 2) return;
-  const elapsedMin = Math.max(0.033, (snapshot.simSeconds - ui.lastSampleSec) / 60);
-  const requestsDelta = snapshot.analytics.totalRequests - (ui.lastTotalRequests||0);
-  ui.lastTotalRequests = snapshot.analytics.totalRequests;
-  ui.lastSampleSec = snapshot.simSeconds;
-  push('waitTime', snapshot.analytics.avgWaitTime);
-  push('travelTime', snapshot.analytics.avgTravelTime);
-  push('requestsPerMin', requestsDelta / elapsedMin);
-  push('utilization', snapshot.analytics.utilizationPct);
-  push('energy', snapshot.analytics.energy);
-  push('faults', snapshot.analytics.faultCount);
-  if(!ui.algoStats[snapshot.algorithm]) ui.algoStats[snapshot.algorithm] = [];
-  ui.algoStats[snapshot.algorithm].push(snapshot.analytics.avgWaitTime);
-  if(ui.algoStats[snapshot.algorithm].length>20) ui.algoStats[snapshot.algorithm].shift();
-}
-function push(key,val){ const a=ui.history[key]; a.push(val); if(a.length>60) a.shift(); }
-
-function fmtClock(sec){
-  const s=Math.floor(sec); const hh=String(Math.floor(s/3600)%24).padStart(2,'0');
-  const mm=String(Math.floor(s/60)%60).padStart(2,'0'); const ss=String(s%60).padStart(2,'0');
-  return hh+':'+mm+':'+ss;
-}
-function floorLabel(f){
-  if(!snapshot) return String(f);
-  if(f===snapshot.building.lobby) return 'LOBBY';
-  if(f<0) return 'B'+Math.abs(f);
-  return 'F'+f;
-}
-function floorTag(f){
-  const b = snapshot.building;
-  if(f===b.lobby) return 'Reception';
-  if(b.vipFloors.includes(f)) return 'VIP Floor';
-  if(b.serviceFloors.includes(f)) return 'Service';
-  if(b.mechanicalFloors.includes(f)) return 'Mechanical';
-  if(b.parkingFloors.includes(f)) return 'Parking';
-  if(f<0) return snapshot.safety.flood? 'Basement · LOCKED' : 'Basement';
-  return '';
-}
-function floorRange(){
-  const b=snapshot.building; const floors=[];
-  const bottom = b.basements>0? -b.basements : 1;
-  for(let f=b.floors; f>=bottom; f--){ if(f===0) continue; floors.push(f); }
-  return floors;
-}
-
-function renderClock(){
-  document.getElementById('simClock').textContent = 'DAY '+snapshot.simDay+' · '+fmtClock(snapshot.simSeconds);
-}
-function renderStatOverlay(){
-  const a = snapshot.analytics;
-  const chips = [['Waiting', a.waitingPassengers], ['Avg Wait', a.avgWaitTime.toFixed(1)+'s'], ['Completed', a.completed],
-    ['Active Cars', snapshot.elevators.filter(e=>e.state==='moving').length+'/'+snapshot.elevators.length]];
-  document.getElementById('statOverlay').innerHTML = chips.map(c=>`<div class="stat-chip"><div class="v">${c[1]}</div><div class="l">${c[0]}</div></div>`).join('');
-  const s = snapshot.safety; const alerts=[];
-  if(s.fire) alerts.push('FIRE ALARM ACTIVE'); if(s.smoke) alerts.push('SMOKE DETECTED');
-  if(s.estop) alerts.push('EMERGENCY STOP'); if(s.power) alerts.push('POWER OUTAGE');
-  if(s.earthquake) alerts.push('EARTHQUAKE PROTOCOL'); if(s.flood) alerts.push('FLOOD PROTOCOL — BASEMENTS LOCKED');
-  const bar = document.getElementById('alertBar');
-  if(alerts.length){ bar.style.display='flex'; document.getElementById('alertText').textContent = alerts.join(' · '); }
-  else bar.style.display='none';
-}
-
-const canvas = document.getElementById('shaftCanvas'); const ctx = canvas.getContext('2d');
-function resizeCanvas(){
-  const wrap = document.getElementById('shaftWrap');
-  const floors = snapshot? floorRange() : [1];
-  const elCount = snapshot? snapshot.elevators.length : 4;
-  const baseW = Math.max(wrap.clientWidth-20, elCount*140+150);
-  const baseH = Math.max(wrap.clientHeight-20, (floors.length+1)*48+70);
-  const w = baseW*ui.zoom, h = baseH*ui.zoom;
-  const wPx=w+'px', hPx=h+'px';
-  if(canvas.style.width===wPx && canvas.style.height===hPx) return;
-  canvas.width=w*devicePixelRatio; canvas.height=h*devicePixelRatio;
-  canvas.style.width=wPx; canvas.style.height=hPx;
-  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-}
-window.addEventListener('resize', resizeCanvas);
-function cssVar(n){ return getComputedStyle(document.body).getPropertyValue(n).trim(); }
-let COLORS = null;
-function computeColors(){
-  const cs = getComputedStyle(document.body); const g = n => cs.getPropertyValue(n).trim();
-  COLORS = {
-    text1:g('--text-1'), text2:g('--text-2'), border:g('--border-strong'),
-    accent:g('--accent'), accent2:g('--accent-2'), danger:g('--danger'), warning:g('--warning'), success:g('--success'),
-    vip:g('--p-vip'), bg0:g('--bg-0'), bg1:g('--bg-1'), bg2:g('--bg-2'),
-    priority:{normal:g('--p-normal'), staff:g('--p-staff'), elderly:g('--p-elderly'), disabled:g('--p-disabled'),
-      vip:g('--p-vip'), medical:g('--p-medical'), emergency:g('--p-emergency'), firefighter:g('--p-firefighter')}
+  // The 10 Preserved Scheduling Algorithms
+  const ALGO_METADATA = {
+    fcfs: { name: 'FCFS', desc: 'First-Come First-Served: processes hall and car calls strictly in order of arrival.' },
+    scan: { name: 'SCAN', desc: 'Elevator Algorithm: sweeps full shaft bottom to top before reversing direction.' },
+    look: { name: 'LOOK', desc: 'Optimized Sweep: sweeps in active direction until no queued calls remain, then reverses.' },
+    sstf: { name: 'SSTF', desc: 'Shortest Seek Time First: dispatches the car with the smallest floor distance.' },
+    collective: { name: 'Collective Control', desc: 'Collects coincidental same-direction calls along active journey.' },
+    nearest: { name: 'Nearest Car', desc: 'Estimates arrival cost across idle and moving cars to select closest car.' },
+    sector: { name: 'Sector Based', desc: 'Partitions building floors into dedicated zones; assigns designated car fleets.' },
+    destination: { name: 'Destination Dispatch', desc: 'Riders enter destination at hall; passengers grouped by floor before boarding.' },
+    adaptive: { name: 'Adaptive', desc: 'Monitors real-time traffic volume and adapts dispatch strategy dynamically.' },
+    ai: { name: 'AI-Inspired Dynamic', desc: 'Multi-factor weighted optimization evaluating wait penalty, load, and energy.' }
   };
-}
-function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
-function drawPersonIcon(x,y,color,scale){ ctx.fillStyle=color; ctx.beginPath(); ctx.arc(x,y-scale*1.2,scale*0.62,0,7); ctx.fill(); roundRect(ctx,x-scale*0.75,y-scale*0.5,scale*1.5,scale*1.5,scale*0.5); ctx.fill(); }
 
-function drawShaft(){
-  if(!snapshot) return;
-  resizeCanvas();
-  const floors = floorRange().sort((a,b)=>b-a);
-  const w=canvas.width/devicePixelRatio, h=canvas.height/devicePixelRatio;
-  ctx.clearRect(0,0,w,h);
-  const labelW=78, roofRowH=34, rowH=(h-40-roofRowH)/floors.length;
-  const carW = Math.min(104, (w-labelW-24)/snapshot.elevators.length - 12);
-  if(!COLORS) computeColors();
-  const {text1,text2,border,accent,danger,warning,success,vip,bg2}=COLORS;
+  // Color Swatches for Themes
+  const PALETTES = [
+    {
+      id: 'aubergine',
+      label: 'Aubergine & Marigold Executive',
+      sub: 'Industrial Corporate Identity (Default theme-aubergine)',
+      swatches: ['#231724', '#8E3A75', '#E5A93C', '#1D151F', '#F5EEF6']
+    },
+    {
+      id: 'obsidian',
+      label: 'Industrial Obsidian SCADA',
+      sub: 'High-Contrast Telemetry Center',
+      swatches: ['#0B0E14', '#18202F', '#E5A93C', '#94A3B8', '#F1F5F9']
+    },
+    {
+      id: 'slate',
+      label: 'Industrial Slate Control',
+      sub: 'Midnight Navy Operations',
+      swatches: ['#090E17', '#15223D', '#38BDF8', '#94A3B8', '#F8FAFC']
+    }
+  ];
 
-  ctx.save(); ctx.strokeStyle='rgba(232,163,61,0.045)'; ctx.lineWidth=1;
-  for(let gx=labelW; gx<w-10; gx+=24){ ctx.beginPath(); ctx.moveTo(gx,16); ctx.lineTo(gx,h-10); ctx.stroke(); }
-  for(let gy=16; gy<h-10; gy+=24){ ctx.beginPath(); ctx.moveTo(labelW,gy); ctx.lineTo(w-10,gy); ctx.stroke(); }
-  ctx.restore();
+  // API Call Helper with Error Handling
+  async function api(endpoint, method = 'GET', body = null) {
+    const options = { method, headers: {} };
+    if (body) {
+      options.headers['Content-Type'] = 'application/json';
+      options.body = JSON.stringify(body);
+    }
+    const res = await fetch(API_ROOT + endpoint, options);
+    if (!res.ok) throw new Error(`API error ${res.status} on ${endpoint}`);
+    const contentType = res.headers.get('content-type') || '';
+    return contentType.includes('application/json') ? res.json() : res.text();
+  }
 
-  ctx.fillStyle=bg2; ctx.fillRect(labelW,16,w-labelW-14,roofRowH-2);
-  ctx.strokeStyle=border; ctx.strokeRect(labelW,16,w-labelW-14,roofRowH-2);
-  ctx.fillStyle=text2; ctx.font='700 10px sans-serif'; ctx.textAlign='left'; ctx.textBaseline='middle';
-  ctx.fillText('◤ ROOF · MECHANICAL DECK', labelW+10, 16+roofRowH/2-1);
+  // WebSocket Connection
+  function initWebSocket() {
+    ws = new WebSocket(WS_URL);
+    ws.onopen = () => updateConnectionStatus(true);
+    ws.onclose = () => {
+      updateConnectionStatus(false);
+      setTimeout(initWebSocket, 2000);
+    };
+    ws.onerror = () => updateConnectionStatus(false);
+    ws.onmessage = (evt) => {
+      try {
+        snapshot = JSON.parse(evt.data);
+        onSnapshotReceived();
+      } catch (err) {
+        console.error('Snapshot parse error', err);
+      }
+    };
+  }
 
-  floors.forEach((f,i)=>{
-    const y=20+roofRowH+i*rowH;
-    const activeFloor = snapshot.elevators.some(e=>Math.round(e.currentFloor)===f && (e.doorState==='open'||e.doorState==='opening'));
-    if(activeFloor){ ctx.fillStyle=accent+'14'; ctx.fillRect(labelW,y,w-labelW-14,rowH); }
-    ctx.strokeStyle=border; ctx.beginPath(); ctx.moveTo(labelW,y+rowH); ctx.lineTo(w-10,y+rowH); ctx.stroke();
-    ctx.fillStyle = f===snapshot.building.lobby? accent : (snapshot.building.vipFloors.includes(f)? vip : text1);
-    ctx.font='700 12px monospace'; ctx.fillText(floorLabel(f), 8, y+rowH/2-6);
-    const tag = floorTag(f);
-    if(tag){ ctx.fillStyle=text2; ctx.font='600 8.5px sans-serif'; ctx.fillText(tag, 8, y+rowH/2+8); }
-    const waitCount = snapshot.passengers.filter(p=>p.state==='waiting' && p.origin===f).length;
-    if(waitCount>0){
-      ctx.fillStyle=warning; ctx.beginPath(); ctx.arc(labelW-12,y+rowH/2-10,7,0,7); ctx.fill();
-      ctx.fillStyle='#1a1206'; ctx.font='700 9px monospace'; ctx.textAlign='center';
-      ctx.fillText(waitCount, labelW-12, y+rowH/2-9); ctx.textAlign='left';
+  function updateConnectionStatus(connected) {
+    const badge = document.getElementById('connIndicator');
+    const text = document.getElementById('connText');
+    if (connected) {
+      badge.className = 'conn-indicator connected';
+      text.textContent = 'Live Connected';
+    } else {
+      badge.className = 'conn-indicator disconnected';
+      text.textContent = 'Reconnecting...';
+    }
+  }
+
+  function onSnapshotReceived() {
+    if (!snapshot) return;
+
+    if (snapshot.running && !ui.started) {
+      ui.started = true;
+      document.getElementById('startOverlay').classList.add('hidden');
+    }
+
+    document.getElementById('buildingHeaderName').textContent = snapshot.building.name;
+    document.getElementById('activeAlgoBadge').textContent = (snapshot.algorithm || 'LOOK').toUpperCase();
+    renderSimulationClock();
+    renderStatOverlay();
+    drawShaftVisualization();
+    recordTelemetrySample();
+
+    if (ui.activeTab === 'analytics') renderAnalyticsTab();
+    if (ui.activeTab === 'requests') renderHallCallsTab();
+    if (ui.activeTab === 'algorithm') renderAlgoComparisonBars();
+    if (ui.activeTab === 'safety') checkSafetyTabUpdate();
+    syncPauseButton();
+  }
+
+  function recordTelemetrySample() {
+    if (!snapshot) return;
+    if (snapshot.simSeconds - ui.lastSampleSec < 2) return;
+    const elapsedMin = Math.max(0.033, (snapshot.simSeconds - ui.lastSampleSec) / 60);
+    const delta = snapshot.analytics.totalRequests - (ui.lastTotalRequests || 0);
+    ui.lastTotalRequests = snapshot.analytics.totalRequests;
+    ui.lastSampleSec = snapshot.simSeconds;
+
+    pushHistory('waitTime', snapshot.analytics.avgWaitTime);
+    pushHistory('travelTime', snapshot.analytics.avgTravelTime);
+    pushHistory('requestsPerMin', delta / elapsedMin);
+    pushHistory('utilization', snapshot.analytics.utilizationPct);
+    pushHistory('energy', snapshot.analytics.energy);
+    pushHistory('faults', snapshot.analytics.faultCount);
+
+    const algo = snapshot.algorithm || 'look';
+    if (!ui.algoStats[algo]) ui.algoStats[algo] = [];
+    ui.algoStats[algo].push(snapshot.analytics.avgWaitTime);
+    if (ui.algoStats[algo].length > 40) ui.algoStats[algo].shift();
+  }
+
+  function pushHistory(key, val) {
+    ui.history[key].push(val);
+    if (ui.history[key].length > 60) ui.history[key].shift();
+  }
+
+  function renderSimulationClock() {
+    if (!snapshot) return;
+    const sec = Math.floor(snapshot.simSeconds);
+    const h = String(Math.floor(sec / 3600)).padStart(2, '0');
+    const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+    const s = String(sec % 60).padStart(2, '0');
+    document.getElementById('simClockBadge').textContent = `DAY ${snapshot.simDay} · ${h}:${m}:${s}`;
+  }
+
+  function renderStatOverlay() {
+    if (!snapshot) return;
+    const a = snapshot.analytics;
+    const moving = snapshot.elevators.filter(e => e.state === 'moving').length;
+    const total = snapshot.elevators.length;
+
+    const chips = [
+      { v: a.waitingPassengers, l: 'Waiting' },
+      { v: a.avgWaitTime.toFixed(1) + 's', l: 'Avg Wait' },
+      { v: a.completed, l: 'Completed' },
+      { v: `${moving}/${total}`, l: 'Moving Cars' }
+    ];
+
+    document.getElementById('statOverlay').innerHTML = chips.map(c => `
+      <div class="stat-chip">
+        <div class="v">${c.v}</div>
+        <div class="l">${c.l}</div>
+      </div>
+    `).join('');
+
+    const banner = document.getElementById('alertBanner');
+    const activeAlerts = [];
+    if (snapshot.safety.fire) activeAlerts.push('FIRE ALARM ACTIVE');
+    if (snapshot.safety.smoke) activeAlerts.push('SMOKE DETECTED');
+    if (snapshot.safety.estop) activeAlerts.push('EMERGENCY STOP ENGAGED');
+    if (snapshot.safety.power) activeAlerts.push('POWER FAILURE MODE');
+    if (snapshot.safety.earthquake) activeAlerts.push('EARTHQUAKE PROTOCOL');
+    if (snapshot.safety.flood) activeAlerts.push('BASEMENT FLOOD PROTOCOL');
+    const faulted = snapshot.elevators.filter(e => e.fault);
+    if (faulted.length > 0) activeAlerts.push(`${faulted.length} CAR FAULT(S) DETECTED`);
+
+    if (activeAlerts.length > 0) {
+      banner.style.display = 'flex';
+      document.getElementById('alertBannerText').textContent = activeAlerts.join(' · ');
+    } else {
+      banner.style.display = 'none';
+    }
+  }
+
+  function getFloorRange() {
+    if (!snapshot) return [12,11,10,9,8,7,6,5,4,3,2,1,-1,-2];
+    const b = snapshot.building;
+    const floors = [];
+    for (let f = b.floors; f >= 1; f--) floors.push(f);
+    for (let f = -1; f >= -b.basements; f--) floors.push(f);
+    return floors;
+  }
+
+  function formatFloor(f) {
+    if (f < 0) return 'B' + Math.abs(f);
+    return 'F' + f;
+  }
+
+  function floorTag(f) {
+    if (!snapshot) return '';
+    const b = snapshot.building;
+    if (f === b.lobby) return 'LOBBY';
+    if (b.vipFloors && b.vipFloors.includes(f)) return 'VIP';
+    if (b.parkingFloors && b.parkingFloors.includes(f)) return 'PARKING';
+    if (b.serviceFloors && b.serviceFloors.includes(f)) return 'SERVICE';
+    return '';
+  }
+
+  /* ----------------------------------------------------
+     CANVAS AUTO-SCALE & SHAFT RENDERING
+  ---------------------------------------------------- */
+  const canvas = document.getElementById('shaftCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function resizeCanvas() {
+    const wrap = document.getElementById('shaftViewport');
+    const floors = getFloorRange();
+    const elCount = snapshot ? snapshot.elevators.length : 4;
+
+    const overheadH = 90;
+    const bottomPad = 28;
+    const labelW = 90;
+    const colW = 120;
+
+    const availableH = wrap.clientHeight - 24;
+    const neededH = overheadH + floors.length * 36 + bottomPad;
+    const baseH = Math.max(availableH, neededH);
+
+    const availableW = wrap.clientWidth - 28;
+    const neededW = labelW + elCount * colW + 40;
+    const baseW = Math.max(availableW, neededW);
+
+    const w = Math.round(baseW * ui.zoom);
+    const h = Math.round(baseH * ui.zoom);
+    const wPx = w + 'px';
+    const hPx = h + 'px';
+
+    if (canvas.style.width !== wPx || canvas.style.height !== hPx) {
+      canvas.width = Math.round(w * window.devicePixelRatio);
+      canvas.height = Math.round(h * window.devicePixelRatio);
+      canvas.style.width = wPx;
+      canvas.style.height = hPx;
+      ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+    }
+  }
+  window.addEventListener('resize', () => { resizeCanvas(); drawShaftVisualization(); });
+
+  function drawRoundRect(c, x, y, w, h, r) {
+    c.beginPath();
+    c.moveTo(x + r, y);
+    c.arcTo(x + w, y, x + w, y + h, r);
+    c.arcTo(x + w, y + h, x, y + h, r);
+    c.arcTo(x, y + h, x, y, r);
+    c.arcTo(x, y, x + w, y, r);
+    c.closePath();
+  }
+
+  function drawPassengerIcon(c, x, y, color, scale) {
+    c.fillStyle = color;
+    c.beginPath();
+    c.arc(x, y - scale * 1.25, scale * 0.65, 0, Math.PI * 2);
+    c.fill();
+    drawRoundRect(c, x - scale * 0.75, y - scale * 0.5, scale * 1.5, scale * 1.6, scale * 0.4);
+    c.fill();
+  }
+
+  function drawShaftVisualization() {
+    if (!snapshot) return;
+    resizeCanvas();
+    const floors = getFloorRange().sort((a, b) => b - a);
+    const w = canvas.width / window.devicePixelRatio;
+    const h = canvas.height / window.devicePixelRatio;
+    ctx.clearRect(0, 0, w, h);
+
+    const labelW = 90;
+    const topMargin = 12;
+    const machineRoomH = 34;
+    const colHeaderH = 32;
+    const shaftTop = topMargin + machineRoomH + colHeaderH + 10;
+    const bottomMargin = 22;
+
+    const rowH = (h - shaftTop - bottomMargin) / floors.length;
+    const carW = Math.min(100, (w - labelW - 36) / snapshot.elevators.length - 16);
+
+    // Machine Room Header Box
+    ctx.save();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+    ctx.fillRect(labelW, topMargin, w - labelW - 16, machineRoomH);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(labelW, topMargin, w - labelW - 16, machineRoomH);
+
+    ctx.fillStyle = '#94A3B8';
+    ctx.font = '700 10px monospace';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('◤ OVERHEAD MACHINE ROOM · DUAL BRAKE TRACTION HOISTS', labelW + 12, topMargin + machineRoomH / 2);
+    ctx.restore();
+
+    // Floor Rows & Hall Calls
+    floors.forEach((f, i) => {
+      const y = shaftTop + i * rowH;
+      const activeFloor = snapshot.elevators.some(e => Math.round(e.currentFloor) === f && (e.doorState === 'open' || e.doorState === 'opening'));
+
+      if (activeFloor) {
+        ctx.fillStyle = 'rgba(229, 169, 60, 0.08)';
+        ctx.fillRect(labelW, y, w - labelW - 16, rowH);
+      }
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
+      ctx.beginPath();
+      ctx.moveTo(labelW, y + rowH);
+      ctx.lineTo(w - 16, y + rowH);
+      ctx.stroke();
+
+      // Floor Tag & Name
+      const isLobby = f === snapshot.building.lobby;
+      const isVip = snapshot.building.vipFloors && snapshot.building.vipFloors.includes(f);
+      const isParking = snapshot.building.parkingFloors && snapshot.building.parkingFloors.includes(f);
+
+      ctx.fillStyle = isLobby ? '#E5A93C' : (isVip ? '#A78BFA' : (isParking ? '#38BDF8' : '#F1F5F9'));
+      ctx.font = '700 12px monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText(formatFloor(f), 10, y + rowH / 2 - 4);
+
+      const tag = floorTag(f);
+      if (tag) {
+        ctx.fillStyle = isLobby ? '#E5A93C' : (isVip ? '#A78BFA' : '#64748B');
+        ctx.font = '700 8.5px sans-serif';
+        ctx.fillText(tag, 10, y + rowH / 2 + 10);
+      }
+
+      // Active Directional Hall Call Beacons
+      const callsHere = snapshot.hallCalls.filter(c => c.floor === f);
+      if (callsHere.length > 0) {
+        const hasUp = callsHere.some(c => c.dir === 'up');
+        const hasDown = callsHere.some(c => c.dir === 'down');
+        ctx.font = '700 10px monospace';
+        if (hasUp) {
+          ctx.fillStyle = '#10B981';
+          ctx.fillText('▲', labelW - 24, y + rowH / 2 - 3);
+        }
+        if (hasDown) {
+          ctx.fillStyle = '#F59E0B';
+          ctx.fillText('▼', labelW - 14, y + rowH / 2 - 3);
+        }
+      }
+
+      // Waiting Rider Queue
+      const waiting = snapshot.passengers.filter(p => p.state === 'waiting' && p.origin === f);
+      if (waiting.length > 0) {
+        ctx.fillStyle = '#E5A93C';
+        ctx.beginPath();
+        ctx.arc(labelW - 36, y + rowH / 2 - 4, 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#0B0E14';
+        ctx.font = '800 9px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(waiting.length, labelW - 36, y + rowH / 2 - 1);
+        ctx.textAlign = 'left';
+
+        // Mini Rider Avatars
+        waiting.slice(0, 4).forEach((p, pi) => {
+          const px = labelW - 48 - (pi * 10);
+          const py = y + rowH / 2 - 4;
+          const pColor = getPriorityColor(p.priority);
+          drawPassengerIcon(ctx, px, py, pColor, 2.2);
+        });
+      }
+    });
+
+    // Elevators Columns & Cabins
+    snapshot.elevators.forEach((e, ei) => {
+      const x0 = labelW + 24 + ei * (carW + 20);
+      const shaftBottom = shaftTop + floors.length * rowH;
+
+      // Column Header Plaque (Positioned cleanly with zero collision)
+      const headerY = topMargin + machineRoomH + 4;
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+      drawRoundRect(ctx, x0 - 4, headerY, carW + 8, colHeaderH, 4);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.stroke();
+
+      ctx.fillStyle = '#F1F5F9';
+      ctx.font = '800 11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`CAR ${e.label}`, x0 + carW / 2, headerY + 13);
+
+      const stateLabel = e.fault ? 'FAULT' : (e.maintenance ? 'MAINT' : (e.inspection ? 'INSPECT' : (e.state === 'moving' ? (e.direction > 0 ? '▲ UP' : '▼ DN') : 'IDLE')));
+      ctx.fillStyle = e.fault ? '#EF4444' : (e.state === 'moving' ? '#10B981' : '#E5A93C');
+      ctx.font = '700 8.5px monospace';
+      ctx.fillText(stateLabel, x0 + carW / 2, headerY + 25);
+      ctx.textAlign = 'left';
+
+      // Twin Vertical Guide Rails
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x0 + 4, shaftTop); ctx.lineTo(x0 + 4, shaftBottom);
+      ctx.moveTo(x0 + carW - 4, shaftTop); ctx.lineTo(x0 + carW - 4, shaftBottom);
+      ctx.stroke();
+
+      // Car Position Interpolation
+      const topFloor = floors[0];
+      const botFloor = floors[floors.length - 1];
+      const frac = (topFloor - e.currentFloor) / (topFloor - botFloor);
+      const carH = Math.min(rowH * 0.88, 54);
+      const carY = shaftTop + frac * (shaftBottom - shaftTop - carH);
+      const carCenterX = x0 + carW / 2;
+
+      // Suspension Cable
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([3, 3]);
+      ctx.lineDashOffset = -((snapshot.simSeconds * 30) % 6) * e.direction;
+      ctx.beginPath();
+      ctx.moveTo(carCenterX, shaftTop);
+      ctx.lineTo(carCenterX, carY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Counterweight (Moves inversely on rail)
+      const cwY = shaftTop + (1 - frac) * (shaftBottom - shaftTop - 28);
+      ctx.fillStyle = '#475569';
+      drawRoundRect(ctx, x0 + carW + 1, cwY, 5, 24, 2);
+      ctx.fill();
+
+      // Sleek Industrial Cabin
+      let cabinColor = '#E5A93C'; // Idle
+      if (e.fault) cabinColor = '#EF4444';
+      else if (e.maintenance || e.inspection) cabinColor = '#F59E0B';
+      else if (e.state === 'moving') cabinColor = '#10B981';
+
+      // Cabin Glass Frame
+      ctx.save();
+      ctx.fillStyle = 'rgba(18, 24, 38, 0.9)';
+      drawRoundRect(ctx, x0, carY, carW, carH, 6);
+      ctx.fill();
+
+      ctx.strokeStyle = cabinColor;
+      ctx.lineWidth = 1.8;
+      ctx.stroke();
+
+      // Interior Ambient Floor Light
+      const cabinGrad = ctx.createLinearGradient(x0, carY, x0, carY + carH);
+      cabinGrad.addColorStop(0, cabinColor + '25');
+      cabinGrad.addColorStop(1, 'rgba(0, 0, 0, 0.4)');
+      ctx.fillStyle = cabinGrad;
+      ctx.fill();
+      ctx.restore();
+
+      // Sliding Split Center Doors
+      const doorProgress = e.doorState === 'open' ? 1.0 : (e.doorState === 'closed' ? 0.0 : e.doorProgress);
+      const doorGap = doorProgress * (carW * 0.42);
+      if (e.doorState !== 'closed') {
+        ctx.fillStyle = '#0F131D';
+        ctx.fillRect(x0 + 2, carY + 2, Math.max(0, doorGap), carH - 4);
+        ctx.fillRect(x0 + carW - 2 - doorGap, carY + 2, Math.max(0, doorGap), carH - 4);
+      }
+      ctx.strokeStyle = cabinColor + '80';
+      ctx.beginPath();
+      ctx.moveTo(x0 + carW / 2, carY + 2);
+      ctx.lineTo(x0 + carW / 2, carY + carH - 2);
+      ctx.stroke();
+
+      // Digital Floor Indicator Header Badge
+      ctx.fillStyle = '#0B0E14';
+      ctx.strokeStyle = cabinColor;
+      ctx.lineWidth = 1;
+      drawRoundRect(ctx, x0 + carW / 2 - 20, carY - 18, 40, 15, 3);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = cabinColor;
+      ctx.font = '700 10px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(formatFloor(Math.round(e.currentFloor)), x0 + carW / 2, carY - 7);
+
+      // Onboard Passengers
+      const onboard = snapshot.passengers.filter(p => p.state === 'riding' && p.assignedElevatorId === e.id);
+      const dotsPerRow = Math.ceil(Math.sqrt(snapshot.building.capacity));
+      onboard.forEach((p, pi) => {
+        const col = pi % dotsPerRow;
+        const row = Math.floor(pi / dotsPerRow);
+        const pColor = getPriorityColor(p.priority);
+        drawPassengerIcon(ctx, x0 + 10 + col * 10, carY + 10 + row * 10, pColor, 2.6);
+      });
+
+      // Capacity & Weight Gauge
+      const occFrac = e.passengerCount / snapshot.building.capacity;
+      const weightFrac = e.weight / snapshot.building.weightLimit;
+      const barY = carY + carH + 4;
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.fillRect(x0, barY, carW, 3);
+      ctx.fillStyle = occFrac > 0.9 ? '#EF4444' : (occFrac > 0.7 ? '#F59E0B' : '#E5A93C');
+      ctx.fillRect(x0, barY, carW * Math.min(1, occFrac), 3);
+
+      ctx.font = '600 8.5px monospace';
+      ctx.fillStyle = '#94A3B8';
+      ctx.textAlign = 'left';
+      ctx.fillText(`${e.passengerCount}/${snapshot.building.capacity}`, x0, barY + 11);
+      ctx.textAlign = 'right';
+      ctx.fillStyle = weightFrac > 0.9 ? '#EF4444' : '#94A3B8';
+      ctx.fillText(`${Math.round(e.weight)}kg`, x0 + carW, barY + 11);
+      ctx.textAlign = 'left';
+    });
+  }
+
+  function getPriorityColor(priority) {
+    switch (priority) {
+      case 'staff': return '#38BDF8';
+      case 'elderly': return '#F59E0B';
+      case 'disabled': return '#0D9488';
+      case 'vip': return '#8B5CF6';
+      case 'medical': return '#EF4444';
+      case 'emergency': return '#EF4444';
+      case 'firefighter': return '#EA580C';
+      default: return '#94A3B8';
+    }
+  }
+
+  /* ----------------------------------------------------
+     TAB RENDERING FUNCTIONS
+  ---------------------------------------------------- */
+  function renderTab(name) {
+    ui.activeTab = name;
+    const viewport = document.getElementById('tabViewport');
+    switch (name) {
+      case 'config': viewport.innerHTML = renderConfigTab(); break;
+      case 'requests': viewport.innerHTML = renderRequestsTab(); break;
+      case 'algorithm': viewport.innerHTML = renderAlgorithmTab(); break;
+      case 'safety': viewport.innerHTML = renderSafetyTab(); break;
+      case 'analytics': viewport.innerHTML = renderAnalyticsTabHTML(); break;
+      case 'reports': viewport.innerHTML = renderReportsTab(); break;
+      case 'logs': viewport.innerHTML = renderLogsTab(); break;
+      case 'theme': viewport.innerHTML = renderThemeTab(); break;
+    }
+    bindTabEvents(name);
+
+    if (name === 'algorithm') { renderAlgoGrid(); renderAlgoComparisonBars(); }
+    if (name === 'requests') renderHallCallsTab();
+    if (name === 'analytics') renderAnalyticsTab();
+    if (name === 'logs') fetchAndDisplayLogs();
+    if (name === 'theme') renderThemeControls();
+  }
+
+  function renderConfigTab() {
+    const b = snapshot ? snapshot.building : {
+      name: 'Infinity Tower', floors: 12, basements: 2, lobby: 1, idleFloor: 1,
+      parkingFloors: [-1, -2], vipFloors: [10, 11, 12], serviceFloors: [-2], mechanicalFloors: [],
+      elevatorCount: 4, capacity: 8, weightLimit: 900, maxSpeed: 2.2, acceleration: 1.1, deceleration: 1.1,
+      doorOpenTime: 1.6, doorCloseTime: 1.6, loadTime: 1.2, unloadTime: 1.0, energySaving: false
+    };
+
+    return `
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Building Architecture</h3></div>
+      <div class="form-row">
+        <div class="form-col"><label>Building Name</label><input class="input-control" id="cfgName" value="${escapeHtml(b.name)}"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-col"><label>Total Floors</label><input class="input-control" id="cfgFloors" type="number" min="1" max="60" value="${b.floors}"/></div>
+        <div class="form-col"><label>Basements</label><input class="input-control" id="cfgBasements" type="number" min="0" max="6" value="${b.basements}"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-col"><label>Main Lobby Floor</label><input class="input-control" id="cfgLobby" type="number" value="${b.lobby}"/></div>
+        <div class="form-col"><label>Default Idle Floor</label><input class="input-control" id="cfgIdle" type="number" value="${b.idleFloor}"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-col"><label>Parking Floors (csv)</label><input class="input-control input-mono" id="cfgParking" value="${(b.parkingFloors||[]).join(',')}"/></div>
+        <div class="form-col"><label>VIP Floors (csv)</label><input class="input-control input-mono" id="cfgVip" value="${(b.vipFloors||[]).join(',')}"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-col"><label>Service Floors (csv)</label><input class="input-control input-mono" id="cfgService" value="${(b.serviceFloors||[]).join(',')}"/></div>
+        <div class="form-col"><label>Mechanical Floors (csv)</label><input class="input-control input-mono" id="cfgMechanical" value="${(b.mechanicalFloors||[]).join(',')}"/></div>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Fleet Kinematics &amp; Timing</h3></div>
+      <div class="form-row">
+        <div class="form-col"><label>Elevator Cars (1–16)</label><input class="input-control" id="cfgElevators" type="number" min="1" max="16" value="${b.elevatorCount}"/></div>
+        <div class="form-col"><label>Cabin Capacity (pax)</label><input class="input-control" id="cfgCapacity" type="number" min="2" max="30" value="${b.capacity}"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-col"><label>Weight Limit (kg)</label><input class="input-control" id="cfgWeight" type="number" value="${b.weightLimit}"/></div>
+        <div class="form-col"><label>Max Speed (m/s)</label><input class="input-control" id="cfgMaxSpeed" type="number" step="0.1" value="${b.maxSpeed}"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-col"><label>Acceleration (m/s²)</label><input class="input-control" id="cfgAccel" type="number" step="0.1" value="${b.acceleration}"/></div>
+        <div class="form-col"><label>Deceleration (m/s²)</label><input class="input-control" id="cfgDecel" type="number" step="0.1" value="${b.deceleration}"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-col"><label>Door Open (s)</label><input class="input-control" id="cfgDoorOpen" type="number" step="0.1" value="${b.doorOpenTime}"/></div>
+        <div class="form-col"><label>Door Close (s)</label><input class="input-control" id="cfgDoorClose" type="number" step="0.1" value="${b.doorCloseTime}"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-col"><label>Boarding Load (s)</label><input class="input-control" id="cfgLoadTime" type="number" step="0.1" value="${b.loadTime}"/></div>
+        <div class="form-col"><label>Deboarding Load (s)</label><input class="input-control" id="cfgUnloadTime" type="number" step="0.1" value="${b.unloadTime}"/></div>
+      </div>
+      <label class="checkbox-control">
+        <input type="checkbox" id="cfgEnergySaving" ${b.energySaving ? 'checked' : ''}/>
+        Enable Energy-Saving Eco Dispatch Mode
+      </label>
+    </div>
+
+    <div style="display:flex; gap:10px;">
+      <button class="btn primary" id="applyConfigBtn" style="flex:1;">Apply &amp; Rebuild Fleet</button>
+      <button class="btn" id="resetSimBtn">Reset Defaults</button>
+    </div>
+    `;
+  }
+
+  function renderRequestsTab() {
+    const floors = getFloorRange().sort((a, b) => b - a);
+    const floorOptions = floors.map(f => `<option value="${f}">${formatFloor(f)} ${floorTag(f) ? '('+floorTag(f)+')' : ''}</option>`).join('');
+    const priorityOptions = ['normal', 'vip', 'staff', 'elderly', 'disabled', 'medical', 'emergency', 'firefighter']
+      .map(p => `<option value="${p}">${p.charAt(0).toUpperCase() + p.slice(1)}</option>`).join('');
+
+    return `
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Manual Passenger Spawn</h3></div>
+      <div class="form-row">
+        <div class="form-col"><label>Origin Floor</label><select class="select-control" id="reqOrigin">${floorOptions}</select></div>
+        <div class="form-col"><label>Destination Floor</label><select class="select-control" id="reqDest">${floorOptions}</select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-col"><label>Passenger Priority</label><select class="select-control" id="reqPriority">${priorityOptions}</select></div>
+        <div class="form-col"><label>Group Size</label><input class="input-control" id="reqGroup" type="number" min="1" max="16" value="1"/></div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn accent" id="spawnSingleBtn" style="flex:1;">Dispatch Call</button>
+        <button class="btn" id="spawnBatchBtn">Batch ×10 Random</button>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Traffic Flow Profiles</h3></div>
+      <div class="form-row">
+        <div class="form-col">
+          <label>Traffic Pattern</label>
+          <select class="select-control" id="autoTrafficMode">
+            <option value="off">Off (Manual Only)</option>
+            <option value="peak">Peak-Hour Traffic</option>
+            <option value="random">Random Uniform</option>
+            <option value="rush">Rush-Hour Flow</option>
+            <option value="office">Corporate Commercial Office</option>
+            <option value="residential">Residential High-Rise</option>
+            <option value="mall">Shopping Mall</option>
+            <option value="hospital">Hospital Trauma Center</option>
+            <option value="hotel">Luxury Hotel</option>
+            <option value="airport">Airport Terminal</option>
+          </select>
+        </div>
+        <div class="form-col">
+          <label>Rate (riders / min)</label>
+          <input class="input-control" id="autoTrafficRate" type="number" min="1" max="120" value="12"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Active Hall Calls Queue</h3></div>
+      <div id="hallCallList" style="display:flex; flex-direction:column; gap:6px; max-height:220px; overflow-y:auto;"></div>
+    </div>
+    `;
+  }
+
+  function renderAlgorithmTab() {
+    return `
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Dispatch Algorithms (Select Live)</h3></div>
+      <div class="algo-grid" id="algoGrid"></div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Comparative Wait Performance Benchmark</h3></div>
+      <div class="bar-container" id="algoBars"></div>
+    </div>
+    `;
+  }
+
+  function renderAlgoGrid() {
+    const grid = document.getElementById('algoGrid');
+    if (!grid) return;
+    const current = snapshot ? snapshot.algorithm : 'look';
+    grid.innerHTML = Object.entries(ALGO_METADATA).map(([key, meta]) => `
+      <div class="algo-card ${current === key ? 'active' : ''}" data-algo="${key}">
+        <div class="algo-title">
+          <span>${meta.name}</span>
+          ${current === key ? '<span class="algo-badge">ACTIVE</span>' : ''}
+        </div>
+        <div class="algo-desc">${meta.desc}</div>
+      </div>
+    `).join('');
+
+    grid.querySelectorAll('.algo-card').forEach(card => {
+      card.addEventListener('click', async () => {
+        const algo = card.dataset.algo;
+        try {
+          await api('/api/algorithm', 'POST', { algorithm: algo });
+          showToast(`Switched algorithm to ${ALGO_METADATA[algo].name}`, 'success');
+          renderAlgoGrid();
+        } catch (e) {
+          showToast('Failed to switch algorithm', 'error');
+        }
+      });
+    });
+  }
+
+  function renderAlgoComparisonBars() {
+    const box = document.getElementById('algoBars');
+    if (!box) return;
+    const entries = Object.entries(ui.algoStats).map(([k, v]) => [k, v.length ? v.reduce((a, b) => a + b, 0) / v.length : 0]);
+    if (!entries.length) {
+      box.innerHTML = '<div style="font-size:11.5px; color:var(--text-muted);">No comparison telemetry recorded yet. Switch algorithms to observe comparative wait performance.</div>';
+      return;
+    }
+    const maxVal = Math.max(1, ...entries.map(e => e[1]));
+    box.innerHTML = entries.map(([key, val]) => `
+      <div class="bar-row">
+        <div style="display:flex; justify-content:space-between; font-weight:700;">
+          <span>${(ALGO_METADATA[key] ? ALGO_METADATA[key].name : key).toUpperCase()}</span>
+          <span>${val.toFixed(1)}s avg wait</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: ${(val / maxVal * 100).toFixed(0)}%"></div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderSafetyTab() {
+    const s = snapshot ? snapshot.safety : {};
+    const els = snapshot ? snapshot.elevators : [];
+    const safeIdx = Math.min(ui.selectedElevatorForFault, Math.max(0, els.length - 1));
+    const sel = els[safeIdx] || els[0] || {};
+
+    return `
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Facility Emergencies &amp; Hazards</h3></div>
+      <div class="safety-grid">
+        <div class="safety-btn ${s.fire ? 'active' : ''}" data-safety="fire">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+          Fire Alarm
+        </div>
+        <div class="safety-btn ${s.smoke ? 'active' : ''}" data-safety="smoke">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Smoke Alert
+        </div>
+        <div class="safety-btn ${s.estop ? 'active' : ''}" data-safety="estop">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/></svg>
+          Emergency Stop
+        </div>
+        <div class="safety-btn ${s.power ? 'active' : ''}" data-safety="power">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Power Outage
+        </div>
+        <div class="safety-btn ${s.earthquake ? 'active' : ''}" data-safety="earthquake">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Earthquake
+        </div>
+        <div class="safety-btn ${s.flood ? 'active' : ''}" data-safety="flood">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+          Basement Flood
+        </div>
+      </div>
+      <button class="btn" id="clearAllSafetyBtn" style="width:100%; margin-top:4px;">Clear All Emergencies</button>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Per-Elevator Faults &amp; Service Modes</h3></div>
+      <label style="font-size:11px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:6px;">Select Elevator Car</label>
+      <div class="car-selector-strip" id="faultCarSelector">
+        ${els.map((e, idx) => `<div class="car-btn ${safeIdx === idx ? 'active' : ''}" data-id="${idx}">CAR ${e.label}</div>`).join('')}
+      </div>
+      <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:10px;">
+        Car ${sel.label || '-'}: <strong style="color:var(--text-main);">${sel.fault ? 'FAULT (' + sel.fault.toUpperCase() + ')' : (sel.maintenance ? 'MAINTENANCE' : (sel.inspection ? 'INSPECTION' : (sel.independentService ? 'INDEPENDENT' : 'NORMAL SERVICE')))}</strong>
+      </div>
+      <div class="safety-grid">
+        <div class="safety-btn ${sel.fault === 'sensor' ? 'active' : ''}" data-fault="sensor">Sensor Failure</div>
+        <div class="safety-btn ${sel.fault === 'motor' ? 'active' : ''}" data-fault="motor">Motor Failure</div>
+        <div class="safety-btn ${sel.fault === 'comm' ? 'active' : ''}" data-fault="comm">Comm Failure</div>
+        <div class="safety-btn ${sel.fault === 'cable' ? 'active' : ''}" data-fault="cable">Cable Failure</div>
+        <div class="safety-btn ${sel.fault === 'brake' ? 'active' : ''}" data-fault="brake">Brake Lockup</div>
+        <div class="safety-btn ${sel.fault === 'door' ? 'active' : ''}" data-fault="door">Door Obstruction</div>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+        <button class="btn small" id="clearCarFaultBtn" ${sel.fault ? '' : 'disabled'}>Clear Fault</button>
+        <button class="btn small ${sel.maintenance ? 'accent' : ''}" id="toggleMaintenanceBtn">Maintenance</button>
+        <button class="btn small ${sel.inspection ? 'accent' : ''}" id="toggleInspectionBtn">Inspection</button>
+        <button class="btn small ${sel.independentService ? 'accent' : ''}" id="toggleIndependentBtn">Independent</button>
+      </div>
+    </div>
+    `;
+  }
+
+  function checkSafetyTabUpdate() {
+    if (!snapshot) return;
+    const key = JSON.stringify({
+      s: snapshot.safety,
+      sel: ui.selectedElevatorForFault,
+      els: snapshot.elevators.map(e => [e.fault, e.maintenance, e.inspection, e.independentService])
+    });
+    if (key !== ui.lastSafetyKey) {
+      ui.lastSafetyKey = key;
+      renderTab('safety');
+    }
+  }
+
+  function renderAnalyticsTabHTML() {
+    return `
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Live Telemetry KPIs</h3></div>
+      <div class="metrics-grid" id="metricsGrid"></div>
+    </div>
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Kinematic &amp; Dispatch Trend Charts</h3></div>
+      <div class="charts-stack" id="chartsStack"></div>
+    </div>
+    `;
+  }
+
+  function renderAnalyticsTab() {
+    const grid = document.getElementById('metricsGrid');
+    if (!grid || !snapshot) return;
+    const a = snapshot.analytics;
+    const items = [
+      ['Active Passengers', a.activePassengers],
+      ['Waiting In Hall', a.waitingPassengers],
+      ['Average Wait', a.avgWaitTime.toFixed(1) + 's'],
+      ['Average Travel', a.avgTravelTime.toFixed(1) + 's'],
+      ['Fleet Utilization', a.utilizationPct.toFixed(0) + '%'],
+      ['Queue Length', a.queueLength],
+      ['Completed Trips', a.completed],
+      ['Rejected / Overweight', a.rejected],
+      ['Total Trips Made', a.trips],
+      ['Total Stops', a.stops],
+      ['Power Consumed', a.energy.toFixed(0) + ' kWh'],
+      ['Active Faults', a.faultCount]
+    ];
+    grid.innerHTML = items.map(([label, val]) => `
+      <div class="metric-tile">
+        <div class="m-val">${val}</div>
+        <div class="m-lbl">${label}</div>
+      </div>
+    `).join('');
+    drawCharts();
+  }
+
+  const CHART_DEFINITIONS = [
+    ['waitTime', 'Passenger Wait Time (s)'],
+    ['travelTime', 'Passenger Travel Time (s)'],
+    ['requestsPerMin', 'Rider Requests / Minute'],
+    ['utilization', 'Fleet Utilization Rate (%)'],
+    ['energy', 'Energy Consumption (kWh)'],
+    ['faults', 'Fault Injections & Safety Stops']
+  ];
+  let chartContextMap = {};
+
+  function drawCharts() {
+    const stack = document.getElementById('chartsStack');
+    if (!stack) return;
+    if (!stack.dataset.initialized) {
+      stack.innerHTML = CHART_DEFINITIONS.map(([k, title]) => `
+        <div class="chart-card">
+          <div class="chart-title">${title}</div>
+          <canvas id="chart-${k}" width="380" height="68" style="width:100%; height:68px;"></canvas>
+        </div>
+      `).join('');
+      stack.dataset.initialized = 'true';
+      chartContextMap = {};
+      CHART_DEFINITIONS.forEach(([k]) => {
+        chartContextMap[k] = document.getElementById('chart-' + k).getContext('2d');
+      });
+    }
+
+    CHART_DEFINITIONS.forEach(([k]) => {
+      const data = ui.history[k];
+      const cvs = chartContextMap[k].canvas;
+      const cctx = chartContextMap[k];
+      const w = cvs.clientWidth || 380;
+      const h = 68;
+
+      if (cvs.width !== w * window.devicePixelRatio) {
+        cvs.width = w * window.devicePixelRatio;
+        cvs.height = h * window.devicePixelRatio;
+        cctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+      }
+      cctx.clearRect(0, 0, w, h);
+      if (data.length < 2) return;
+
+      const maxVal = Math.max(1, ...data);
+      cctx.beginPath();
+      data.forEach((val, i) => {
+        const x = (i / 59) * w;
+        const y = h - 6 - (val / maxVal) * (h - 14);
+        if (i === 0) cctx.moveTo(x, y);
+        else cctx.lineTo(x, y);
+      });
+      cctx.strokeStyle = '#E5A93C';
+      cctx.lineWidth = 2.0;
+      cctx.stroke();
+    });
+  }
+
+  function renderReportsTab() {
+    return `
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Audit &amp; Operational Reports</h3></div>
+      <div class="form-row">
+        <div class="form-col">
+          <label>Report Type</label>
+          <select class="select-control" id="reportTypeSelect">
+            <option value="simulation">Full Simulation Telemetry</option>
+            <option value="performance">Fleet Dispatch Performance</option>
+            <option value="energy">Energy &amp; Power Efficiency</option>
+            <option value="fault">Fault &amp; Incident Log</option>
+            <option value="passenger">Passenger Traffic Analysis</option>
+            <option value="daily">Daily Operational Audit</option>
+            <option value="weekly">Weekly Efficiency Summary</option>
+            <option value="monthly">Monthly Executive Summary</option>
+          </select>
+        </div>
+        <div class="form-col">
+          <label>File Format</label>
+          <select class="select-control" id="reportFormatSelect">
+            <option value="json">JSON Format (.json)</option>
+            <option value="csv">CSV Spreadsheet (.csv)</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn accent" id="downloadReportBtn" style="width:100%; margin-top:6px;">Download Report</button>
+      <div style="font-size:11px; color:var(--text-muted); margin-top:10px; line-height:1.45;">
+        Audit reports are computed dynamically in memory directly from simulated kinematics, timestamps, and fleet dispatch logs.
+      </div>
+    </div>
+    `;
+  }
+
+  function renderLogsTab() {
+    return `
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Real-Time Event Stream</h3></div>
+      <input class="input-control" id="logSearchInput" placeholder="Search event logs..." value="${escapeHtml(ui.logSearch)}" style="margin-bottom:10px;"/>
+      <div class="log-filter-row" id="logFilterChips">
+        ${['all', 'dispatch', 'passenger', 'elevator', 'safety', 'fault', 'system'].map(cat => `
+          <div class="chip-pill ${ui.logFilter === cat ? 'active' : ''}" data-category="${cat}">${cat.toUpperCase()}</div>
+        `).join('')}
+      </div>
+      <div class="log-feed" id="logFeedList"></div>
+    </div>
+    `;
+  }
+
+  function renderThemeTab() {
+    return `
+    <div class="panel-card">
+      <div class="panel-card-header"><h3>Visual Identity &amp; Palette</h3></div>
+      <div class="palette-list" id="paletteSelectionGroup" role="radiogroup" aria-label="Visual Themes">
+        ${PALETTES.map(p => `
+          <div class="palette-option ${ui.selectedPalette === p.id ? 'selected' : ''}" data-palette="${p.id}" role="radio" aria-checked="${ui.selectedPalette === p.id}" tabindex="0">
+            <div class="palette-option-left">
+              <div class="swatch-stack">
+                ${p.swatches.map(s => `<span class="swatch-dot" style="background-color: ${s};"></span>`).join('')}
+              </div>
+              <div>
+                <div class="palette-label">${p.label}</div>
+                <div class="palette-sub">${p.sub}</div>
+              </div>
+            </div>
+            <div class="palette-check-indicator">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    `;
+  }
+
+  function renderThemeControls() {
+    const group = document.getElementById('paletteSelectionGroup');
+    if (!group) return;
+
+    group.querySelectorAll('.palette-option').forEach(option => {
+      const selectPalette = () => {
+        const palId = option.dataset.palette;
+        applyPalette(palId);
+        group.querySelectorAll('.palette-option').forEach(o => {
+          o.classList.remove('selected');
+          o.setAttribute('aria-checked', 'false');
+        });
+        option.classList.add('selected');
+        option.setAttribute('aria-checked', 'true');
+        showToast(`Theme switched to ${palId.toUpperCase()}`, 'info');
+      };
+
+      option.addEventListener('click', selectPalette);
+      option.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectPalette();
+        }
+      });
+    });
+  }
+
+  function applyPalette(themeId) {
+    ui.selectedPalette = themeId;
+    document.body.className = `theme-${themeId}`;
+    localStorage.setItem('infinity_tower_theme', themeId);
+    drawShaftVisualization();
+  }
+
+  /* ----------------------------------------------------
+     EVENT BINDINGS & ACTION HANDLERS
+  ---------------------------------------------------- */
+  function bindTabEvents(name) {
+    if (name === 'config') {
+      document.getElementById('applyConfigBtn').addEventListener('click', async function() {
+        this.disabled = true;
+        const getInt = (id, fallback) => {
+          const v = parseInt(document.getElementById(id).value);
+          return isNaN(v) ? fallback : v;
+        };
+        const getFloat = (id, fallback) => {
+          const v = parseFloat(document.getElementById(id).value);
+          return isNaN(v) ? fallback : v;
+        };
+        const parseCsv = (id) => {
+          const val = document.getElementById(id).value;
+          return val.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+        };
+
+        const configPayload = {
+          name: document.getElementById('cfgName').value.trim() || 'Infinity Tower',
+          floors: getInt('cfgFloors', 12),
+          basements: getInt('cfgBasements', 2),
+          lobby: getInt('cfgLobby', 1),
+          idleFloor: getInt('cfgIdle', 1),
+          parkingFloors: parseCsv('cfgParking'),
+          vipFloors: parseCsv('cfgVip'),
+          serviceFloors: parseCsv('cfgService'),
+          mechanicalFloors: parseCsv('cfgMechanical'),
+          elevatorCount: Math.max(1, Math.min(16, getInt('cfgElevators', 4))),
+          capacity: getInt('cfgCapacity', 8),
+          weightLimit: getInt('cfgWeight', 900),
+          maxSpeed: getFloat('cfgMaxSpeed', 2.2),
+          acceleration: getFloat('cfgAccel', 1.1),
+          deceleration: getFloat('cfgDecel', 1.1),
+          doorOpenTime: getFloat('cfgDoorOpen', 1.6),
+          doorCloseTime: getFloat('cfgDoorClose', 1.6),
+          loadTime: getFloat('cfgLoadTime', 1.2),
+          unloadTime: getFloat('cfgUnloadTime', 1.0),
+          energySaving: document.getElementById('cfgEnergySaving').checked,
+          algorithm: snapshot ? snapshot.algorithm : 'look'
+        };
+
+        try {
+          await api('/api/config', 'PUT', configPayload);
+          showToast('Configuration applied & fleet rebuilt', 'success');
+        } catch (err) {
+          console.error('Config apply failed', err);
+          showToast('Failed to apply configuration', 'error');
+        } finally {
+          this.disabled = false;
+        }
+      });
+
+      document.getElementById('resetSimBtn').addEventListener('click', async () => {
+        if (confirm('Reset simulation state to factory defaults?')) {
+          try {
+            await api('/api/simulation/reset', 'POST');
+            showToast('Simulation reset to factory defaults', 'info');
+          } catch (e) {
+            showToast('Failed to reset simulation', 'error');
+          }
+        }
+      });
+    }
+
+    if (name === 'requests') {
+      document.getElementById('spawnSingleBtn').addEventListener('click', async function() {
+        const origin = parseInt(document.getElementById('reqOrigin').value);
+        const dest = parseInt(document.getElementById('reqDest').value);
+        if (origin === dest) {
+          showToast('Origin and Destination floors must be distinct', 'warning');
+          return;
+        }
+        this.disabled = true;
+        try {
+          await api('/api/requests/spawn', 'POST', {
+            origin, dest,
+            priority: document.getElementById('reqPriority').value,
+            group: parseInt(document.getElementById('reqGroup').value) || 1
+          });
+          showToast(`Passenger dispatched from ${formatFloor(origin)} to ${formatFloor(dest)}`, 'success');
+        } catch (e) {
+          showToast('Failed to dispatch passenger', 'error');
+        } finally {
+          this.disabled = false;
+        }
+      });
+
+      document.getElementById('spawnBatchBtn').addEventListener('click', async () => {
+        try {
+          await api('/api/requests/batch?count=10', 'POST');
+          showToast('Spawned 10 random passengers', 'success');
+        } catch (e) {
+          showToast('Batch spawn failed', 'error');
+        }
+      });
+
+      document.getElementById('autoTrafficMode').addEventListener('change', async (e) => {
+        try {
+          await api('/api/requests/autogen', 'POST', {
+            mode: e.target.value,
+            ratePerMinute: parseFloat(document.getElementById('autoTrafficRate').value) || 12
+          });
+          showToast(`Traffic mode set to ${e.target.value.toUpperCase()}`, 'info');
+        } catch (err) {
+          showToast('Auto-traffic update failed', 'error');
+        }
+      });
+
+      document.getElementById('autoTrafficRate').addEventListener('change', async (e) => {
+        try {
+          await api('/api/requests/autogen', 'POST', {
+            mode: document.getElementById('autoTrafficMode').value,
+            ratePerMinute: parseFloat(e.target.value) || 12
+          });
+          showToast(`Traffic rate set to ${e.target.value}/min`, 'info');
+        } catch (err) {
+          showToast('Rate update failed', 'error');
+        }
+      });
+    }
+
+    if (name === 'safety') {
+      document.querySelectorAll('[data-safety]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          try {
+            await api('/api/safety/toggle', 'POST', { key: btn.dataset.safety });
+            showToast(`Toggled ${btn.dataset.safety.toUpperCase()} condition`, 'warning');
+            renderTab('safety');
+          } catch (e) {
+            showToast('Safety toggle failed', 'error');
+          }
+        });
+      });
+
+      document.getElementById('clearAllSafetyBtn').addEventListener('click', async () => {
+        try {
+          await api('/api/safety/clear-all', 'POST');
+          showToast('All emergency conditions cleared', 'success');
+          renderTab('safety');
+        } catch (e) {
+          showToast('Failed to clear emergencies', 'error');
+        }
+      });
+
+      document.querySelectorAll('#faultCarSelector .car-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          ui.selectedElevatorForFault = parseInt(btn.dataset.id);
+          renderTab('safety');
+        });
+      });
+
+      document.querySelectorAll('[data-fault]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!snapshot || !snapshot.elevators.length) return;
+          const safeIdx = Math.min(ui.selectedElevatorForFault, snapshot.elevators.length - 1);
+          const car = snapshot.elevators[safeIdx];
+          try {
+            await api('/api/safety/fault', 'POST', { elevatorId: car.id, action: 'inject', faultType: btn.dataset.fault });
+            showToast(`Fault ${btn.dataset.fault.toUpperCase()} injected on Car ${car.label}`, 'error');
+            renderTab('safety');
+          } catch (e) {
+            showToast('Failed to inject fault', 'error');
+          }
+        });
+      });
+
+      document.getElementById('clearCarFaultBtn').addEventListener('click', async () => {
+        if (!snapshot || !snapshot.elevators.length) return;
+        const safeIdx = Math.min(ui.selectedElevatorForFault, snapshot.elevators.length - 1);
+        const car = snapshot.elevators[safeIdx];
+        try {
+          await api('/api/safety/fault', 'POST', { elevatorId: car.id, action: 'clear' });
+          showToast(`Fault cleared on Car ${car.label}`, 'success');
+          renderTab('safety');
+        } catch (e) {
+          showToast('Failed to clear fault', 'error');
+        }
+      });
+
+      document.getElementById('toggleMaintenanceBtn').addEventListener('click', async () => {
+        if (!snapshot || !snapshot.elevators.length) return;
+        const safeIdx = Math.min(ui.selectedElevatorForFault, snapshot.elevators.length - 1);
+        const car = snapshot.elevators[safeIdx];
+        await api('/api/safety/fault', 'POST', { elevatorId: car.id, action: 'maintenance' });
+        renderTab('safety');
+      });
+
+      document.getElementById('toggleInspectionBtn').addEventListener('click', async () => {
+        if (!snapshot || !snapshot.elevators.length) return;
+        const safeIdx = Math.min(ui.selectedElevatorForFault, snapshot.elevators.length - 1);
+        const car = snapshot.elevators[safeIdx];
+        await api('/api/safety/fault', 'POST', { elevatorId: car.id, action: 'inspection' });
+        renderTab('safety');
+      });
+
+      document.getElementById('toggleIndependentBtn').addEventListener('click', async () => {
+        if (!snapshot || !snapshot.elevators.length) return;
+        const safeIdx = Math.min(ui.selectedElevatorForFault, snapshot.elevators.length - 1);
+        const car = snapshot.elevators[safeIdx];
+        await api('/api/safety/fault', 'POST', { elevatorId: car.id, action: 'independent' });
+        renderTab('safety');
+      });
+    }
+
+    if (name === 'reports') {
+      document.getElementById('downloadReportBtn').addEventListener('click', async function() {
+        this.disabled = true;
+        try {
+          const type = document.getElementById('reportTypeSelect').value;
+          const format = document.getElementById('reportFormatSelect').value;
+          showToast(`Generating ${type} report...`, 'info');
+          const res = await fetch(`${API_ROOT}/api/reports?type=${type}&format=${format}`);
+          if (!res.ok) throw new Error(`Report export failed: ${res.status}`);
+          const blob = await res.blob();
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `${type}-report.${format}`;
+          link.click();
+          URL.revokeObjectURL(url);
+          showToast('Report downloaded successfully', 'success');
+        } catch (err) {
+          console.error(err);
+          showToast('Could not download report', 'error');
+        } finally {
+          this.disabled = false;
+        }
+      });
+    }
+
+    if (name === 'logs') {
+      document.querySelectorAll('#logFilterChips .chip-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          ui.logFilter = pill.dataset.category;
+          renderTab('logs');
+        });
+      });
+
+      document.getElementById('logSearchInput').addEventListener('input', (e) => {
+        ui.logSearch = e.target.value;
+        fetchAndDisplayLogs();
+      });
+    }
+  }
+
+  function renderHallCallsTab() {
+    const list = document.getElementById('hallCallList');
+    if (!list || !snapshot) return;
+    if (!snapshot.hallCalls.length) {
+      list.innerHTML = '<div style="font-size:11.5px; color:var(--text-muted); padding:6px 0;">No active hall calls queued.</div>';
+      return;
+    }
+    list.innerHTML = snapshot.hallCalls.slice(-25).reverse().map(c => {
+      const car = snapshot.elevators.find(e => e.id === c.elevatorId);
+      return `
+        <div class="log-card ${c.assigned ? 'passenger' : 'safety'}" style="font-size:11px;">
+          <strong>Call #${c.id}</strong>: Floor ${formatFloor(c.floor)} (${c.dir === 'up' ? '▲ UP' : '▼ DOWN'}) — ${c.assigned ? 'Car ' + (car ? car.label : '?') : 'Dispatching...'} · [${c.priority.toUpperCase()}]
+        </div>
+      `;
+    }).join('');
+  }
+
+  async function fetchAndDisplayLogs() {
+    const feed = document.getElementById('logFeedList');
+    if (!feed) return;
+    const params = new URLSearchParams();
+    if (ui.logFilter !== 'all') params.set('category', ui.logFilter);
+    if (ui.logSearch.trim()) params.set('search', ui.logSearch.trim());
+    params.set('limit', '150');
+
+    try {
+      const logs = await api('/api/logs?' + params.toString());
+      feed.innerHTML = logs.map(l => `
+        <div class="log-card ${l.category}">
+          <span class="time-stamp">D${l.simDay} ${l.simClock}</span>
+          <span>${escapeHtml(l.message)}</span>
+        </div>
+      `).join('');
+    } catch (err) {
+      feed.innerHTML = '<div style="font-size:11px; color:var(--text-muted);">Could not refresh logs.</div>';
+    }
+  }
+
+  function escapeHtml(str) {
+    return (str || '').replace(/[&<>'"]/g, tag => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag] || tag));
+  }
+
+  function syncPauseButton() {
+    const btn = document.getElementById('pauseBtn');
+    if (!snapshot) return;
+    btn.textContent = snapshot.running ? 'Pause' : (ui.started ? 'Resume' : 'Start');
+  }
+
+  /* Navigation tab click handlers */
+  document.querySelectorAll('#navTabs .nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('#navTabs .nav-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderTab(tab.dataset.tab);
+    });
+  });
+
+  /* Topbar Action Buttons */
+  document.getElementById('pauseBtn').addEventListener('click', async () => {
+    if (!snapshot || !snapshot.running) {
+      ui.started = true;
+      document.getElementById('startOverlay').classList.add('hidden');
+      if (snapshot && snapshot.simSeconds > 0) {
+        await api('/api/simulation/resume', 'POST');
+        showToast('Simulation resumed', 'success');
+      } else {
+        await api('/api/simulation/start', 'POST');
+        showToast('Simulation started', 'success');
+      }
+    } else {
+      await api('/api/simulation/pause', 'POST');
+      showToast('Simulation paused', 'info');
     }
   });
 
-  snapshot.elevators.forEach((e,ei)=>{
-    const x0=labelW+24+ei*(carW+16), shaftTop=16+roofRowH, shaftBottom=shaftTop+floors.length*rowH-4;
-    ctx.strokeStyle=border; ctx.strokeRect(x0-4,shaftTop,carW+8,shaftBottom-shaftTop);
-    ctx.fillStyle=text2; ctx.font='700 10px sans-serif'; ctx.textAlign='center'; ctx.fillText('CAR '+e.label, x0+carW/2, shaftTop-10); ctx.textAlign='left';
-
-    const topFloor=floors[0], botFloor=floors[floors.length-1];
-    const frac=(topFloor-e.currentFloor)/(topFloor-botFloor);
-    const carY = shaftTop+frac*(shaftBottom-shaftTop-rowH*0.82);
-    const carH = rowH*0.82, carCenterX = x0+carW/2;
-
-    ctx.strokeStyle=border; ctx.lineWidth=1.2; ctx.setLineDash([2,4]);
-    ctx.lineDashOffset = -((snapshot.simSeconds*40)%6)*e.direction;
-    ctx.beginPath(); ctx.moveTo(carCenterX,shaftTop); ctx.lineTo(carCenterX,carY); ctx.stroke(); ctx.setLineDash([]);
-
-    let color=accent;
-    if(e.fault) color=danger; else if(e.maintenance||e.inspection) color=warning;
-    else if(e.state==='moving') color=success; else if(e.fault||e.maintenance) color=danger;
-
-    ctx.save(); ctx.shadowColor=color; ctx.shadowBlur=10;
-    const grad=ctx.createLinearGradient(x0,carY,x0,carY+carH); grad.addColorStop(0,color+'2A'); grad.addColorStop(1,color+'10');
-    ctx.fillStyle=grad; ctx.strokeStyle=color; ctx.lineWidth=1.6;
-    roundRect(ctx,x0,carY,carW,carH,6); ctx.fill(); ctx.stroke(); ctx.restore();
-
-    const doorGap = e.doorState==='closed'? 0 : (e.doorState==='open'?1:e.doorProgress) * (carW*0.42);
-    ctx.fillStyle=COLORS.bg0;
-    if(e.doorState!=='closed'){ ctx.fillRect(x0+2,carY+2,Math.max(0,doorGap),carH-4); ctx.fillRect(x0+carW-2-doorGap,carY+2,Math.max(0,doorGap),carH-4); }
-    ctx.strokeStyle=color+'70'; ctx.beginPath(); ctx.moveTo(x0+carW/2,carY+2); ctx.lineTo(x0+carW/2,carY+carH-2); ctx.stroke();
-
-    ctx.fillStyle=COLORS.bg1; ctx.strokeStyle=border; roundRect(ctx,x0+carW/2-19,carY-24,38,16,4); ctx.fill(); ctx.stroke();
-    ctx.fillStyle=color; ctx.font='700 12px monospace'; ctx.textAlign='center'; ctx.fillText(floorLabel(Math.round(e.currentFloor)), x0+carW/2, carY-16);
-    ctx.font='11px sans-serif'; ctx.fillStyle=e.direction!==0?color:text2;
-    ctx.fillText(e.direction>0?'▲':e.direction<0?'▼':'—', x0+carW/2, carY-30); ctx.textAlign='left';
-
-    const onboard = snapshot.passengers.filter(p=>p.state==='riding' && p.assignedElevatorId===e.id);
-    const dotsPerRow=Math.ceil(Math.sqrt(snapshot.building.capacity));
-    onboard.forEach((p,pi)=>{
-      const col=pi%dotsPerRow, row=Math.floor(pi/dotsPerRow);
-      drawPersonIcon(x0+10+col*9, carY+11+row*9, COLORS.priority[p.priority]||COLORS.priority.normal, 3.1);
-    });
-
-    const occFrac=e.passengerCount/snapshot.building.capacity, weightFrac=e.weight/snapshot.building.weightLimit;
-    const barY=carY+carH+6;
-    ctx.fillStyle=border; ctx.fillRect(x0,barY,carW,3);
-    ctx.fillStyle= occFrac>0.9?danger:occFrac>0.7?warning:cssVar('--accent-2');
-    ctx.fillRect(x0,barY,carW*Math.min(1,occFrac),3);
-    ctx.font='600 8px monospace'; ctx.fillStyle=text2; ctx.fillText(e.passengerCount+'/'+snapshot.building.capacity, x0, barY+13);
-    ctx.textAlign='right'; ctx.fillStyle= weightFrac>0.95?danger:weightFrac>0.75?warning:text2;
-    ctx.fillText(Math.round(e.weight)+'kg', x0+carW, barY+13); ctx.textAlign='left';
+  document.getElementById('speedBtn').addEventListener('click', async function() {
+    const multipliers = [1, 2, 4, 8];
+    const cur = parseInt(this.textContent) || 1;
+    const next = multipliers[(multipliers.indexOf(cur) + 1) % multipliers.length];
+    await api('/api/simulation/speed', 'POST', { multiplier: next });
+    this.textContent = `${next}×`;
+    showToast(`Speed: ${next}×`, 'info');
   });
 
-  floors.forEach((f,i)=>{
-    const y=20+roofRowH+i*rowH;
-    const waiting = snapshot.passengers.filter(p=>p.state==='waiting' && p.origin===f);
-    waiting.slice(0,8).forEach((p,pi)=>{
-      const px=labelW-8-((pi%4)*10), py=y+rowH/2+10+Math.floor(pi/4)*10;
-      drawPersonIcon(px,py, COLORS.priority[p.priority]||COLORS.priority.normal, 2.6);
-    });
+  document.getElementById('topResetBtn').addEventListener('click', async () => {
+    if (confirm('Reset simulation state to defaults?')) {
+      await api('/api/simulation/reset', 'POST');
+      showToast('Simulation reset to factory defaults', 'info');
+    }
   });
-}
 
-function tabConfig(){
-  const b = snapshot? snapshot.building : {name:'Infinity Tower',floors:12,basements:2,lobby:1,idleFloor:1,parkingFloors:[-1,-2],vipFloors:[10,11,12],serviceFloors:[-2],mechanicalFloors:[],elevatorCount:4,capacity:8,weightLimit:900,maxSpeed:2.2,acceleration:1.1,deceleration:1.1,doorOpenTime:1.6,doorCloseTime:1.6,loadTime:1.2,unloadTime:1.0,energySaving:false};
-  return `
-  <div class="panel-section"><h3>Building Identity</h3>
-    <div class="field-row"><div class="field"><label>Building Name</label><input id="cfgName" value="${b.name}"/></div></div>
-    <div class="field-row"><div class="field"><label>Floors</label><input id="cfgFloors" type="number" value="${b.floors}"/></div><div class="field"><label>Basements</label><input id="cfgBasements" type="number" value="${b.basements}"/></div></div>
-    <div class="field-row"><div class="field"><label>Lobby Floor</label><input id="cfgLobby" type="number" value="${b.lobby}"/></div><div class="field"><label>Idle Floor</label><input id="cfgIdle" type="number" value="${b.idleFloor}"/></div></div>
-    <div class="field-row"><div class="field"><label>Parking (csv)</label><input id="cfgParking" value="${b.parkingFloors.join(',')}"/></div><div class="field"><label>VIP (csv)</label><input id="cfgVip" value="${b.vipFloors.join(',')}"/></div></div>
-    <div class="field-row"><div class="field"><label>Service (csv)</label><input id="cfgService" value="${b.serviceFloors.join(',')}"/></div><div class="field"><label>Mechanical (csv)</label><input id="cfgMechanical" value="${b.mechanicalFloors.join(',')}"/></div></div>
-  </div>
-  <div class="panel-section"><h3>Elevator Fleet</h3>
-    <div class="field-row"><div class="field"><label>Elevators</label><input id="cfgElevators" type="number" value="${b.elevatorCount}"/></div><div class="field"><label>Capacity</label><input id="cfgCapacity" type="number" value="${b.capacity}"/></div></div>
-    <div class="field-row"><div class="field"><label>Weight Limit</label><input id="cfgWeight" type="number" value="${b.weightLimit}"/></div><div class="field"><label>Max Speed</label><input id="cfgMaxSpeed" type="number" step="0.1" value="${b.maxSpeed}"/></div></div>
-    <div class="field-row"><div class="field"><label>Accel</label><input id="cfgAccel" type="number" step="0.1" value="${b.acceleration}"/></div><div class="field"><label>Decel</label><input id="cfgDecel" type="number" step="0.1" value="${b.deceleration}"/></div></div>
-    <div class="field-row"><div class="field"><label>Door Open (s)</label><input id="cfgDoorOpen" type="number" step="0.1" value="${b.doorOpenTime}"/></div><div class="field"><label>Door Close (s)</label><input id="cfgDoorClose" type="number" step="0.1" value="${b.doorCloseTime}"/></div></div>
-    <div class="field-row"><div class="field"><label>Load Time (s)</label><input id="cfgLoadTime" type="number" step="0.1" value="${b.loadTime}"/></div><div class="field"><label>Unload Time (s)</label><input id="cfgUnloadTime" type="number" step="0.1" value="${b.unloadTime}"/></div></div>
-    <label class="checkline"><input type="checkbox" id="cfgEnergySaving" ${b.energySaving?'checked':''}/> Energy-saving mode</label>
-  </div>
-  <div class="btn-row" style="display:flex;gap:8px;"><button class="btn primary" id="applyConfigBtn">Apply &amp; Rebuild</button><button class="btn" id="resetSimBtn">Reset Simulation</button></div>
-  `;
-}
-function tabRequests(){
-  const floors = snapshot? floorRange().sort((a,b)=>b-a) : [1];
-  const floorOpts = floors.map(f=>`<option value="${f}">${floorLabel(f)}</option>`).join('');
-  const priorityOpts = ['normal','elderly','disabled','vip','staff','emergency','firefighter','medical'].map(p=>`<option value="${p}">${p}</option>`).join('');
-  return `
-  <div class="panel-section"><h3>Manual Request</h3>
-    <div class="field-row"><div class="field"><label>Origin</label><select id="reqOrigin">${floorOpts}</select></div><div class="field"><label>Destination</label><select id="reqDest">${floorOpts}</select></div></div>
-    <div class="field-row"><div class="field"><label>Priority</label><select id="reqPriority">${priorityOpts}</select></div><div class="field"><label>Group Size</label><input id="reqGroup" type="number" min="1" value="1"/></div></div>
-    <div class="btn-row" style="display:flex;gap:8px;"><button class="btn primary" id="spawnBtn">Generate Request</button><button class="btn" id="spawnBatchBtn">Batch ×10 Random</button></div>
-  </div>
-  <div class="panel-section"><h3>Automatic Generation</h3>
-    <div class="field-row"><div class="field"><label>Traffic Mode</label><select id="autoGenMode">
-      <option value="off">Off</option><option value="random">Random</option><option value="peak">Peak-hour</option><option value="rush">Rush-hour</option>
-      <option value="office">Office</option><option value="residential">Residential</option><option value="mall">Shopping Mall</option>
-      <option value="hospital">Hospital</option><option value="hotel">Hotel</option><option value="airport">Airport</option></select></div>
-      <div class="field"><label>Rate / min</label><input id="autoGenRate" type="number" value="6"/></div></div>
-  </div>
-  <div class="panel-section"><h3>Active Hall Calls</h3><div id="hallCallList" style="display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto;"></div></div>
-  `;
-}
-function tabAlgorithm(){
-  return `<div class="panel-section"><h3>Scheduling Algorithm</h3><div class="algo-grid" id="algoGrid"></div></div>
-  <div class="panel-section"><h3>Performance Comparison</h3><div id="algoBars" style="display:flex;flex-direction:column;gap:8px;"></div></div>`;
-}
-function tabSafety(){
-  const s = snapshot? snapshot.safety : {};
-  const els = snapshot? snapshot.elevators : [];
-  const sel = els[ui.selectedElevatorForFault] || els[0] || {};
-  return `
-  <div class="panel-section"><h3>Building-Wide Emergencies</h3><div class="safety-grid">
-    <div class="safety-btn ${s.fire?'active':''}" data-safety="fire">Fire Alarm</div>
-    <div class="safety-btn ${s.smoke?'active':''}" data-safety="smoke">Smoke Alarm</div>
-    <div class="safety-btn ${s.estop?'active':''}" data-safety="estop">Emergency Stop</div>
-    <div class="safety-btn ${s.power?'active':''}" data-safety="power">Power Outage</div>
-    <div class="safety-btn ${s.earthquake?'active':''}" data-safety="earthquake">Earthquake Mode</div>
-    <div class="safety-btn ${s.flood?'active':''}" data-safety="flood">Flood Mode</div>
-  </div>
-  <div class="btn-row" style="margin-top:10px;"><button class="btn small" id="clearAllSafetyBtn">Clear All Alarms — Return to Normal</button></div></div>
-  <div class="panel-section"><h3>Per-Elevator Fault Injection</h3>
-    <div class="elevator-select" id="faultElevatorSelect">${els.map(e=>`<div class="es-btn ${ui.selectedElevatorForFault===e.id?'active':''}" data-id="${e.id}">CAR ${e.label}</div>`).join('')}</div>
-    <div class="hint" style="margin:-2px 0 10px 0;">Car ${sel.label||'-'}${sel.fault?(' — fault: '+sel.fault):(sel.maintenance?' — maintenance':sel.inspection?' — inspection':sel.independentService?' — independent service':' — normal')}</div>
-    <div class="safety-grid">
-      <div class="safety-btn ${sel.fault==='sensor'?'active':''}" data-fault="sensor">Sensor Failure</div>
-      <div class="safety-btn ${sel.fault==='motor'?'active':''}" data-fault="motor">Motor Failure</div>
-      <div class="safety-btn ${sel.fault==='comm'?'active':''}" data-fault="comm">Comm Failure</div>
-      <div class="safety-btn ${sel.fault==='cable'?'active':''}" data-fault="cable">Cable Failure</div>
-      <div class="safety-btn ${sel.fault==='brake'?'active':''}" data-fault="brake">Brake Failure</div>
-      <div class="safety-btn ${sel.fault==='door'?'active':''}" data-fault="door">Door Obstruction</div>
-    </div>
-    <div class="btn-row" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
-      <button class="btn small" id="clearFaultBtn" ${sel.fault?'':'disabled'}>Clear Fault</button>
-      <button class="btn small ${sel.maintenance?'active':''}" id="toggleMaintenanceBtn">Toggle Maintenance</button>
-      <button class="btn small ${sel.inspection?'active':''}" id="toggleInspectionBtn">Toggle Inspection</button>
-      <button class="btn small ${sel.independentService?'active':''}" id="toggleIndependentBtn">Toggle Independent Service</button>
-    </div>
-  </div>`;
-}
-function tabAnalytics(){ return `<div class="panel-section"><h3>Live Metrics</h3><div class="analytics-grid" id="analyticsGrid"></div></div>
-  <div class="panel-section"><h3>Live Charts</h3><div id="chartsBox"></div></div>`; }
-function tabReports(){ return `
-  <div class="panel-section"><h3>Generate Report</h3>
-    <div class="field-row"><div class="field"><label>Type</label><select id="reportType">
-      <option value="simulation">Simulation</option><option value="performance">Performance</option><option value="energy">Energy</option>
-      <option value="fault">Fault</option><option value="passenger">Passenger</option><option value="daily">Daily</option>
-      <option value="weekly">Weekly</option><option value="monthly">Monthly</option></select></div>
-      <div class="field"><label>Format</label><select id="reportFormat"><option value="json">JSON</option><option value="csv">CSV</option></select></div></div>
-    <div class="btn-row"><button class="btn primary" id="exportBtn">Export Report</button></div>
-    <div class="hint">Reports are generated server-side and persisted to MySQL for audit history.</div></div>`; }
-function tabLogs(){ return `
-  <input id="logSearch" placeholder="Search logs…" value="${ui.logSearch}"/>
-  <div class="log-filters" id="logFilters">${['all','dispatch','passenger','elevator','safety','fault','system'].map(f=>`<div class="chip-filter ${ui.logFilter===f?'active':''}" data-filter="${f}">${f}</div>`).join('')}</div>
-  <div id="logList"></div>`; }
-
-const TAB_RENDER = {config:tabConfig, requests:tabRequests, algorithm:tabAlgorithm, safety:tabSafety, analytics:tabAnalytics, reports:tabReports, logs:tabLogs};
-
-function renderTab(name){
-  document.getElementById('tabContent').innerHTML = TAB_RENDER[name]();
-  bindTabEvents(name);
-  if(name==='algorithm') renderAlgoGrid();
-  if(name==='requests') renderHallCallList();
-  if(name==='analytics') renderAnalyticsTab();
-  if(name==='logs') refreshLogs();
-}
-
-function renderAlgoGrid(){
-  const grid = document.getElementById('algoGrid'); if(!grid) return;
-  const current = snapshot? snapshot.algorithm : 'look';
-  grid.innerHTML = Object.entries(ALGO_META).map(([id,desc])=>`<div class="algo-card ${current===id?'active':''}" data-algo="${id}"><span class="name">${id.toUpperCase()}</span><span class="desc">${desc}</span></div>`).join('');
-  grid.querySelectorAll('.algo-card').forEach(c=>c.addEventListener('click', async ()=>{
-    await api('/api/algorithm','POST',{algorithm:c.dataset.algo});
-    renderAlgoGrid();
-  }));
-}
-function renderAlgoBars(){
-  const box = document.getElementById('algoBars'); if(!box) return;
-  const entries = Object.entries(ui.algoStats).map(([k,v])=>[k, v.length? v.reduce((a,b)=>a+b,0)/v.length : 0]);
-  const max = Math.max(1, ...entries.map(e=>e[1]));
-  box.innerHTML = entries.length? entries.map(([k,v])=>`<div>${k.toUpperCase()} — ${v.toFixed(1)}s avg wait<div class="bar-track"><div class="bar-fill" style="width:${(v/max*100).toFixed(0)}%"></div></div></div>`).join('') : '<div class="hint">No data yet.</div>';
-}
-function renderHallCallList(){
-  const box = document.getElementById('hallCallList'); if(!box || !snapshot) return;
-  box.innerHTML = snapshot.hallCalls.slice(-30).reverse().map(h=>{
-    const car = snapshot.elevators.find(e=>e.id===h.elevatorId);
-    return `<div class="log-entry ${h.assigned?'passenger':'safety'}">#${h.id} ${floorLabel(h.floor)} (${h.dir}) — ${h.assigned?'Car '+(car?car.label:'?'):'unassigned'} · ${h.priority}</div>`;
-  }).join('') || '<div class="hint">No active hall calls.</div>';
-}
-function renderAnalyticsTab(){
-  const grid = document.getElementById('analyticsGrid'); if(!grid || !snapshot) return;
-  const a = snapshot.analytics;
-  const items = [['Active Passengers',a.activePassengers],['Waiting Passengers',a.waitingPassengers],
-    ['Avg Wait Time',a.avgWaitTime.toFixed(1)+'s'],['Avg Travel Time',a.avgTravelTime.toFixed(1)+'s'],
-    ['Elevator Utilization',a.utilizationPct.toFixed(0)+'%'],['Queue Length',a.queueLength],
-    ['Completed Requests',a.completed],['Rejected Requests',a.rejected],
-    ['Trips (Completed Journeys)',a.trips],['Stops',a.stops],
-    ['Energy Consumption',a.energy.toFixed(0)+' kWh'],['Fault Count',a.faultCount]];
-  grid.innerHTML = items.map(([l,v])=>`<div class="metric-card"><div class="mc-value">${v}</div><div class="mc-label">${l}</div></div>`).join('');
-  renderCharts();
-}
-const CHART_DEFS=[['waitTime','Wait Time (s)'],['travelTime','Travel Time (s)'],['requestsPerMin','Requests / Minute'],['utilization','Utilization (%)'],['energy','Energy (kWh)'],['faults','Fault Count']];
-let chartCtxs={};
-function renderCharts(){
-  const box=document.getElementById('chartsBox'); if(!box) return;
-  if(!box.dataset.built){
-    box.innerHTML = CHART_DEFS.map(([k,t])=>`<div style="background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:6px;padding:12px;margin-bottom:10px;box-shadow:var(--glass-inset);"><div style="font-size:10.5px;font-weight:700;color:var(--text-1);margin-bottom:6px;">${t}</div><canvas id="cc-${k}" width="360" height="70" style="width:100%;height:70px;"></canvas></div>`).join('');
-    box.dataset.built='1'; chartCtxs={}; CHART_DEFS.forEach(([k])=>chartCtxs[k]=document.getElementById('cc-'+k).getContext('2d'));
-  }
-  CHART_DEFS.forEach(([k])=>{
-    const data=ui.history[k]; const cvs=chartCtxs[k].canvas; const cctx=chartCtxs[k];
-    const w=cvs.clientWidth||360,h=70;
-    if(cvs.width!==w*devicePixelRatio){ cvs.width=w*devicePixelRatio; cvs.height=h*devicePixelRatio; cctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); }
-    cctx.clearRect(0,0,w,h); if(data.length<2) return;
-    const max=Math.max(1,...data); const color=cssVar('--accent');
-    cctx.beginPath();
-    data.forEach((v,i)=>{ const x=(i/59)*w, y=h-6-(v/max)*(h-14); if(i===0) cctx.moveTo(x,y); else cctx.lineTo(x,y); });
-    cctx.strokeStyle=color; cctx.lineWidth=2; cctx.stroke();
+  document.getElementById('themeShortcutBtn').addEventListener('click', () => {
+    document.querySelectorAll('#navTabs .nav-tab').forEach(t => t.classList.remove('active'));
+    const themeTab = document.querySelector('#navTabs .nav-tab[data-tab="theme"]');
+    if (themeTab) themeTab.classList.add('active');
+    renderTab('theme');
   });
-}
-async function refreshLogs(){
-  const params = new URLSearchParams();
-  if(ui.logFilter!=='all') params.set('category', ui.logFilter);
-  if(ui.logSearch) params.set('search', ui.logSearch);
-  params.set('limit','150');
-  try{
-    const logs = await api('/api/logs?'+params.toString());
-    const list = document.getElementById('logList'); if(!list) return;
-    list.innerHTML = logs.slice().reverse().map(l=>`<div class="log-entry ${l.category}"><span class="t">Day ${l.simDay} ${l.simClock}</span>${escapeHtml(l.message)}</div>`).join('');
-  }catch(e){}
-}
-function escapeHtml(s){ return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 
-function bindTabEvents(name){
-  if(name==='config'){
-    document.getElementById('applyConfigBtn').addEventListener('click', async function(){
-      this.disabled=true;
-      const cur = snapshot ? snapshot.building : {name:'Infinity Tower',floors:12,basements:2,lobby:1,idleFloor:1,elevatorCount:4,capacity:8,weightLimit:900,maxSpeed:2.2,acceleration:1.1,deceleration:1.1,doorOpenTime:1.6,doorCloseTime:1.6,loadTime:1.2,unloadTime:1.0};
-      const num = (id, fallback) => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? fallback : v; };
-      const intVal = (id, fallback) => { const v = parseInt(document.getElementById(id).value); return isNaN(v) ? fallback : v; };
-      const b = {
-        name: document.getElementById('cfgName').value || cur.name,
-        floors: intVal('cfgFloors', cur.floors),
-        basements: intVal('cfgBasements', cur.basements),
-        lobby: intVal('cfgLobby', cur.lobby),
-        idleFloor: intVal('cfgIdle', cur.idleFloor),
-        parkingFloors: csvToInts(document.getElementById('cfgParking').value),
-        vipFloors: csvToInts(document.getElementById('cfgVip').value),
-        serviceFloors: csvToInts(document.getElementById('cfgService').value),
-        mechanicalFloors: csvToInts(document.getElementById('cfgMechanical').value),
-        elevatorCount: Math.max(1, Math.min(16, intVal('cfgElevators', cur.elevatorCount))),
-        capacity: intVal('cfgCapacity', cur.capacity),
-        weightLimit: intVal('cfgWeight', cur.weightLimit),
-        maxSpeed: num('cfgMaxSpeed', cur.maxSpeed),
-        acceleration: num('cfgAccel', cur.acceleration),
-        deceleration: num('cfgDecel', cur.deceleration),
-        doorOpenTime: num('cfgDoorOpen', cur.doorOpenTime),
-        doorCloseTime: num('cfgDoorClose', cur.doorCloseTime),
-        loadTime: num('cfgLoadTime', cur.loadTime),
-        unloadTime: num('cfgUnloadTime', cur.unloadTime),
-        energySaving: document.getElementById('cfgEnergySaving').checked,
-        algorithm: snapshot? snapshot.algorithm : 'look'
-      };
-      try {
-        await api('/api/config','PUT', b);
-      } catch(err) {
-        console.error('Apply config failed', err);
-        alert('Could not apply configuration — check the backend is running and reachable.');
-      } finally {
-        this.disabled=false;
-      }
-    });
-    document.getElementById('resetSimBtn').addEventListener('click', ()=>api('/api/simulation/reset','POST'));
-  }
-  if(name==='requests'){
-    document.getElementById('spawnBtn').addEventListener('click', async function(){
-      const origin = parseInt(document.getElementById('reqOrigin').value);
-      const dest = parseInt(document.getElementById('reqDest').value);
-      if(origin===dest){ alert('Origin and destination must differ.'); return; }
-      this.disabled=true;
-      try {
-        await api('/api/requests/spawn','POST', {
-          origin, dest,
-          priority: document.getElementById('reqPriority').value,
-          group: parseInt(document.getElementById('reqGroup').value)||1
-        });
-      } catch(err) {
-        console.error('Spawn request failed', err);
-      } finally {
-        this.disabled=false;
-      }
-    });
-    document.getElementById('spawnBatchBtn').addEventListener('click', ()=>api('/api/requests/batch?count=10','POST'));
-    document.getElementById('autoGenMode').addEventListener('change', e=>{
-      api('/api/requests/autogen','POST', {mode:e.target.value, ratePerMinute: parseFloat(document.getElementById('autoGenRate').value)||6});
-    });
-    document.getElementById('autoGenRate').addEventListener('change', e=>{
-      api('/api/requests/autogen','POST', {mode:document.getElementById('autoGenMode').value, ratePerMinute: parseFloat(e.target.value)||6});
-    });
-  }
-  if(name==='safety'){
-    document.querySelectorAll('[data-safety]').forEach(btn=>btn.addEventListener('click', async ()=>{
-      await api('/api/safety/toggle','POST', {key:btn.dataset.safety});
-      renderTab('safety');
-    }));
-    document.getElementById('clearAllSafetyBtn').addEventListener('click', async ()=>{
-      await api('/api/safety/clear-all','POST'); renderTab('safety');
-    });
-    document.querySelectorAll('#faultElevatorSelect .es-btn').forEach(btn=>btn.addEventListener('click', ()=>{
-      ui.selectedElevatorForFault=parseInt(btn.dataset.id); renderTab('safety');
-    }));
-    document.querySelectorAll('[data-fault]').forEach(btn=>btn.addEventListener('click', async ()=>{
-      const id = snapshot.elevators[ui.selectedElevatorForFault].id;
-      await api('/api/safety/fault','POST', {elevatorId:id, action:'inject', faultType:btn.dataset.fault});
-      renderTab('safety');
-    }));
-    document.getElementById('clearFaultBtn').addEventListener('click', async ()=>{
-      const id = snapshot.elevators[ui.selectedElevatorForFault].id;
-      await api('/api/safety/fault','POST', {elevatorId:id, action:'clear'}); renderTab('safety');
-    });
-    document.getElementById('toggleMaintenanceBtn').addEventListener('click', async ()=>{
-      const id = snapshot.elevators[ui.selectedElevatorForFault].id;
-      await api('/api/safety/fault','POST', {elevatorId:id, action:'maintenance'}); renderTab('safety');
-    });
-    document.getElementById('toggleInspectionBtn').addEventListener('click', async ()=>{
-      const id = snapshot.elevators[ui.selectedElevatorForFault].id;
-      await api('/api/safety/fault','POST', {elevatorId:id, action:'inspection'}); renderTab('safety');
-    });
-    document.getElementById('toggleIndependentBtn').addEventListener('click', async ()=>{
-      const id = snapshot.elevators[ui.selectedElevatorForFault].id;
-      await api('/api/safety/fault','POST', {elevatorId:id, action:'independent'}); renderTab('safety');
-    });
-  }
-  if(name==='reports'){
-    document.getElementById('exportBtn').addEventListener('click', async function(){
-      this.disabled=true;
-      try {
-        const type=document.getElementById('reportType').value, format=document.getElementById('reportFormat').value;
-        const res = await fetch(API+'/api/reports?type='+type+'&format='+format);
-        if(!res.ok) throw new Error('Report request failed: '+res.status);
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href=url; a.download=type+'-report.'+format; a.click();
-        URL.revokeObjectURL(url);
-      } catch(err) {
-        console.error('Export failed', err);
-        alert('Could not generate the report — check the backend is running.');
-      } finally {
-        this.disabled=false;
-      }
-    });
-  }
-  if(name==='logs'){
-    document.querySelectorAll('#logFilters .chip-filter').forEach(chip=>chip.addEventListener('click', ()=>{ ui.logFilter=chip.dataset.filter; renderTab('logs'); }));
-    document.getElementById('logSearch').addEventListener('input', e=>{ ui.logSearch=e.target.value; refreshLogs(); });
-  }
-}
-function csvToInts(s){ return s.split(',').map(x=>parseInt(x.trim())).filter(n=>!isNaN(n)); }
+  document.getElementById('startSimHeroBtn').addEventListener('click', async () => {
+    ui.started = true;
+    await api('/api/simulation/start', 'POST');
+    document.getElementById('startOverlay').classList.add('hidden');
+    showToast('Simulation launched', 'success');
+  });
 
-function syncPauseButton(){
-  const btn = document.getElementById('pauseBtn');
-  btn.textContent = (snapshot && snapshot.running) ? 'Pause' : 'Resume';
-}
+  /* Zoom controls */
+  function setZoom(val) {
+    ui.zoom = Math.min(2.0, Math.max(0.65, val));
+    document.getElementById('zoomLevelDisplay').textContent = `${Math.round(ui.zoom * 100)}%`;
+    resizeCanvas();
+    drawShaftVisualization();
+  }
+  document.getElementById('zoomInBtn').addEventListener('click', () => setZoom(ui.zoom + 0.15));
+  document.getElementById('zoomOutBtn').addEventListener('click', () => setZoom(ui.zoom - 0.15));
+  document.getElementById('zoomResetBtn').addEventListener('click', () => setZoom(1.0));
 
-document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click', ()=>{
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  tab.classList.add('active'); ui.activeTab=tab.dataset.tab; renderTab(tab.dataset.tab);
-}));
-document.getElementById('pauseBtn').addEventListener('click', async ()=>{
-  if(!ui.started) return;
-  if(snapshot && snapshot.running) await api('/api/simulation/pause','POST'); else await api('/api/simulation/resume','POST');
-});
-document.getElementById('speedBtn').addEventListener('click', async function(){
-  const speeds=[1,2,4,8]; const cur=parseInt(this.textContent)||1;
-  const next = speeds[(speeds.indexOf(cur)+1)%speeds.length];
-  await api('/api/simulation/speed','POST', {multiplier: next});
-  this.textContent = next+'×';
-});
-document.getElementById('startFab').addEventListener('click', async ()=>{
-  ui.started = true;
-  await api('/api/simulation/start','POST');
-  document.getElementById('startOverlay').classList.add('hidden');
-});
-function setZoom(z){
-  ui.zoom = Math.min(2, Math.max(0.5, z));
-  document.getElementById('zoomLabel').textContent = Math.round(ui.zoom*100)+'%';
-  resizeCanvas(); drawShaft();
-}
-document.getElementById('zoomInBtn').addEventListener('click', ()=> setZoom(ui.zoom+0.15));
-document.getElementById('zoomOutBtn').addEventListener('click', ()=> setZoom(ui.zoom-0.15));
+  /* Initial Theme Load */
+  const savedTheme = localStorage.getItem('infinity_tower_theme') || 'aubergine';
+  applyPalette(savedTheme);
 
-computeColors();
-renderTab('config');
-resizeCanvas();
-connectWebSocket();
-setInterval(()=>{ if(ui.activeTab==='logs') refreshLogs(); }, 4000);
+  /* Start periodic background telemetry */
+  renderTab('config');
+  resizeCanvas();
+  initWebSocket();
+  setInterval(() => {
+    if (ui.activeTab === 'logs') fetchAndDisplayLogs();
+  }, 3500);
+
 })();
 </script>
 </body>

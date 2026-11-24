@@ -1,8 +1,6 @@
 package com.infinitytower.ecs.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infinitytower.ecs.domain.ReportRecordEntity;
-import com.infinitytower.ecs.repository.ReportRecordRepository;
 import com.infinitytower.ecs.service.SimulationService;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -20,12 +18,10 @@ import java.util.Map;
 public class ReportController {
 
     private final SimulationService service;
-    private final ReportRecordRepository reportRecordRepository;
     private final ObjectMapper objectMapper;
 
-    public ReportController(SimulationService service, ReportRecordRepository reportRecordRepository, ObjectMapper objectMapper) {
+    public ReportController(SimulationService service, ObjectMapper objectMapper) {
         this.service = service;
-        this.reportRecordRepository = reportRecordRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -34,10 +30,6 @@ public class ReportController {
                                        @RequestParam(defaultValue = "json") String format) throws Exception {
         Map<String, Object> report = service.buildReport(type);
         String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(report);
-
-        ReportRecordEntity record = new ReportRecordEntity(type, String.valueOf(report.get("buildingName")),
-                String.valueOf(report.get("algorithmUsed")), json);
-        reportRecordRepository.save(record);
 
         if ("csv".equalsIgnoreCase(format)) {
             String csv = toCsv(report);

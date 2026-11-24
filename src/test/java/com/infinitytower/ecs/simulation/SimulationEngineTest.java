@@ -84,4 +84,55 @@ class SimulationEngineTest {
         snap = engine.getSnapshot();
         assertTrue(snap.hallCalls.get(0).assigned, "Clearing maintenance should immediately retry the stuck call");
     }
+
+    @Test
+    void inMemoryLogsAreBoundedAndSupportSearchAndCategoryFilters() {
+        engine.setMaxLogEntries(100);
+        for (int i = 0; i < 150; i++) {
+            engine.spawnPassenger(1, 5, "normal", 1);
+        }
+        var allLogs = engine.getLogs(null, null, 200);
+        assertTrue(allLogs.size() <= 100, "Log buffer must be bounded by max capacity");
+
+        var passengerLogs = engine.getLogs("passenger", null, 50);
+        assertFalse(passengerLogs.isEmpty());
+        assertTrue(passengerLogs.stream().allMatch(l -> "passenger".equals(l.category)));
+
+        var searchLogs = engine.getLogs(null, "Passenger #", 10);
+        assertFalse(searchLogs.isEmpty());
+        assertTrue(searchLogs.get(0).message.contains("Passenger #"));
+    }
+
+    @Test
+    void allTenAlgorithmsAreRegisteredAndSelectable() {
+        var algos = engine.listAlgorithms();
+        assertEquals(10, algos.size(), "All 10 scheduling algorithms must be registered");
+
+        String[] expected = {"fcfs", "scan", "look", "sstf", "collective", "nearest", "sector", "destination", "adaptive", "ai"};
+        for (String id : expected) {
+            engine.setAlgorithm(id);
+            assertEquals(id, engine.getAlgorithm(), "Should switch to algorithm: " + id);
+        }
+    }
+
+    @Test
+    void buildReportGeneratesTelemetryWithoutDatabase() {
+        var report = engine.buildReport("simulation");
+        assertNotNull(report);
+        assertEquals("Infinity Tower", report.get("buildingName"));
+        assertNotNull(report.get("algorithmUsed"));
+        assertNotNull(report.get("performanceSummary"));
+        assertNotNull(report.get("elevators"));
+    }
+
+    @Test
+    void inMemoryConfigCanBeModifiedDuringSession() {
+        Dto.BuildingConfigDto update = engine.getConfig();
+        update.name = "Apex Tower";
+        update.floors = 18;
+        engine.applyConfig(update);
+
+        assertEquals("Apex Tower", engine.getConfig().name);
+        assertEquals(18, engine.getConfig().floors);
+    }
 }

@@ -3,8 +3,9 @@ package com.infinitytower.ecs.simulation;
 import com.infinitytower.ecs.dto.Dto;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Component
 public class SimulationEngine {
@@ -15,8 +16,9 @@ public class SimulationEngine {
     private final List<ElevatorModel> elevators = new ArrayList<>();
     private final List<PassengerModel> passengers = new ArrayList<>();
     private final List<HallCallModel> hallCalls = new ArrayList<>();
-    private final Deque<Dto.LogEntryDto> recentLogs = new ArrayDeque<>();
-    private final ConcurrentLinkedQueue<Dto.LogEntryDto> pendingPersistLogs = new ConcurrentLinkedQueue<>();
+    private final Deque<Dto.LogEntryDto> inMemoryLogs = new ArrayDeque<>();
+    private final AtomicLong logSeq = new AtomicLong(0);
+    private int maxLogEntries = 5000;
     private final Random random = new Random();
 
     private String algorithm = "look";
@@ -82,7 +84,7 @@ public class SimulationEngine {
         waitTimes.clear(); travelTimes.clear();
         stops = 0; distance = 0; energy = 0; faultCount = 0;
         lastRedispatchSweep = 0;
-        recentLogs.clear();
+        inMemoryLogs.clear();
         initElevators();
         log("Simulation reset. \"" + building.name + "\" initialized with " + building.elevatorCount
                 + " elevators across " + building.floorRange().size() + " floors.", "ok", "system");
@@ -141,7 +143,7 @@ public class SimulationEngine {
         building.energySaving = dto.energySaving;
         if (dto.algorithm != null) algorithm = dto.algorithm;
         resetSimulation();
-        log("Configuration applied — building rebuilt.", "ok", "system");
+        log("Configuration applied - building rebuilt.", "ok", "system");
     }
 
     public synchronized Dto.BuildingConfigDto getConfig() {
@@ -609,18 +611,26 @@ public class SimulationEngine {
         return elevators.stream().filter(e -> e.id == id).findFirst().orElse(null);
     }
 
-    // ---------- Logging ----------
+    // ---------- Logging & In-Memory Log Store ----------
 
-    private void log(String message, String level, String category) {
-        Dto.LogEntryDto entry = new Dto.LogEntryDto();
-        entry.simDay = simDay;
-        entry.simClock = fmtClock();
-        entry.level = level;
-        entry.category = category;
-        entry.message = message;
-        recentLogs.addLast(entry);
-        if (recentLogs.size() > 500) recentLogs.removeFirst();
-        pendingPersistLogs.add(entry);
+    public void setMaxLogEntries(int max) {
+        this.maxLogEntries = Math.max(100, max);
+    }
+
+    private synchronized void log(String message, String level, String category) {
+        Dto.LogEntryDto entry = new Dto.LogEntryDto(
+                logSeq.incrementAndGet(),
+                simDay,
+                fmtClock(),
+                category,
+                level,
+                message,
+                Instant.now().toString()
+        );
+        inMemoryLogs.addLast(entry);
+        while (inMemoryLogs.size() > maxLogEntries) {
+            inMemoryLogs.removeFirst();
+        }
     }
 
     private String fmtClock() {
@@ -631,11 +641,25 @@ public class SimulationEngine {
         return String.format("%02d:%02d:%02d", hh, mm, ss);
     }
 
-    public List<Dto.LogEntryDto> drainNewLogsForPersistence() {
-        List<Dto.LogEntryDto> batch = new ArrayList<>();
-        Dto.LogEntryDto item;
-        while ((item = pendingPersistLogs.poll()) != null) batch.add(item);
-        return batch;
+    public synchronized List<Dto.LogEntryDto> getLogs(String category, String search, int limit) {
+        int max = Math.max(1, Math.min(500, limit));
+        List<Dto.LogEntryDto> result = new ArrayList<>();
+        Iterator<Dto.LogEntryDto> it = inMemoryLogs.descendingIterator();
+        boolean filterCategory = category != null && !category.isBlank() && !"all".equalsIgnoreCase(category);
+        boolean filterSearch = search != null && !search.isBlank();
+        String searchLower = filterSearch ? search.toLowerCase() : null;
+
+        while (it.hasNext() && result.size() < max) {
+            Dto.LogEntryDto item = it.next();
+            if (filterCategory && !category.equalsIgnoreCase(item.category)) {
+                continue;
+            }
+            if (filterSearch && (item.message == null || !item.message.toLowerCase().contains(searchLower))) {
+                continue;
+            }
+            result.add(item);
+        }
+        return result;
     }
 
     // ---------- Snapshot / analytics ----------
@@ -654,8 +678,8 @@ public class SimulationEngine {
                 .map(this::passengerDto).toList();
         snap.hallCalls = hallCalls.stream().map(this::hallCallDto).toList();
         snap.analytics = analyticsDto();
-        snap.recentLogs = new ArrayList<>(recentLogs).stream()
-                .skip(Math.max(0, recentLogs.size() - 60)).toList();
+        snap.recentLogs = new ArrayList<>(inMemoryLogs).stream()
+                .skip(Math.max(0, inMemoryLogs.size() - 60)).toList();
         return snap;
     }
 
