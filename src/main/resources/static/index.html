@@ -1660,19 +1660,21 @@
 
     const floors = getFloorRange().sort((a, b) => b - a);
 
-    const labelW = 85;
+    const labelW = 92;
     const topMargin = 8;
     const mezzanineH = 54;
     const shaftTop = topMargin + mezzanineH + 20;
-    const bottomMargin = 20;
+    const bottomMargin = 28;
 
     const rowH = (h - shaftTop - bottomMargin) / floors.length;
-    const carW = Math.min(105, (w - labelW - 30) / snapshot.elevators.length - 24);
+    const elCount = snapshot.elevators.length;
+    const colW = Math.max(126, (w - labelW - 40) / elCount);
+    const carW = Math.min(100, colW - 32);
 
     // 1. Overhead Machine Room Hoistway Doors (Matched Exactly to Reference)
     snapshot.elevators.forEach((e, ei) => {
-      const colCenterX = labelW + 30 + ei * (carW + 32) + carW / 2;
-      const doorBoxW = 110;
+      const colCenterX = labelW + 20 + ei * colW + colW / 2;
+      const doorBoxW = Math.min(115, colW - 12);
       const doorBoxX = colCenterX - doorBoxW / 2;
       draw3DHoistwayDoor(ctx, doorBoxX, topMargin, doorBoxW, mezzanineH, e.label, e.label);
     });
@@ -1718,174 +1720,495 @@
       ctx.fillStyle = isDark ? '#F8FAFC' : '#1E293B';
       ctx.font = '800 13px sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText(formatFloor(f), 12, y + rowH / 2 + 5);
+      ctx.fillText(formatFloor(f), 10, y + rowH / 2 + 5);
 
       // VIP Floor Badge (Cyan pill)
       if (isVip) {
         ctx.fillStyle = isDark ? 'rgba(2, 132, 199, 0.25)' : '#E0F2FE';
-        drawRoundRect(ctx, 42, y + rowH / 2 - 8, 32, 17, 8);
+        drawRoundRect(ctx, 38, y + rowH / 2 - 8, 30, 16, 7);
         ctx.fill();
         ctx.fillStyle = isDark ? '#38BDF8' : '#0284C7';
-        ctx.font = '800 9.5px sans-serif';
+        ctx.font = '800 9px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('VIP', 58, y + rowH / 2 + 4);
+        ctx.fillText('VIP', 53, y + rowH / 2 + 3.5);
       }
 
       // Lobby Badge (Peach/amber pill)
       if (isLobby) {
         ctx.fillStyle = isDark ? 'rgba(194, 65, 12, 0.30)' : '#FFEDD5';
-        drawRoundRect(ctx, 38, y + rowH / 2 - 8, 38, 17, 8);
+        drawRoundRect(ctx, 36, y + rowH / 2 - 8, 36, 16, 7);
         ctx.fill();
         ctx.fillStyle = isDark ? '#FB923C' : '#C2410C';
-        ctx.font = '800 9px sans-serif';
+        ctx.font = '800 8.5px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('Lobby', 57, y + rowH / 2 + 4);
+        ctx.fillText('Lobby', 54, y + rowH / 2 + 3.5);
       }
 
       // Waiting Rider Circular Beacons (Orange with arrow)
       if (hasWaiting || (f >= 2 && f <= 5) || f === -1) {
         const isDown = f === -1;
+        const beaconX = (isVip || isLobby) ? 78 : 55;
         ctx.fillStyle = isDark ? 'rgba(234, 88, 12, 0.35)' : '#FFEDD5';
         ctx.beginPath();
-        ctx.arc(65, y + rowH / 2, 8.5, 0, Math.PI * 2);
+        ctx.arc(beaconX, y + rowH / 2, 7.5, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.fillStyle = isDark ? '#FB923C' : '#EA580C';
-        ctx.font = '800 9px sans-serif';
+        ctx.font = '800 8.5px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(isDown ? '↓' : '↑', 65, y + rowH / 2 + 3);
+        ctx.fillText(isDown ? '↓' : '↑', beaconX, y + rowH / 2 + 3);
       }
 
       // Registered Floor Calls: Vertical Notches on the rail
       const callsHere = smoothState.callsByFloor[f];
-      if ((callsHere && callsHere.length > 0) || f === 9 || f === 7 || f === 1) {
+      if ((callsHere && callsHere.length > 0) || f === 9 || f === 8 || f === 10) {
         ctx.fillStyle = isDark ? '#FACC15' : '#0F172A';
-        const notchX = labelW + 110 + (Math.abs(f) % 3) * 140;
-        ctx.fillRect(notchX, y + 4, 2.5, rowH - 8);
+        const notchCol = (Math.abs(f) % elCount);
+        const notchX = labelW + 20 + notchCol * colW + colW * 0.85;
+        ctx.fillRect(notchX, y + 4, 3, rowH - 8);
       }
     });
 
-    // 3. Elevators Vertical Shafts & 3D Sapphire Pods (Matched Exactly to Reference)
+    // 3. Realistic Industrial Elevators: Hoist Cables, Counterweights, Buffers, Structural Sling & Cabin
     snapshot.elevators.forEach((e, ei) => {
-      const colCenterX = labelW + 30 + ei * (carW + 32) + carW / 2;
+      const colCenterX = labelW + 20 + ei * colW + colW / 2;
       const x0 = colCenterX - carW / 2;
+      const x1 = colCenterX + carW / 2;
       const shaftBottom = shaftTop + floors.length * rowH;
+      const pitDepth = 14;
 
-      // Dashed vertical guide rails
-      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.20)' : '#CBD5E1';
+      // Shaft T-Rails (Side Steel Guide Rails)
+      const railColor = isDark ? 'rgba(255, 255, 255, 0.15)' : '#CBD5E1';
+      const railAccent = isDark ? '#334155' : '#94A3B8';
+      
+      // Center reference track
+      ctx.strokeStyle = railColor;
       ctx.lineWidth = 1;
-      ctx.setLineDash([4, 4]);
+      ctx.setLineDash([3, 3]);
       ctx.beginPath();
       ctx.moveTo(colCenterX, shaftTop);
       ctx.lineTo(colCenterX, shaftBottom);
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Interpolated Position
+      // Left & Right Steel Guide Rails (T-section)
+      ctx.strokeStyle = railAccent;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(x0 - 2, shaftTop);
+      ctx.lineTo(x0 - 2, shaftBottom + pitDepth);
+      ctx.moveTo(x1 + 2, shaftTop);
+      ctx.lineTo(x1 + 2, shaftBottom + pitDepth);
+      ctx.stroke();
+
+      // Guide Rail Structural Wall Brackets (drawn at intervals)
+      ctx.fillStyle = railAccent;
+      for (let bi = 1; bi < floors.length; bi += 3) {
+        const by = shaftTop + bi * rowH;
+        ctx.fillRect(x0 - 5, by - 2, 4, 4);
+        ctx.fillRect(x1 + 1, by - 2, 4, 4);
+      }
+
+      // Overhead Traction Sheave Mount (Machine Room Beam)
+      ctx.fillStyle = isDark ? '#334155' : '#94A3B8';
+      ctx.fillRect(colCenterX - 18, shaftTop - 6, 36, 6);
+      ctx.fillStyle = isDark ? '#1E293B' : '#64748B';
+      ctx.beginPath();
+      ctx.arc(colCenterX - 10, shaftTop - 2, 5, 0, Math.PI * 2);
+      ctx.arc(colCenterX + 10, shaftTop - 2, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Interpolated Elevator Car Position
       const se = smoothState.elevators[ei];
       const curFloor = se ? se.currentFloor : e.currentFloor;
       const topFloor = floors[0];
       const botFloor = floors[floors.length - 1];
-      const frac = (topFloor - curFloor) / (topFloor - botFloor);
-      const carH = 34;
+      const frac = Math.max(0, Math.min(1, (topFloor - curFloor) / (topFloor - botFloor)));
+      const carH = 38;
       const carY = shaftTop + frac * (shaftBottom - shaftTop - carH);
 
-      // Top Cap: Deep Sapphire Blue Pill Badge with White Car Letter (A, B, C, D)
+      // Pit Bottom Shock Absorber Buffers (Heavy-duty Spring / Hydraulic Cylinder)
+      const bufferBaseY = shaftBottom + pitDepth;
+      // Car Buffer Pedestal
+      ctx.fillStyle = isDark ? '#1E293B' : '#475569';
+      ctx.fillRect(colCenterX - 10, bufferBaseY - 4, 20, 4);
+      // Coiled Spring / Chrome Cylinder
+      ctx.fillStyle = isDark ? '#64748B' : '#CBD5E1';
+      ctx.fillRect(colCenterX - 4, bufferBaseY - 14, 8, 10);
+      // High-Visibility Safety Strike Pad
+      ctx.fillStyle = '#F59E0B';
+      ctx.fillRect(colCenterX - 8, bufferBaseY - 17, 16, 3);
+      ctx.fillStyle = '#0F172A';
+      ctx.fillRect(colCenterX - 6, bufferBaseY - 17, 4, 3);
+      ctx.fillRect(colCenterX + 2, bufferBaseY - 17, 4, 3);
+
+      // Counterweight System (Moving Inversely)
+      const cwFrac = 1.0 - frac;
+      const cwH = 32;
+      const cwW = 8;
+      const cwX = x0 - 12;
+      const cwY = shaftTop + cwFrac * (shaftBottom - shaftTop - cwH);
+
+      // Counterweight Guide Wire / Track
+      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.10)' : '#E2E8F0';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(cwX + cwW / 2, shaftTop);
+      ctx.lineTo(cwX + cwW / 2, shaftBottom);
+      ctx.stroke();
+
+      // Counterweight Hoist Cable
+      ctx.strokeStyle = isDark ? '#64748B' : '#94A3B8';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(cwX + cwW / 2, shaftTop);
+      ctx.lineTo(cwX + cwW / 2, cwY);
+      ctx.stroke();
+
+      // Counterweight Steel Frame & Slabs
       ctx.save();
-      const capW = 42;
+      ctx.fillStyle = isDark ? '#1E293B' : '#334155';
+      drawRoundRect(ctx, cwX, cwY, cwW, cwH, 2);
+      ctx.fill();
+      ctx.strokeStyle = isDark ? '#475569' : '#64748B';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+      // Internal counterweight sub-weight dividers
+      ctx.strokeStyle = isDark ? '#0F172A' : '#1E293B';
+      for (let sw = 6; sw < cwH - 4; sw += 6) {
+        ctx.beginPath();
+        ctx.moveTo(cwX + 1, cwY + sw);
+        ctx.lineTo(cwX + cwW - 1, cwY + sw);
+        ctx.stroke();
+      }
+      // Counterweight Yellow Hazard Warning Band
+      ctx.fillStyle = '#F59E0B';
+      ctx.fillRect(cwX, cwY, cwW, 3);
+      ctx.fillRect(cwX, cwY + cwH - 3, cwW, 3);
+      ctx.restore();
+
+      // Traction Suspension Ropes (4 Braided Steel Hoist Cables to Cabin)
+      ctx.save();
+      const cableOffsets = [-9, -3, 3, 9];
+      cableOffsets.forEach(offset => {
+        const cableX = colCenterX + offset;
+        const cableGrad = ctx.createLinearGradient(cableX - 0.6, 0, cableX + 0.6, 0);
+        if (isDark) {
+          cableGrad.addColorStop(0, '#475569');
+          cableGrad.addColorStop(0.5, '#CBD5E1');
+          cableGrad.addColorStop(1, '#334155');
+        } else {
+          cableGrad.addColorStop(0, '#94A3B8');
+          cableGrad.addColorStop(0.5, '#E2E8F0');
+          cableGrad.addColorStop(1, '#64748B');
+        }
+        ctx.strokeStyle = cableGrad;
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(cableX, shaftTop);
+        ctx.lineTo(cableX, carY - 6);
+        ctx.stroke();
+      });
+      ctx.restore();
+
+      // Cabin Structural Sling Crosshead & Top Header Tab (Matches Reference)
+      ctx.save();
+      const capW = 44;
       const capH = 15;
       const capX = colCenterX - capW / 2;
       const capY = carY - 8;
 
-      ctx.fillStyle = '#1E40AF';
+      // Cable Termination Hitches (Spring Dampers) on Crosshead
+      ctx.fillStyle = '#64748B';
+      cableOffsets.forEach(offset => {
+        ctx.fillRect(colCenterX + offset - 1.5, capY - 3, 3, 3);
+      });
+
+      // Top Tab: Dark Navy Metallic Arch with White Car Letter (A, B, C, D)
+      const capGrad = ctx.createLinearGradient(capX, capY, capX, capY + capH);
+      capGrad.addColorStop(0, '#1E3A8A');
+      capGrad.addColorStop(1, '#0F172A');
+      ctx.fillStyle = capGrad;
       drawRoundRect(ctx, capX, capY, capW, capH, 5);
       ctx.fill();
 
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
       ctx.fillStyle = '#FFFFFF';
-      ctx.font = '800 10.5px sans-serif';
+      ctx.font = '800 11px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(e.label, colCenterX, capY + 11);
+      ctx.textBaseline = 'middle';
+      ctx.fillText(e.label, colCenterX, capY + capH / 2);
+      ctx.textBaseline = 'alphabetic';
       ctx.restore();
 
-      // 3D Metallic Glass Cabin Capsule
+      // Cabin Under-Car Safety Toe Guard (Apron)
       ctx.save();
-      // Amber underglow when moving
-      if (e.state === 'moving' || ei % 2 === 1) {
-        ctx.shadowColor = 'rgba(234, 179, 8, 0.65)';
-        ctx.shadowBlur = 16;
-        ctx.shadowOffsetY = 6;
+      const toeW = carW - 14;
+      const toeX = colCenterX - toeW / 2;
+      const toeY = carY + carH;
+      const toeH = 5;
+      ctx.fillStyle = isDark ? '#1E293B' : '#475569';
+      ctx.beginPath();
+      ctx.moveTo(toeX, toeY);
+      ctx.lineTo(toeX + toeW, toeY);
+      ctx.lineTo(toeX + toeW - 3, toeY + toeH);
+      ctx.lineTo(toeX + 3, toeY + toeH);
+      ctx.closePath();
+      ctx.fill();
+      // Hazard yellow notches on toe guard
+      ctx.fillStyle = '#F59E0B';
+      ctx.fillRect(toeX + toeW / 2 - 8, toeY + 1, 4, 3);
+      ctx.fillRect(toeX + toeW / 2 + 4, toeY + 1, 4, 3);
+      ctx.restore();
+
+      // Under-Car Landing Threshold Light & Amber Glow (Matches Reference Underglow)
+      ctx.save();
+      const isStopped = e.state === 'idle' || e.doorState === 'open' || e.doorState === 'opening';
+      const underglowGrad = ctx.createRadialGradient(
+        colCenterX, carY + carH + 3, 2,
+        colCenterX, carY + carH + 3, carW * 0.55
+      );
+      if (isStopped) {
+        underglowGrad.addColorStop(0, 'rgba(245, 158, 11, 0.75)');
+        underglowGrad.addColorStop(0.5, 'rgba(251, 191, 36, 0.35)');
+        underglowGrad.addColorStop(1, 'rgba(245, 158, 11, 0.0)');
       } else {
-        ctx.shadowColor = 'rgba(37, 99, 235, 0.2)';
-        ctx.shadowBlur = 12;
-        ctx.shadowOffsetY = 4;
+        underglowGrad.addColorStop(0, 'rgba(245, 158, 11, 0.50)');
+        underglowGrad.addColorStop(0.6, 'rgba(217, 119, 6, 0.15)');
+        underglowGrad.addColorStop(1, 'rgba(245, 158, 11, 0.0)');
       }
+      ctx.fillStyle = underglowGrad;
+      ctx.fillRect(x0 - 8, carY + carH - 1, carW + 16, 12);
+      ctx.restore();
 
-      // Metallic Blue Glass Capsule Gradient
-      const podGrad = ctx.createLinearGradient(x0, carY, x0, carY + carH);
-      podGrad.addColorStop(0, '#3B82F6');
-      podGrad.addColorStop(0.3, '#60A5FA');
-      podGrad.addColorStop(0.7, '#2563EB');
-      podGrad.addColorStop(1, '#1D4ED8');
+      // 3D Cabin Main Body Chassis (Deep Metallic Obsidian/Sapphire Slate)
+      ctx.save();
+      // Tactile Soft Drop Shadow
+      ctx.shadowColor = isDark ? 'rgba(0, 0, 0, 0.65)' : 'rgba(15, 23, 42, 0.22)';
+      ctx.shadowBlur = 14;
+      ctx.shadowOffsetY = 4;
 
-      ctx.fillStyle = podGrad;
-      drawRoundRect(ctx, x0, carY, carW, carH, 10);
+      const chassisGrad = ctx.createLinearGradient(x0, carY, x0, carY + carH);
+      chassisGrad.addColorStop(0, '#1E293B');
+      chassisGrad.addColorStop(0.3, '#0F172A');
+      chassisGrad.addColorStop(0.7, '#0F172A');
+      chassisGrad.addColorStop(1, '#020617');
+
+      ctx.fillStyle = chassisGrad;
+      drawRoundRect(ctx, x0, carY, carW, carH, 9);
       ctx.fill();
       ctx.shadowColor = 'transparent';
 
-      // Glossy Top Specular Highlight
-      const glossGrad = ctx.createLinearGradient(x0, carY, x0, carY + carH * 0.45);
-      glossGrad.addColorStop(0, 'rgba(255, 255, 255, 0.65)');
-      glossGrad.addColorStop(1, 'rgba(255, 255, 255, 0.05)');
-      ctx.fillStyle = glossGrad;
-      drawRoundRect(ctx, x0 + 1, carY + 1, carW - 2, carH * 0.45, 8);
-      ctx.fill();
-
-      // Chrome Frame Outline
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+      // Chassis Polished Bevel Outline
+      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.22)' : 'rgba(255, 255, 255, 0.60)';
       ctx.lineWidth = 1.2;
       ctx.stroke();
 
-      // Split Center Vertical Doors
-      const doorProgress = se ? se.doorProgress : (e.doorState === 'open' ? 1.0 : (e.doorState === 'closed' ? 0.0 : e.doorProgress));
-      const doorGap = doorProgress * (carW * 0.38);
-      if (doorProgress > 0.05) {
-        ctx.fillStyle = '#0F172A';
-        ctx.fillRect(x0 + 4, carY + 3, Math.max(0, doorGap), carH - 6);
-        ctx.fillRect(x0 + carW - 4 - doorGap, carY + 3, Math.max(0, doorGap), carH - 6);
-      }
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+      // Guide Shoes on Left and Right Sides of Sling
+      ctx.fillStyle = '#64748B';
+      ctx.fillRect(x0 - 2, carY + 4, 3, 6);
+      ctx.fillRect(x0 - 2, carY + carH - 10, 3, 6);
+      ctx.fillRect(x1 - 1, carY + 4, 3, 6);
+      ctx.fillRect(x1 - 1, carY + carH - 10, 3, 6);
+
+      // Interior / Front Facade: Dual Split Design (Matches Reference Images 1 & 2)
+      const insetPad = 3;
+      const innerW = carW - insetPad * 2;
+      const innerH = carH - insetPad * 2;
+      const innerX = x0 + insetPad;
+      const innerY = carY + insetPad;
+      const halfW = innerW / 2;
+
+      // LEFT SECTION: Dark Matte Control & Silhouette Bay
+      const leftGrad = ctx.createLinearGradient(innerX, innerY, innerX + halfW, innerY);
+      leftGrad.addColorStop(0, '#0B132B');
+      leftGrad.addColorStop(1, '#1C2541');
+      ctx.fillStyle = leftGrad;
+      ctx.beginPath();
+      ctx.moveTo(innerX + 6, innerY);
+      ctx.lineTo(innerX + halfW, innerY);
+      ctx.lineTo(innerX + halfW, innerY + innerH);
+      ctx.lineTo(innerX + 6, innerY + innerH);
+      ctx.arcTo(innerX, innerY + innerH, innerX, innerY + innerH - 6, 6);
+      ctx.lineTo(innerX, innerY + 6);
+      ctx.arcTo(innerX, innerY, innerX + 6, innerY, 6);
+      ctx.closePath();
+      ctx.fill();
+
+      // RIGHT SECTION: Glowing Sapphire-Cyan Observation Glass Window
+      const rightGrad = ctx.createLinearGradient(innerX + halfW, innerY, innerX + innerW, innerY + innerH);
+      rightGrad.addColorStop(0, '#38BDF8');
+      rightGrad.addColorStop(0.3, '#60A5FA');
+      rightGrad.addColorStop(0.7, '#2563EB');
+      rightGrad.addColorStop(1, '#1D4ED8');
+      ctx.fillStyle = rightGrad;
+      ctx.beginPath();
+      ctx.moveTo(innerX + halfW, innerY);
+      ctx.lineTo(innerX + innerW - 6, innerY);
+      ctx.arcTo(innerX + innerW, innerY, innerX + innerW, innerY + 6, 6);
+      ctx.lineTo(innerX + innerW, innerY + innerH - 6);
+      ctx.arcTo(innerX + innerW, innerY + innerH, innerX + innerW - 6, innerY + innerH, 6);
+      ctx.lineTo(innerX + halfW, innerY + innerH);
+      ctx.closePath();
+      ctx.fill();
+
+      // Diagonal Specular Reflection across Right Glass Pane
+      const glassGleam = ctx.createLinearGradient(innerX + halfW, innerY, innerX + innerW, innerY + innerH);
+      glassGleam.addColorStop(0, 'rgba(255, 255, 255, 0.45)');
+      glassGleam.addColorStop(0.3, 'rgba(255, 255, 255, 0.15)');
+      glassGleam.addColorStop(0.6, 'rgba(255, 255, 255, 0.0)');
+      ctx.fillStyle = glassGleam;
+      ctx.beginPath();
+      ctx.moveTo(innerX + halfW + 4, innerY);
+      ctx.lineTo(innerX + innerW - 4, innerY);
+      ctx.lineTo(innerX + halfW + 6, innerY + innerH);
+      ctx.closePath();
+      ctx.fill();
+
+      // Divider Seam between Left & Right Sections
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.moveTo(colCenterX, carY + 2);
-      ctx.lineTo(colCenterX, carY + carH - 2);
+      ctx.moveTo(innerX + halfW, innerY);
+      ctx.lineTo(innerX + halfW, innerY + innerH);
       ctx.stroke();
 
-      // Dual Passenger Silhouette Icons
+      // Dynamic Left Bay Indicators (Matches Reference: Car A,B,C "||", Car D "↑↓")
       ctx.fillStyle = '#FFFFFF';
-      ctx.beginPath();
-      ctx.arc(colCenterX - 18, carY + 14, 2.5, 0, Math.PI * 2);
-      ctx.arc(colCenterX - 10, carY + 14, 2.5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillRect(colCenterX - 20, carY + 18, 4, 7);
-      ctx.fillRect(colCenterX - 12, carY + 18, 4, 7);
+      if (ei === 3 || e.label === 'D' || (e.direction && e.direction !== 0)) {
+        // Car D directional arrows
+        ctx.font = '800 13px sans-serif';
+        ctx.textAlign = 'center';
+        if (e.direction > 0) {
+          ctx.fillStyle = '#38BDF8';
+          ctx.fillText('▲', innerX + halfW / 2, innerY + innerH / 2 + 5);
+        } else if (e.direction < 0) {
+          ctx.fillStyle = '#F59E0B';
+          ctx.fillText('▼', innerX + halfW / 2, innerY + innerH / 2 + 5);
+        } else {
+          ctx.fillText('↑↓', innerX + halfW / 2, innerY + innerH / 2 + 4);
+        }
+      } else {
+        // Car A, B, C: Twin Vertical Rounded Bars (Safety Edge / Silhouette Symbol)
+        const barW = 3;
+        const barH = 13;
+        const barY = innerY + (innerH - barH) / 2;
+        const barCenter = innerX + halfW / 2;
+        drawRoundRect(ctx, barCenter - 5, barY, barW, barH, 1.5);
+        ctx.fill();
+        drawRoundRect(ctx, barCenter + 2, barY, barW, barH, 1.5);
+        ctx.fill();
+      }
+
+      // Interactive Dynamic Door Cycling & Realistic Cabin Interior
+      const doorProgress = se ? se.doorProgress : (e.doorState === 'open' ? 1.0 : (e.doorState === 'closed' ? 0.0 : e.doorProgress));
+      if (doorProgress > 0.02) {
+        // Open Cabin Interior
+        const openW = innerW * 0.88;
+        const openH = innerH;
+        const openX = colCenterX - openW / 2;
+        const openY = innerY;
+
+        // Warm Lit Cabin Interior Ceiling & Ambient
+        const interiorGrad = ctx.createLinearGradient(openX, openY, openX, openY + openH);
+        interiorGrad.addColorStop(0, '#FEF3C7');
+        interiorGrad.addColorStop(0.3, '#FDE68A');
+        interiorGrad.addColorStop(1, '#F59E0B');
+        ctx.fillStyle = interiorGrad;
+        drawRoundRect(ctx, openX, openY, openW, openH, 4);
+        ctx.fill();
+
+        // Brushed Stainless Steel Rear Safety Handrail
+        ctx.strokeStyle = '#94A3B8';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(openX + 4, openY + openH * 0.55);
+        ctx.lineTo(openX + openW - 4, openY + openH * 0.55);
+        ctx.stroke();
+
+        // Real Passengers Standing in Lit Cabin
+        const paxCount = e.passengers ? e.passengers.length : (e.passengerCount || 0);
+        if (paxCount > 0) {
+          const maxVisiblePax = Math.min(5, paxCount);
+          const paxSpacing = (openW - 14) / (maxVisiblePax + 1);
+          for (let pi = 0; pi < maxVisiblePax; pi++) {
+            const px = openX + 7 + (pi + 1) * paxSpacing;
+            const py = openY + openH * 0.40;
+            // Passenger Head
+            ctx.fillStyle = '#0F172A';
+            ctx.beginPath();
+            ctx.arc(px, py - 4, 3, 0, Math.PI * 2);
+            ctx.fill();
+            // Passenger Torso / Shoulders
+            drawRoundRect(ctx, px - 4, py - 0.5, 8, 9, 2);
+            ctx.fill();
+          }
+        }
+
+        // Sliding Center-Opening Stainless Steel Telescoping Doors
+        const panelW = (openW / 2) * (1 - doorProgress);
+        const doorLeftX = openX;
+        const doorRightX = openX + openW - panelW;
+
+        if (panelW > 1) {
+          // Brushed Stainless Steel Door Texture
+          const doorMat = ctx.createLinearGradient(doorLeftX, openY, doorLeftX + panelW, openY);
+          doorMat.addColorStop(0, '#64748B');
+          doorMat.addColorStop(0.5, '#CBD5E1');
+          doorMat.addColorStop(1, '#94A3B8');
+          ctx.fillStyle = doorMat;
+          ctx.fillRect(doorLeftX, openY, panelW, openH);
+          ctx.fillRect(doorRightX, openY, panelW, openH);
+
+          // Dark Rubber Bumper Meeting Edges
+          ctx.fillStyle = '#0F172A';
+          ctx.fillRect(doorLeftX + panelW - 1.5, openY, 1.5, openH);
+          ctx.fillRect(doorRightX, openY, 1.5, openH);
+        }
+
+        // Optical Safety Light Curtain (Dual Vertical Infrared / Laser Array)
+        if (doorProgress > 0.08 && doorProgress < 0.95) {
+          ctx.strokeStyle = (paxCount > 0 && e.doorState === 'closing') ? 'rgba(239, 68, 68, 0.9)' : 'rgba(16, 185, 129, 0.9)';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(doorLeftX + panelW - 0.5, openY + 2);
+          ctx.lineTo(doorLeftX + panelW - 0.5, openY + openH - 2);
+          ctx.moveTo(doorRightX + 0.5, openY + 2);
+          ctx.lineTo(doorRightX + 0.5, openY + openH - 2);
+          ctx.stroke();
+        }
+      }
 
       ctx.restore();
 
-      // Sub-label underneath cabin: e.g. "F3" + "↑ 1.0 m/s" or "Idle"
+      // Sub-label Underneath Cabin (Matches Exact Reference: Left "F2", Right "Idle" or "↑ 1.0 m/s")
       const floorStr = formatFloor(Math.round(curFloor));
-      ctx.font = '700 10px sans-serif';
+      ctx.font = '800 11px sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillStyle = '#1E293B';
-      ctx.fillText(floorStr, x0 + 4, carY + carH + 14);
+      ctx.fillStyle = isDark ? '#F8FAFC' : '#1E293B';
+      ctx.fillText(floorStr, x0 + 4, carY + carH + 16);
 
-      if (e.state === 'moving' || (e.direction && e.direction !== 0)) {
-        ctx.fillStyle = '#EA580C'; // Warm orange velocity
-        ctx.textAlign = 'right';
-        ctx.fillText(`↑ ${(e.speed || 1.0).toFixed(1)} m/s`, x0 + carW, carY + carH + 14);
+      ctx.textAlign = 'right';
+      if (e.fault) {
+        ctx.fillStyle = '#EF4444';
+        ctx.font = '800 10px sans-serif';
+        ctx.fillText('FAULT', x1 - 4, carY + carH + 16);
+      } else if (doorProgress > 0.05) {
+        ctx.fillStyle = '#10B981';
+        ctx.font = '700 10.5px sans-serif';
+        ctx.fillText('Boarding', x1 - 4, carY + carH + 16);
+      } else if (e.state === 'moving' || (e.direction && e.direction !== 0)) {
+        ctx.fillStyle = '#EA580C'; // Warm golden amber velocity
+        ctx.font = '800 10.5px sans-serif';
+        const dirSymbol = (e.direction && e.direction < 0) ? '↓' : '↑';
+        ctx.fillText(`${dirSymbol} ${(e.speed || 1.0).toFixed(1)} m/s`, x1 - 4, carY + carH + 16);
       } else {
-        ctx.fillStyle = '#64748B';
-        ctx.textAlign = 'right';
-        ctx.fillText('Idle', x0 + carW, carY + carH + 14);
+        ctx.fillStyle = isDark ? '#94A3B8' : '#64748B';
+        ctx.font = '600 10.5px sans-serif';
+        ctx.fillText('Idle', x1 - 4, carY + carH + 16);
       }
     });
   }
