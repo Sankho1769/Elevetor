@@ -103,6 +103,51 @@
     --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.75);
   }
 
+  
+  body.theme-daylight {
+    --theme-name: 'daylight';
+    --bg-base: #EEF2F6;
+    --bg-app: #F8FAFC;
+    --bg-topbar: #FFFFFF;
+    --bg-panel: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --bg-card-subtle: #F1F5F9;
+    --bg-input: #FFFFFF;
+
+    --primary: #0284C7;
+    --primary-hover: #0369A1;
+    --primary-contrast: #FFFFFF;
+    --accent: #F59E0B;
+    --accent-hover: #D97706;
+    --accent-contrast: #0F172A;
+    --accent-dim: rgba(245, 158, 11, 0.16);
+
+    --text-main: #0F172A;
+    --text-muted: #475569;
+    --text-dim: #94A3B8;
+
+    --border-subtle: rgba(15, 23, 42, 0.08);
+    --border-strong: rgba(2, 132, 199, 0.35);
+    --border-focus: #0284C7;
+
+    --shaft-bg: #E2E8F0;
+    --shaft-grid: rgba(15, 23, 42, 0.06);
+    --shaft-rail: rgba(15, 23, 42, 0.18);
+
+    --status-success: #059669;
+    --status-success-dim: rgba(5, 150, 105, 0.15);
+    --status-warning: #D97706;
+    --status-warning-dim: rgba(217, 119, 6, 0.15);
+    --status-danger: #DC2626;
+    --status-danger-dim: rgba(220, 38, 38, 0.15);
+    --status-info: #0284C7;
+    --status-info-dim: rgba(2, 132, 199, 0.15);
+
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+    --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.1);
+    --shadow-lg: 0 10px 24px rgba(15, 23, 42, 0.12);
+  }
+
   body.theme-slate {
     --theme-name: 'slate';
     --bg-base: #090E17;
@@ -221,7 +266,7 @@
     font-size: 15px;
     font-weight: 800;
     letter-spacing: 0.02em;
-    color: #FFFFFF;
+    color: var(--text-main);
     line-height: 1.15;
   }
   .brand-text span {
@@ -364,8 +409,8 @@
     justify-content: space-between;
     padding: 10px 18px;
     border-bottom: 1px solid var(--border-subtle);
-    background: rgba(0, 0, 0, 0.28);
-    backdrop-filter: blur(10px);
+    background: var(--bg-panel);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     z-index: 10;
     gap: 12px;
     flex-wrap: wrap;
@@ -382,7 +427,7 @@
     font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #FFFFFF;
+    color: var(--text-main);
   }
   .sim-view-title .badge-tag {
     font-size: 10px;
@@ -412,7 +457,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 14px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--text-main);
     line-height: 1.1;
   }
   .stat-chip .l {
@@ -475,6 +520,8 @@
   #shaftCanvas {
     display: block;
     border-radius: 4px;
+    will-change: transform;
+    transform: translateZ(0);
   }
 
   /* Start Simulation Hero Modal */
@@ -485,8 +532,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(10, 10, 15, 0.82);
-    backdrop-filter: blur(10px);
+    background: rgba(10, 10, 15, 0.88);
     transition: opacity 0.25s ease, visibility 0.25s ease;
   }
   #startOverlay.hidden {
@@ -843,7 +889,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 18px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--text-main);
     line-height: 1.15;
   }
   .metric-tile .m-lbl {
@@ -1129,7 +1175,12 @@
         <h2>Shaft Telemetry</h2>
         <span class="badge-tag" id="activeAlgoBadge">LOOK</span>
       </div>
-      <div id="statOverlay"></div>
+      <div id="statOverlay">
+        <div class="stat-chip"><div class="v" id="statWaiting">0</div><div class="l">Waiting</div></div>
+        <div class="stat-chip"><div class="v" id="statAvgWait">0.0s</div><div class="l">Avg Wait</div></div>
+        <div class="stat-chip"><div class="v" id="statCompleted">0</div><div class="l">Completed</div></div>
+        <div class="stat-chip"><div class="v" id="statMovingCars">0/4</div><div class="l">Moving Cars</div></div>
+      </div>
       <div class="zoom-toolbar">
         <button class="btn small" id="zoomOutBtn" title="Zoom Out">−</button>
         <span id="zoomLevelDisplay">100%</span>
@@ -1223,6 +1274,12 @@
       swatches: ['#231724', '#8E3A75', '#E5A93C', '#1D151F', '#F5EEF6']
     },
     {
+      id: 'daylight',
+      label: 'High-Tech Technical Daylight',
+      sub: 'Crisp High-Visibility Laboratory Environment',
+      swatches: ['#FFFFFF', '#0284C7', '#F59E0B', '#E2E8F0', '#0F172A']
+    },
+    {
       id: 'obsidian',
       label: 'Industrial Obsidian SCADA',
       sub: 'High-Contrast Telemetry Center',
@@ -1280,26 +1337,153 @@
     }
   }
 
+  /* ----------------------------------------------------
+     SMOOTH KINEMATICS INTERPOLATION & 60 FPS ENGINE
+  ---------------------------------------------------- */
+  const smoothState = {
+    elevators: [],
+    lastTime: performance.now(),
+    waitingByFloor: {},
+    ridingByElevator: {},
+    callsByFloor: {},
+    activeElevatorFloors: new Set(),
+    animRunning: false
+  };
+
+  let cachedCanvasW = 0;
+  let cachedCanvasH = 0;
+  let lastTabRenderTime = { analytics: 0, requests: 0, algorithm: 0 };
+
   function onSnapshotReceived() {
     if (!snapshot) return;
 
     if (snapshot.running && !ui.started) {
       ui.started = true;
-      document.getElementById('startOverlay').classList.add('hidden');
+      const overlay = document.getElementById('startOverlay');
+      if (overlay) overlay.classList.add('hidden');
     }
 
-    document.getElementById('buildingHeaderName').textContent = snapshot.building.name;
-    document.getElementById('activeAlgoBadge').textContent = (snapshot.algorithm || 'LOOK').toUpperCase();
+    const bNameEl = document.getElementById('buildingHeaderName');
+    if (bNameEl && bNameEl.textContent !== snapshot.building.name) {
+      bNameEl.textContent = snapshot.building.name;
+    }
+    const algoEl = document.getElementById('activeAlgoBadge');
+    const algoName = (snapshot.algorithm || 'LOOK').toUpperCase();
+    if (algoEl && algoEl.textContent !== algoName) {
+      algoEl.textContent = algoName;
+    }
+
     renderSimulationClock();
     renderStatOverlay();
-    drawShaftVisualization();
     recordTelemetrySample();
+    updateInterpolators();
+    ensureAnimationLoop();
 
-    if (ui.activeTab === 'analytics') renderAnalyticsTab();
-    if (ui.activeTab === 'requests') renderHallCallsTab();
-    if (ui.activeTab === 'algorithm') renderAlgoComparisonBars();
+    // Throttled sub-tab updates to avoid UI stutter
+    const now = performance.now();
+    if (ui.activeTab === 'analytics' && now - lastTabRenderTime.analytics > 350) {
+      lastTabRenderTime.analytics = now;
+      renderAnalyticsTab();
+    }
+    if (ui.activeTab === 'requests' && now - lastTabRenderTime.requests > 300) {
+      lastTabRenderTime.requests = now;
+      renderHallCallsTab();
+    }
+    if (ui.activeTab === 'algorithm' && now - lastTabRenderTime.algorithm > 400) {
+      lastTabRenderTime.algorithm = now;
+      renderAlgoComparisonBars();
+    }
     if (ui.activeTab === 'safety') checkSafetyTabUpdate();
     syncPauseButton();
+  }
+
+  function updateInterpolators() {
+    if (!snapshot) return;
+
+    // Fast O(P) single-pass pre-bucketing of passengers and calls
+    const wMap = {};
+    const rMap = {};
+    const cMap = {};
+    const activeFloors = new Set();
+
+    if (snapshot.passengers) {
+      for (let i = 0; i < snapshot.passengers.length; i++) {
+        const p = snapshot.passengers[i];
+        if (p.state === 'waiting') {
+          (wMap[p.origin] || (wMap[p.origin] = [])).push(p);
+        } else if (p.state === 'riding') {
+          (rMap[p.assignedElevatorId] || (rMap[p.assignedElevatorId] = [])).push(p);
+        }
+      }
+    }
+
+    if (snapshot.hallCalls) {
+      for (let i = 0; i < snapshot.hallCalls.length; i++) {
+        const c = snapshot.hallCalls[i];
+        (cMap[c.floor] || (cMap[c.floor] = [])).push(c);
+      }
+    }
+
+    if (snapshot.elevators) {
+      for (let i = 0; i < snapshot.elevators.length; i++) {
+        const e = snapshot.elevators[i];
+        if (e.doorState === 'open' || e.doorState === 'opening') {
+          activeFloors.add(Math.round(e.currentFloor));
+        }
+
+        const targetDoor = e.doorState === 'open' ? 1.0 : (e.doorState === 'closed' ? 0.0 : (e.doorProgress || 0));
+        if (!smoothState.elevators[i]) {
+          smoothState.elevators[i] = {
+            currentFloor: e.currentFloor,
+            targetFloor: e.currentFloor,
+            doorProgress: targetDoor,
+            targetDoorProgress: targetDoor
+          };
+        } else {
+          smoothState.elevators[i].targetFloor = e.currentFloor;
+          smoothState.elevators[i].targetDoorProgress = targetDoor;
+        }
+      }
+    }
+
+    smoothState.waitingByFloor = wMap;
+    smoothState.ridingByElevator = rMap;
+    smoothState.callsByFloor = cMap;
+    smoothState.activeElevatorFloors = activeFloors;
+  }
+
+  function ensureAnimationLoop() {
+    if (smoothState.animRunning) return;
+    smoothState.animRunning = true;
+    smoothState.lastTime = performance.now();
+
+    function loop(now) {
+      const dt = Math.min(0.06, (now - smoothState.lastTime) / 1000);
+      smoothState.lastTime = now;
+
+      if (snapshot && snapshot.elevators && smoothState.elevators.length > 0) {
+        // Smooth exponential interpolation factor (converges cleanly at 60/120 FPS)
+        const lerpFactor = 1 - Math.exp(-18 * dt);
+        const doorLerp = 1 - Math.exp(-22 * dt);
+
+        for (let i = 0; i < snapshot.elevators.length; i++) {
+          const se = smoothState.elevators[i];
+          if (!se) continue;
+          se.currentFloor += (se.targetFloor - se.currentFloor) * lerpFactor;
+          if (Math.abs(se.targetFloor - se.currentFloor) < 0.001) {
+            se.currentFloor = se.targetFloor;
+          }
+          se.doorProgress += (se.targetDoorProgress - se.doorProgress) * doorLerp;
+          if (Math.abs(se.targetDoorProgress - se.doorProgress) < 0.002) {
+            se.doorProgress = se.targetDoorProgress;
+          }
+        }
+        drawShaftVisualization();
+      }
+
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
   }
 
   function recordTelemetrySample() {
@@ -1334,7 +1518,11 @@
     const h = String(Math.floor(sec / 3600)).padStart(2, '0');
     const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
     const s = String(sec % 60).padStart(2, '0');
-    document.getElementById('simClockBadge').textContent = `DAY ${snapshot.simDay} · ${h}:${m}:${s}`;
+    const badge = document.getElementById('simClockBadge');
+    if (badge) {
+      const str = `DAY ${snapshot.simDay} · ${h}:${m}:${s}`;
+      if (badge.textContent !== str) badge.textContent = str;
+    }
   }
 
   function renderStatOverlay() {
@@ -1343,21 +1531,31 @@
     const moving = snapshot.elevators.filter(e => e.state === 'moving').length;
     const total = snapshot.elevators.length;
 
-    const chips = [
-      { v: a.waitingPassengers, l: 'Waiting' },
-      { v: a.avgWaitTime.toFixed(1) + 's', l: 'Avg Wait' },
-      { v: a.completed, l: 'Completed' },
-      { v: `${moving}/${total}`, l: 'Moving Cars' }
-    ];
+    // High performance in-place text updates without destroying DOM nodes
+    const elWait = document.getElementById('statWaiting');
+    const elAvg = document.getElementById('statAvgWait');
+    const elComp = document.getElementById('statCompleted');
+    const elMov = document.getElementById('statMovingCars');
 
-    document.getElementById('statOverlay').innerHTML = chips.map(c => `
-      <div class="stat-chip">
-        <div class="v">${c.v}</div>
-        <div class="l">${c.l}</div>
-      </div>
-    `).join('');
+    if (elWait) {
+      const v = String(a.waitingPassengers);
+      if (elWait.textContent !== v) elWait.textContent = v;
+    }
+    if (elAvg) {
+      const v = a.avgWaitTime.toFixed(1) + 's';
+      if (elAvg.textContent !== v) elAvg.textContent = v;
+    }
+    if (elComp) {
+      const v = String(a.completed);
+      if (elComp.textContent !== v) elComp.textContent = v;
+    }
+    if (elMov) {
+      const v = `${moving}/${total}`;
+      if (elMov.textContent !== v) elMov.textContent = v;
+    }
 
     const banner = document.getElementById('alertBanner');
+    if (!banner) return;
     const activeAlerts = [];
     if (snapshot.safety.fire) activeAlerts.push('FIRE ALARM ACTIVE');
     if (snapshot.safety.smoke) activeAlerts.push('SMOKE DETECTED');
@@ -1370,7 +1568,8 @@
 
     if (activeAlerts.length > 0) {
       banner.style.display = 'flex';
-      document.getElementById('alertBannerText').textContent = activeAlerts.join(' · ');
+      const bText = document.getElementById('alertBannerText');
+      if (bText) bText.textContent = activeAlerts.join(' · ');
     } else {
       banner.style.display = 'none';
     }
@@ -1408,6 +1607,7 @@
 
   function resizeCanvas() {
     const wrap = document.getElementById('shaftViewport');
+    if (!wrap) return;
     const floors = getFloorRange();
     const elCount = snapshot ? snapshot.elevators.length : 4;
 
@@ -1435,6 +1635,8 @@
       canvas.style.width = wPx;
       canvas.style.height = hPx;
       ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+      cachedCanvasW = w;
+      cachedCanvasH = h;
     }
   }
   window.addEventListener('resize', () => { resizeCanvas(); drawShaftVisualization(); });
@@ -1460,11 +1662,14 @@
 
   function drawShaftVisualization() {
     if (!snapshot) return;
-    resizeCanvas();
-    const floors = getFloorRange().sort((a, b) => b - a);
-    const w = canvas.width / window.devicePixelRatio;
-    const h = canvas.height / window.devicePixelRatio;
+    if (cachedCanvasW === 0 || cachedCanvasH === 0) resizeCanvas();
+
+    const w = cachedCanvasW || (canvas.width / window.devicePixelRatio);
+    const h = cachedCanvasH || (canvas.height / window.devicePixelRatio);
     ctx.clearRect(0, 0, w, h);
+
+    const isLight = document.body.classList.contains('theme-daylight');
+    const floors = getFloorRange().sort((a, b) => b - a);
 
     const labelW = 90;
     const topMargin = 12;
@@ -1476,15 +1681,29 @@
     const rowH = (h - shaftTop - bottomMargin) / floors.length;
     const carW = Math.min(100, (w - labelW - 36) / snapshot.elevators.length - 16);
 
+    // Dynamic theme colors for canvas elements
+    const gridLineColor = isLight ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.07)';
+    const floorTextColor = isLight ? '#0F172A' : '#F1F5F9';
+    const machineRoomBg = isLight ? 'rgba(15, 23, 42, 0.04)' : 'rgba(255, 255, 255, 0.03)';
+    const machineRoomBorder = isLight ? 'rgba(15, 23, 42, 0.14)' : 'rgba(255, 255, 255, 0.12)';
+    const machineRoomText = isLight ? '#475569' : '#94A3B8';
+    const railColor = isLight ? 'rgba(15, 23, 42, 0.22)' : 'rgba(255, 255, 255, 0.12)';
+    const cableColor = isLight ? 'rgba(15, 23, 42, 0.45)' : 'rgba(255, 255, 255, 0.35)';
+    const colHeaderBg = isLight ? 'rgba(15, 23, 42, 0.05)' : 'rgba(255, 255, 255, 0.04)';
+    const colHeaderBorder = isLight ? 'rgba(15, 23, 42, 0.14)' : 'rgba(255, 255, 255, 0.1)';
+    const colHeaderText = isLight ? '#0F172A' : '#F1F5F9';
+    const cabinBg = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(18, 24, 38, 0.92)';
+    const badgeBg = isLight ? '#FFFFFF' : '#0B0E14';
+
     // Machine Room Header Box
     ctx.save();
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+    ctx.fillStyle = machineRoomBg;
     ctx.fillRect(labelW, topMargin, w - labelW - 16, machineRoomH);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.strokeStyle = machineRoomBorder;
     ctx.lineWidth = 1;
     ctx.strokeRect(labelW, topMargin, w - labelW - 16, machineRoomH);
 
-    ctx.fillStyle = '#94A3B8';
+    ctx.fillStyle = machineRoomText;
     ctx.font = '700 10px monospace';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
@@ -1494,14 +1713,14 @@
     // Floor Rows & Hall Calls
     floors.forEach((f, i) => {
       const y = shaftTop + i * rowH;
-      const activeFloor = snapshot.elevators.some(e => Math.round(e.currentFloor) === f && (e.doorState === 'open' || e.doorState === 'opening'));
+      const activeFloor = smoothState.activeElevatorFloors.has(f);
 
       if (activeFloor) {
-        ctx.fillStyle = 'rgba(229, 169, 60, 0.08)';
+        ctx.fillStyle = isLight ? 'rgba(2, 132, 199, 0.08)' : 'rgba(229, 169, 60, 0.08)';
         ctx.fillRect(labelW, y, w - labelW - 16, rowH);
       }
 
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
+      ctx.strokeStyle = gridLineColor;
       ctx.beginPath();
       ctx.moveTo(labelW, y + rowH);
       ctx.lineTo(w - 16, y + rowH);
@@ -1512,55 +1731,59 @@
       const isVip = snapshot.building.vipFloors && snapshot.building.vipFloors.includes(f);
       const isParking = snapshot.building.parkingFloors && snapshot.building.parkingFloors.includes(f);
 
-      ctx.fillStyle = isLobby ? '#E5A93C' : (isVip ? '#A78BFA' : (isParking ? '#38BDF8' : '#F1F5F9'));
+      ctx.fillStyle = isLobby ? (isLight ? '#D97706' : '#E5A93C') : (isVip ? '#8B5CF6' : (isParking ? (isLight ? '#0284C7' : '#38BDF8') : floorTextColor));
       ctx.font = '700 12px monospace';
       ctx.textAlign = 'left';
       ctx.fillText(formatFloor(f), 10, y + rowH / 2 - 4);
 
       const tag = floorTag(f);
       if (tag) {
-        ctx.fillStyle = isLobby ? '#E5A93C' : (isVip ? '#A78BFA' : '#64748B');
+        ctx.fillStyle = isLobby ? (isLight ? '#D97706' : '#E5A93C') : (isVip ? '#8B5CF6' : (isLight ? '#64748B' : '#94A3B8'));
         ctx.font = '700 8.5px sans-serif';
         ctx.fillText(tag, 10, y + rowH / 2 + 10);
       }
 
-      // Active Directional Hall Call Beacons
-      const callsHere = snapshot.hallCalls.filter(c => c.floor === f);
-      if (callsHere.length > 0) {
-        const hasUp = callsHere.some(c => c.dir === 'up');
-        const hasDown = callsHere.some(c => c.dir === 'down');
+      // Fast O(1) Active Directional Hall Call Beacons
+      const callsHere = smoothState.callsByFloor[f];
+      if (callsHere && callsHere.length > 0) {
+        let hasUp = false, hasDown = false;
+        for (let ci = 0; ci < callsHere.length; ci++) {
+          if (callsHere[ci].dir === 'up') hasUp = true;
+          if (callsHere[ci].dir === 'down') hasDown = true;
+        }
         ctx.font = '700 10px monospace';
         if (hasUp) {
-          ctx.fillStyle = '#10B981';
+          ctx.fillStyle = isLight ? '#059669' : '#10B981';
           ctx.fillText('▲', labelW - 24, y + rowH / 2 - 3);
         }
         if (hasDown) {
-          ctx.fillStyle = '#F59E0B';
+          ctx.fillStyle = isLight ? '#D97706' : '#F59E0B';
           ctx.fillText('▼', labelW - 14, y + rowH / 2 - 3);
         }
       }
 
-      // Waiting Rider Queue
-      const waiting = snapshot.passengers.filter(p => p.state === 'waiting' && p.origin === f);
-      if (waiting.length > 0) {
-        ctx.fillStyle = '#E5A93C';
+      // Fast O(1) Waiting Rider Queue
+      const waiting = smoothState.waitingByFloor[f];
+      if (waiting && waiting.length > 0) {
+        ctx.fillStyle = isLight ? '#0284C7' : '#E5A93C';
         ctx.beginPath();
         ctx.arc(labelW - 36, y + rowH / 2 - 4, 8, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = '#0B0E14';
+        ctx.fillStyle = isLight ? '#FFFFFF' : '#0B0E14';
         ctx.font = '800 9px monospace';
         ctx.textAlign = 'center';
         ctx.fillText(waiting.length, labelW - 36, y + rowH / 2 - 1);
         ctx.textAlign = 'left';
 
         // Mini Rider Avatars
-        waiting.slice(0, 4).forEach((p, pi) => {
+        const avatarCount = Math.min(4, waiting.length);
+        for (let pi = 0; pi < avatarCount; pi++) {
           const px = labelW - 48 - (pi * 10);
           const py = y + rowH / 2 - 4;
-          const pColor = getPriorityColor(p.priority);
+          const pColor = getPriorityColor(waiting[pi].priority);
           drawPassengerIcon(ctx, px, py, pColor, 2.2);
-        });
+        }
       }
     });
 
@@ -1569,43 +1792,45 @@
       const x0 = labelW + 24 + ei * (carW + 20);
       const shaftBottom = shaftTop + floors.length * rowH;
 
-      // Column Header Plaque (Positioned cleanly with zero collision)
+      // Column Header Plaque
       const headerY = topMargin + machineRoomH + 4;
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.fillStyle = colHeaderBg;
       drawRoundRect(ctx, x0 - 4, headerY, carW + 8, colHeaderH, 4);
       ctx.fill();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.strokeStyle = colHeaderBorder;
       ctx.stroke();
 
-      ctx.fillStyle = '#F1F5F9';
+      ctx.fillStyle = colHeaderText;
       ctx.font = '800 11px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(`CAR ${e.label}`, x0 + carW / 2, headerY + 13);
 
       const stateLabel = e.fault ? 'FAULT' : (e.maintenance ? 'MAINT' : (e.inspection ? 'INSPECT' : (e.state === 'moving' ? (e.direction > 0 ? '▲ UP' : '▼ DN') : 'IDLE')));
-      ctx.fillStyle = e.fault ? '#EF4444' : (e.state === 'moving' ? '#10B981' : '#E5A93C');
+      ctx.fillStyle = e.fault ? (isLight ? '#DC2626' : '#EF4444') : (e.state === 'moving' ? (isLight ? '#059669' : '#10B981') : (isLight ? '#D97706' : '#E5A93C'));
       ctx.font = '700 8.5px monospace';
       ctx.fillText(stateLabel, x0 + carW / 2, headerY + 25);
       ctx.textAlign = 'left';
 
       // Twin Vertical Guide Rails
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.strokeStyle = railColor;
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(x0 + 4, shaftTop); ctx.lineTo(x0 + 4, shaftBottom);
       ctx.moveTo(x0 + carW - 4, shaftTop); ctx.lineTo(x0 + carW - 4, shaftBottom);
       ctx.stroke();
 
-      // Car Position Interpolation
+      // Smooth Position Interpolation (60/120 FPS buttery motion)
+      const se = smoothState.elevators[ei];
+      const curFloor = se ? se.currentFloor : e.currentFloor;
       const topFloor = floors[0];
       const botFloor = floors[floors.length - 1];
-      const frac = (topFloor - e.currentFloor) / (topFloor - botFloor);
+      const frac = (topFloor - curFloor) / (topFloor - botFloor);
       const carH = Math.min(rowH * 0.88, 54);
       const carY = shaftTop + frac * (shaftBottom - shaftTop - carH);
       const carCenterX = x0 + carW / 2;
 
       // Suspension Cable
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.strokeStyle = cableColor;
       ctx.lineWidth = 1.2;
       ctx.setLineDash([3, 3]);
       ctx.lineDashOffset = -((snapshot.simSeconds * 30) % 6) * e.direction;
@@ -1615,21 +1840,21 @@
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Counterweight (Moves inversely on rail)
+      // Counterweight
       const cwY = shaftTop + (1 - frac) * (shaftBottom - shaftTop - 28);
-      ctx.fillStyle = '#475569';
+      ctx.fillStyle = isLight ? '#64748B' : '#475569';
       drawRoundRect(ctx, x0 + carW + 1, cwY, 5, 24, 2);
       ctx.fill();
 
-      // Sleek Industrial Cabin
-      let cabinColor = '#E5A93C'; // Idle
-      if (e.fault) cabinColor = '#EF4444';
-      else if (e.maintenance || e.inspection) cabinColor = '#F59E0B';
-      else if (e.state === 'moving') cabinColor = '#10B981';
+      // Cabin Border & State Color
+      let cabinColor = isLight ? '#0284C7' : '#E5A93C'; // Idle
+      if (e.fault) cabinColor = isLight ? '#DC2626' : '#EF4444';
+      else if (e.maintenance || e.inspection) cabinColor = isLight ? '#D97706' : '#F59E0B';
+      else if (e.state === 'moving') cabinColor = isLight ? '#059669' : '#10B981';
 
-      // Cabin Glass Frame
+      // Cabin Frame
       ctx.save();
-      ctx.fillStyle = 'rgba(18, 24, 38, 0.9)';
+      ctx.fillStyle = cabinBg;
       drawRoundRect(ctx, x0, carY, carW, carH, 6);
       ctx.fill();
 
@@ -1637,19 +1862,16 @@
       ctx.lineWidth = 1.8;
       ctx.stroke();
 
-      // Interior Ambient Floor Light
-      const cabinGrad = ctx.createLinearGradient(x0, carY, x0, carY + carH);
-      cabinGrad.addColorStop(0, cabinColor + '25');
-      cabinGrad.addColorStop(1, 'rgba(0, 0, 0, 0.4)');
-      ctx.fillStyle = cabinGrad;
-      ctx.fill();
+      // Interior Ambient Floor Light (High performance solid fill)
+      ctx.fillStyle = isLight ? (cabinColor + '18') : (cabinColor + '22');
+      ctx.fillRect(x0 + 2, carY + 2, carW - 4, carH - 4);
       ctx.restore();
 
-      // Sliding Split Center Doors
-      const doorProgress = e.doorState === 'open' ? 1.0 : (e.doorState === 'closed' ? 0.0 : e.doorProgress);
+      // Smooth Sliding Split Center Doors
+      const doorProgress = se ? se.doorProgress : (e.doorState === 'open' ? 1.0 : (e.doorState === 'closed' ? 0.0 : e.doorProgress));
       const doorGap = doorProgress * (carW * 0.42);
-      if (e.doorState !== 'closed') {
-        ctx.fillStyle = '#0F131D';
+      if (e.doorState !== 'closed' || doorProgress > 0.01) {
+        ctx.fillStyle = isLight ? '#CBD5E1' : '#0F131D';
         ctx.fillRect(x0 + 2, carY + 2, Math.max(0, doorGap), carH - 4);
         ctx.fillRect(x0 + carW - 2 - doorGap, carY + 2, Math.max(0, doorGap), carH - 4);
       }
@@ -1660,7 +1882,7 @@
       ctx.stroke();
 
       // Digital Floor Indicator Header Badge
-      ctx.fillStyle = '#0B0E14';
+      ctx.fillStyle = badgeBg;
       ctx.strokeStyle = cabinColor;
       ctx.lineWidth = 1;
       drawRoundRect(ctx, x0 + carW / 2 - 20, carY - 18, 40, 15, 3);
@@ -1670,34 +1892,36 @@
       ctx.fillStyle = cabinColor;
       ctx.font = '700 10px monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(formatFloor(Math.round(e.currentFloor)), x0 + carW / 2, carY - 7);
+      ctx.fillText(formatFloor(Math.round(curFloor)), x0 + carW / 2, carY - 7);
 
-      // Onboard Passengers
-      const onboard = snapshot.passengers.filter(p => p.state === 'riding' && p.assignedElevatorId === e.id);
-      const dotsPerRow = Math.ceil(Math.sqrt(snapshot.building.capacity));
-      onboard.forEach((p, pi) => {
-        const col = pi % dotsPerRow;
-        const row = Math.floor(pi / dotsPerRow);
-        const pColor = getPriorityColor(p.priority);
-        drawPassengerIcon(ctx, x0 + 10 + col * 10, carY + 10 + row * 10, pColor, 2.6);
-      });
+      // Fast O(1) Onboard Passengers
+      const onboard = smoothState.ridingByElevator[e.id];
+      if (onboard && onboard.length > 0) {
+        const dotsPerRow = Math.ceil(Math.sqrt(snapshot.building.capacity));
+        for (let pi = 0; pi < onboard.length; pi++) {
+          const col = pi % dotsPerRow;
+          const row = Math.floor(pi / dotsPerRow);
+          const pColor = getPriorityColor(onboard[pi].priority);
+          drawPassengerIcon(ctx, x0 + 10 + col * 10, carY + 10 + row * 10, pColor, 2.6);
+        }
+      }
 
       // Capacity & Weight Gauge
       const occFrac = e.passengerCount / snapshot.building.capacity;
       const weightFrac = e.weight / snapshot.building.weightLimit;
       const barY = carY + carH + 4;
 
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.fillStyle = isLight ? 'rgba(15, 23, 42, 0.12)' : 'rgba(255, 255, 255, 0.1)';
       ctx.fillRect(x0, barY, carW, 3);
-      ctx.fillStyle = occFrac > 0.9 ? '#EF4444' : (occFrac > 0.7 ? '#F59E0B' : '#E5A93C');
+      ctx.fillStyle = occFrac > 0.9 ? (isLight ? '#DC2626' : '#EF4444') : (occFrac > 0.7 ? (isLight ? '#D97706' : '#F59E0B') : cabinColor);
       ctx.fillRect(x0, barY, carW * Math.min(1, occFrac), 3);
 
       ctx.font = '600 8.5px monospace';
-      ctx.fillStyle = '#94A3B8';
+      ctx.fillStyle = isLight ? '#475569' : '#94A3B8';
       ctx.textAlign = 'left';
       ctx.fillText(`${e.passengerCount}/${snapshot.building.capacity}`, x0, barY + 11);
       ctx.textAlign = 'right';
-      ctx.fillStyle = weightFrac > 0.9 ? '#EF4444' : '#94A3B8';
+      ctx.fillStyle = weightFrac > 0.9 ? (isLight ? '#DC2626' : '#EF4444') : (isLight ? '#475569' : '#94A3B8');
       ctx.fillText(`${Math.round(e.weight)}kg`, x0 + carW, barY + 11);
       ctx.textAlign = 'left';
     });
@@ -2553,11 +2777,12 @@
     }
   });
 
+  const THEME_ORDER = ['aubergine', 'daylight', 'slate', 'obsidian'];
   document.getElementById('themeShortcutBtn').addEventListener('click', () => {
-    document.querySelectorAll('#navTabs .nav-tab').forEach(t => t.classList.remove('active'));
-    const themeTab = document.querySelector('#navTabs .nav-tab[data-tab="theme"]');
-    if (themeTab) themeTab.classList.add('active');
-    renderTab('theme');
+    const curIdx = THEME_ORDER.indexOf(ui.selectedPalette || 'aubergine');
+    const nextTheme = THEME_ORDER[(curIdx + 1) % THEME_ORDER.length];
+    applyPalette(nextTheme);
+    showToast(`Theme: ${nextTheme.toUpperCase()}`, 'info');
   });
 
   document.getElementById('startSimHeroBtn').addEventListener('click', async () => {

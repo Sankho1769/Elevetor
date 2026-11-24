@@ -40,6 +40,8 @@ The interface was overhauled from informal "vibe-coded" prototypes into an indus
 | **Control Deck Navigation** | Overlapping single-line tab row cut off on standard widescreen displays. | Segmented 2-row × 4-column responsive grid providing instant one-click access across all 8 control subsystems. |
 | **User Feedback & Errors** | Blocking browser `alert()` modal dialogs interrupting real-time simulation loops. | Non-blocking, animated industrial toast notifications with precise error handling and graceful fallbacks. |
 | **Button State & Handlers** | Fragile pause/resume state binding causing unresponsive controls if clicked before manual start; potential `TypeError` on fault injection bounds. | Fully defensive state handlers with boundary protection (`Math.min(carIndex, elevators.length - 1)`), seamless pause/resume/start toggles, and dedicated topbar emergency reset. |
+| **Animation Fidelity & Lag** | Choppy 6.6 FPS canvas jumps tied directly to 150ms WebSocket packet arrivals; layout thrashing from per-frame `resizeCanvas()` and `innerHTML` reconstruction. | Hardware-accelerated 60/120 FPS `requestAnimationFrame` loop with smooth exponential kinematic interpolation, zero forced layout thrashing, $\mathcal{O}(1)$ pre-bucketed passenger lookups, and CSS containment. |
+| **Visual Palette Options** | Limited to dark palettes; missing high-visibility bright laboratory environment. | Added **High-Tech Technical Daylight** bright theme with crisp white surfaces, electric cerulean accents, and adaptive dark canvas geometry, togglable via 1-click topbar shortcut. |
 
 > **Previous Layout Defect Reference**: For defect audit records, see [docs/images/previous-layout-issue.jpg](docs/images/previous-layout-issue.jpg).
 
@@ -190,7 +192,7 @@ All interactive controls and API integrations across the 8-tab SCADA deck have b
 | **Topbar** | Engine Control | `Pause / Resume` | `POST /api/simulation/pause` | 200 OK | Kinematic clock paused/resumed cleanly |
 | **Topbar** | Engine Control | `Reset` | `POST /api/simulation/reset` | 200 OK | Full in-memory state re-initialized |
 | **Topbar** | Speed Multiplier | `1x / 2x / 4x / 8x` | `POST /api/simulation/speed` | 200 OK | Time dilation multiplier applied |
-| **Topbar** | Theme Selector | `Aubergine / Slate / Obsidian` | In-Browser CSS Engine | - | Real-time SCADA theme switch |
+| **Topbar** | Theme Selector | `Aubergine / Daylight / Slate / Obsidian` | In-Browser CSS Engine | - | Real-time 4-palette SCADA theme switch |
 | **Config** | Building Setup | `Update Config` | `PUT /api/config` | 200 OK | In-memory floors, cars, speeds updated |
 | **Config** | Fleet Setup | `Reset to Defaults` | `POST /api/config/reset` | 200 OK | Factory parameters restored |
 | **Requests** | Manual Dispatch | `Spawn Request` | `POST /api/requests/spawn` | 200 OK | Single passenger created with VIP/group flags |
