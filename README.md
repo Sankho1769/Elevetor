@@ -20,7 +20,16 @@ Built with **Java 21 LTS** and **Spring Boot 3.3.4**, the engine features a **ze
 Repository Link: https://github.com/Sankho1769/Elevetor.git
 Local Endpoint:  http://localhost:8080/
 WebSocket Feed:  ws://localhost:8080/ws/simulation
+Actuator Health: http://localhost:8080/actuator/health
 ```
+
+### Enterprise Engineering Documentation
+
+| Document | Description | Standard / Format | Link |
+|---|---|---|:---:|
+| **Product Requirements Document (PRD)** | Business vision, stakeholder personas, functional requirements, acceptance criteria, and KPI definitions. | Enterprise PRD v2.1.0 | [docs/PRD.md](docs/PRD.md) |
+| **Software Requirements Specification (SRS)** | Formal technical specification, physical equations, state machines, and requirements traceability matrix. | IEEE Std 830-1998 / ISO/IEC/IEEE 29148 | [docs/SRS.md](docs/SRS.md) |
+| **Engineering Project Report** | Complete architectural study, kinematic derivations, algorithmic benchmarks, and concurrency test results. | Staff Engineering Report v2.1.0 | [docs/PROJECT_REPORT.md](docs/PROJECT_REPORT.md) |
 
 ---
 
