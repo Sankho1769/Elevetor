@@ -21,6 +21,10 @@ public class SimulationEngine {
     private int maxLogEntries = 5000;
     private final Random random = new Random();
 
+    // Lock-free command pipeline and wait-free snapshot publishing
+    private final Queue<com.infinitytower.ecs.command.SimulationCommand> commandQueue = new java.util.concurrent.ConcurrentLinkedQueue<>();
+    private volatile Dto.SnapshotDto cachedSnapshot;
+
     private String algorithm = "look";
     private long passengerSeq = 1;
     private long requestSeq = 1;
@@ -57,18 +61,21 @@ public class SimulationEngine {
             log("Traffic generation enabled automatically (Peak-hour) on start.", "ok", "system");
         }
         log("Simulation started by operator.", "ok", "system");
+        generateSnapshot();
     }
 
     public synchronized void pause() {
         if (!started) return;
         running = false;
         log("Simulation paused", "ok", "system");
+        generateSnapshot();
     }
 
     public synchronized void resume() {
         if (!started) return;
         running = true;
         log("Simulation resumed", "ok", "system");
+        generateSnapshot();
     }
 
     public synchronized boolean isRunning() { return running; }
@@ -88,6 +95,7 @@ public class SimulationEngine {
         initElevators();
         log("Simulation reset. \"" + building.name + "\" initialized with " + building.elevatorCount
                 + " elevators across " + building.floorRange().size() + " floors.", "ok", "system");
+        generateSnapshot();
     }
 
     private void initElevators() {
@@ -177,6 +185,7 @@ public class SimulationEngine {
     public synchronized void setAlgorithm(String id) {
         this.algorithm = id;
         log("Scheduling algorithm switched to " + id.toUpperCase(), "ok", "system");
+        invalidateSnapshot();
     }
 
     public synchronized String getAlgorithm() { return algorithm; }
@@ -245,10 +254,15 @@ public class SimulationEngine {
 
     // ---------- Passenger / request handling ----------
 
+    private void invalidateSnapshot() {
+        this.cachedSnapshot = null;
+    }
+
     public synchronized void spawnPassenger(Integer origin, Integer dest, String priority, int group) {
         for (int i = 0; i < Math.max(1, group); i++) {
             spawnOne(origin, dest, priority, group);
         }
+        invalidateSnapshot();
     }
 
     private void spawnOne(Integer originIn, Integer destIn, String priorityIn, int group) {
@@ -369,10 +383,65 @@ public class SimulationEngine {
         return r;
     }
 
-    // ---------- Tick / physics ----------
+    // ---------- Lock-free command pipeline & Tick physics ----------
+
+    public void submitCommand(com.infinitytower.ecs.command.SimulationCommand command) {
+        if (command != null) {
+            commandQueue.offer(command);
+        }
+    }
+
+    public int getQueueDepth() {
+        return commandQueue.size();
+    }
+
+    private void drainCommands() {
+        com.infinitytower.ecs.command.SimulationCommand cmd;
+        while ((cmd = commandQueue.poll()) != null) {
+            processCommand(cmd);
+        }
+    }
+
+    private void processCommand(com.infinitytower.ecs.command.SimulationCommand cmd) {
+        switch (cmd) {
+            case com.infinitytower.ecs.command.SimulationCommand.SpawnPassenger sp ->
+                    spawnPassenger(sp.origin(), sp.dest(), sp.priority(), sp.group());
+            case com.infinitytower.ecs.command.SimulationCommand.SetAlgorithm sa ->
+                    setAlgorithm(sa.algorithmId());
+            case com.infinitytower.ecs.command.SimulationCommand.SetSpeed ss -> { }
+            case com.infinitytower.ecs.command.SimulationCommand.Lifecycle lc -> {
+                switch (lc.action()) {
+                    case START -> start();
+                    case PAUSE -> pause();
+                    case RESUME -> resume();
+                    case RESET -> resetSimulation();
+                }
+            }
+            case com.infinitytower.ecs.command.SimulationCommand.ApplyConfig ac ->
+                    applyConfig(ac.config());
+            case com.infinitytower.ecs.command.SimulationCommand.ToggleSafety ts ->
+                    toggleSafety(ts.key());
+            case com.infinitytower.ecs.command.SimulationCommand.ClearAllSafety cas ->
+                    clearAllSafety();
+            case com.infinitytower.ecs.command.SimulationCommand.InjectFault ifcmd ->
+                    injectFault(ifcmd.elevatorId(), ifcmd.faultType());
+            case com.infinitytower.ecs.command.SimulationCommand.ClearFault cf ->
+                    clearFault(cf.elevatorId());
+            case com.infinitytower.ecs.command.SimulationCommand.ToggleMaintenance tm ->
+                    toggleMaintenance(tm.elevatorId());
+            case com.infinitytower.ecs.command.SimulationCommand.ToggleInspection ti ->
+                    toggleInspection(ti.elevatorId());
+            case com.infinitytower.ecs.command.SimulationCommand.SetAutoGen sag ->
+                    setAutoGen(sag.mode(), sag.ratePerMinute());
+        }
+    }
 
     public synchronized void tick(double dt) {
-        if (!running) return;
+        drainCommands();
+        if (!running) {
+            generateSnapshot();
+            return;
+        }
         simSeconds += dt;
         if (simSeconds >= 86400) { simSeconds -= 86400; simDay++; }
         for (ElevatorModel e : elevators) tickElevator(e, dt);
@@ -381,6 +450,7 @@ public class SimulationEngine {
             redispatchPendingCalls();
             lastRedispatchSweep = simSeconds;
         }
+        generateSnapshot();
     }
 
     private void tickElevator(ElevatorModel e, double dt) {
@@ -558,6 +628,7 @@ public class SimulationEngine {
             }
         }
         if (!newVal) redispatchPendingCalls();
+        invalidateSnapshot();
     }
 
     public synchronized void clearAllSafety() {
@@ -565,6 +636,7 @@ public class SimulationEngine {
         elevators.forEach(e -> { e.fireRecall = false; e.earthquakeHold = false; });
         redispatchPendingCalls();
         log("All building-wide safety conditions cleared \u2014 system returned to normal.", "ok", "safety");
+        invalidateSnapshot();
     }
 
     public synchronized void injectFault(int elevatorId, String faultType) {
@@ -573,6 +645,7 @@ public class SimulationEngine {
         e.fault = faultType;
         faultCount++;
         log("Car " + e.label + " fault injected: " + faultType, "error", "fault");
+        invalidateSnapshot();
     }
 
     public synchronized void clearFault(int elevatorId) {
@@ -581,6 +654,7 @@ public class SimulationEngine {
         e.fault = null;
         log("Car " + e.label + " fault cleared", "ok", "fault");
         redispatchPendingCalls();
+        invalidateSnapshot();
     }
 
     public synchronized void toggleMaintenance(int elevatorId) {
@@ -589,6 +663,7 @@ public class SimulationEngine {
         e.maintenance = !e.maintenance;
         log("Car " + e.label + " maintenance mode " + e.maintenance, "warn", "fault");
         redispatchPendingCalls();
+        invalidateSnapshot();
     }
 
     public synchronized void toggleInspection(int elevatorId) {
@@ -597,6 +672,7 @@ public class SimulationEngine {
         e.inspection = !e.inspection;
         log("Car " + e.label + " inspection mode " + e.inspection, "warn", "fault");
         redispatchPendingCalls();
+        invalidateSnapshot();
     }
 
     public synchronized void toggleIndependentService(int elevatorId) {
@@ -605,6 +681,7 @@ public class SimulationEngine {
         e.independentService = !e.independentService;
         log("Car " + e.label + " independent service " + e.independentService, "warn", "fault");
         redispatchPendingCalls();
+        invalidateSnapshot();
     }
 
     private ElevatorModel findElevator(int id) {
@@ -664,7 +741,13 @@ public class SimulationEngine {
 
     // ---------- Snapshot / analytics ----------
 
-    public synchronized Dto.SnapshotDto getSnapshot() {
+    public Dto.SnapshotDto getSnapshot() {
+        Dto.SnapshotDto snap = cachedSnapshot;
+        if (snap != null) return snap;
+        return generateSnapshot();
+    }
+
+    public synchronized Dto.SnapshotDto generateSnapshot() {
         Dto.SnapshotDto snap = new Dto.SnapshotDto();
         snap.simDay = simDay;
         snap.simSeconds = simSeconds;
@@ -680,6 +763,7 @@ public class SimulationEngine {
         snap.analytics = analyticsDto();
         snap.recentLogs = new ArrayList<>(inMemoryLogs).stream()
                 .skip(Math.max(0, inMemoryLogs.size() - 60)).toList();
+        this.cachedSnapshot = snap;
         return snap;
     }
 

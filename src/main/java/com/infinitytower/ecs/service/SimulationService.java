@@ -1,10 +1,14 @@
 package com.infinitytower.ecs.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.infinitytower.ecs.command.SimulationCommand;
 import com.infinitytower.ecs.config.BuildingConfigDefaults;
 import com.infinitytower.ecs.dto.Dto;
+import com.infinitytower.ecs.metrics.SimulationMetrics;
 import com.infinitytower.ecs.simulation.SimulationEngine;
 import com.infinitytower.ecs.websocket.SimulationSocketHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -15,10 +19,13 @@ import java.util.Map;
 @Service
 public class SimulationService {
 
+    private static final Logger log = LoggerFactory.getLogger(SimulationService.class);
+
     private final SimulationEngine engine;
     private final SimulationSocketHandler socketHandler;
     private final ObjectMapper objectMapper;
     private final BuildingConfigDefaults configDefaults;
+    private final SimulationMetrics metrics;
 
     private final double tickIntervalMs;
     private volatile double speedMultiplier = 1.0;
@@ -27,12 +34,14 @@ public class SimulationService {
                              SimulationSocketHandler socketHandler,
                              ObjectMapper objectMapper,
                              BuildingConfigDefaults configDefaults,
+                             SimulationMetrics metrics,
                              @Value("${ecs.simulation.tick-interval-ms:100}") double tickIntervalMs,
                              @Value("${ecs.simulation.max-log-entries:5000}") int maxLogEntries) {
         this.engine = engine;
         this.socketHandler = socketHandler;
         this.objectMapper = objectMapper;
         this.configDefaults = configDefaults;
+        this.metrics = metrics;
         this.tickIntervalMs = tickIntervalMs;
         this.engine.setMaxLogEntries(maxLogEntries);
         // Load default predefined in-memory building configuration
@@ -43,7 +52,7 @@ public class SimulationService {
 
     @Scheduled(fixedRateString = "${ecs.simulation.tick-interval-ms:100}")
     public void tickTask() {
-        engine.tick((tickIntervalMs / 1000.0) * speedMultiplier);
+        metrics.getTickTimer().record(() -> engine.tick((tickIntervalMs / 1000.0) * speedMultiplier));
     }
 
     @Scheduled(fixedRateString = "${ecs.simulation.broadcast-interval-ms:150}")
@@ -52,10 +61,16 @@ public class SimulationService {
         try {
             String json = objectMapper.writeValueAsString(engine.getSnapshot());
             socketHandler.broadcast(json);
-        } catch (Exception ignored) { }
+        } catch (Exception e) {
+            log.warn("Telemetry broadcast error: {}", e.getMessage());
+        }
     }
 
-    // ---------- Passthrough API used by controllers ----------
+    // ---------- Command pipeline & Passthrough API ----------
+
+    public void submitCommand(SimulationCommand command) {
+        engine.submitCommand(command);
+    }
 
     public void start() { engine.start(); }
     public void pause() { engine.pause(); }

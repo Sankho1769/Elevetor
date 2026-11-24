@@ -5,6 +5,12 @@ spring:
   application:
     name: infinity-tower-ecs
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
 ecs:
   simulation:
     tick-interval-ms: 100

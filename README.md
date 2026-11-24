@@ -3,8 +3,9 @@
 [![Java 21](https://img.shields.io/badge/Java-21%20LTS-007396?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/21/)
 [![Spring Boot 3.3.4](https://img.shields.io/badge/Spring%20Boot-3.3.4-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![WebSocket STOMP](https://img.shields.io/badge/WebSocket-Low--Latency%20150ms-010101?style=for-the-badge&logo=socketdotio&logoColor=white)](https://spring.io/guides/gs/messaging-stomp-websocket/)
-[![Architecture](https://img.shields.io/badge/Architecture-Zero--DB%20%2F%20In--Memory-blueviolet?style=for-the-badge)](https://github.com/Sankho1769/Elevetor)
-[![Tests Passing](https://img.shields.io/badge/Tests-27%2F27%20Passing-success?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Sankho1769/Elevetor)
+[![Architecture](https://img.shields.io/badge/Architecture-Lock--Free%20Command%20Pipeline-blueviolet?style=for-the-badge)](https://github.com/Sankho1769/Elevetor)
+[![Tests Passing](https://img.shields.io/badge/Tests-28%2F28%20Passing-success?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Sankho1769/Elevetor)
+[![Observability](https://img.shields.io/badge/Actuator%20%26%20Micrometer-Enabled-F58220?style=for-the-badge&logo=prometheus&logoColor=white)](https://github.com/Sankho1769/Elevetor)
 [![Repository](https://img.shields.io/badge/GitHub-Sankho1769%2FElevetor-blue?style=for-the-badge&logo=github)](https://github.com/Sankho1769/Elevetor.git)
 
 ---
@@ -63,20 +64,29 @@ The system enforces a strict decoupled layered architecture separating the **Sup
 
 ### Core Architectural Pillars
 
-1. **Zero-Database In-Memory State Architecture**:
+1. **Lock-Free Command Pipeline & Wait-Free Snapshot Publishing**:
+   - High-throughput asynchronous ingress via `ConcurrentLinkedQueue<SimulationCommand>`: external HTTP operator requests enqueue immutable command records in $\mathcal{O}(1)$ with zero monitor lock contention.
+   - Batch draining during the start of every physics tick ($10\text{ Hz}$) enforces deterministic, reproducible dispatch transitions.
+   - Wait-free volatile snapshot cache (`cachedSnapshot`) published every tick, completely decoupling reading threads (REST `/api/simulation/snapshot` and WebSocket broadcaster) from writing threads with zero thread stalls.
+
+2. **Zero-Database In-Memory State Architecture**:
    - Eliminates external database overhead, I/O latency, connection pooling bottlenecks, and stale lock contention.
    - Building specifications, kinematic limits, car states, and active passenger manifests reside in memory using lock-free, thread-safe data structures (`ConcurrentHashMap`, `CopyOnWriteArrayList`, `AtomicInteger`, `AtomicReference`).
    - Configuration defaults are initialized from `BuildingConfigDefaults.java`. Custom run-time parameters are modified in memory and can be cleanly restored to factory baseline at any instant via the REST API or UI Reset.
 
-2. **Kinematic & Physics Simulation Model**:
+3. **Enterprise Actuator & Micrometer Observability**:
+   - Real-time JVM, garbage collection, and custom SCADA meters exposed under `/actuator/metrics` and `/actuator/health`.
+   - Native instrumentation timers for physics tick execution (`ecs.simulation.tick.time`), dispatch algorithm evaluation (`ecs.simulation.dispatch.time`), queue depth gauge (`ecs.command_queue.depth`), and active WebSocket telemetry subscribers (`ecs.websocket.active_sessions`).
+
+4. **Kinematic & Physics Simulation Model**:
    - Implements realistic cabin kinematics: jerk-limited acceleration, constant cruise velocity ($2.5 \text{ m/s}$), continuous deceleration profiling, precision floor leveling, and optical door dwell cycling.
    - Tracks passenger boarding/alighting rates, cabin weight capacities, counterweight loads, and energy consumption per hoist movement.
 
-3. **High-Throughput Telemetry Pipeline**:
+5. **High-Throughput Telemetry Pipeline**:
    - Dedicated low-latency WebSocket endpoint (`/ws/simulation`) broadcasting synchronized state vectors every 150ms.
    - Non-blocking client delivery ensures that slower clients or network jitter cannot degrade simulation loop fidelity.
 
-4. **Circular Ring-Buffer Event Audit Trail**:
+6. **Circular Ring-Buffer Event Audit Trail**:
    - In-memory bounded circular log ring-buffer holding up to 5,000 real-time events.
    - Supports sub-millisecond category filtering (`DISPATCH`, `KINEMATICS`, `SAFETY`, `PASSENGER`, `FAULT`), full-text search, and on-demand JSON/CSV operational audit reports.
 
@@ -419,6 +429,7 @@ mvn test
 
 ### Verified Test Classes:
 - `ApplicationTests`: Validates Spring Boot context boot-up with zero database bindings.
+- `LockFreeCommandPipelineConcurrencyTest`: High-concurrency benchmark running 50 threads enqueuing 1,000 commands with zero lock contention and batch tick draining.
 - `SchedulerTest`: Exhaustively verifies all 10 scheduling algorithms and boundary conditions.
 - `SimulationEngineTest`: Validates kinematics calculation, door states, emergency fire recall, flood isolation, fault injection, and ring buffer eviction.
 - `SimulationRestApiIntegrationTest`: Validates all 20+ REST API endpoints and payload validation rules.
@@ -427,7 +438,7 @@ mvn test
 ```text
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 27, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 28, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] BUILD SUCCESS
 ```
