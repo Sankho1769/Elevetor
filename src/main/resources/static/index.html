@@ -101,8 +101,8 @@
     --status-warning-dim: rgba(245, 158, 11, 0.15);
     --status-danger: #EF4444;
     --status-danger-dim: rgba(239, 68, 68, 0.18);
-    --status-info: #38BDF8;
-    --status-info-dim: rgba(56, 189, 248, 0.15);
+    --status-info: #FACC15;
+    --status-info-dim: rgba(250, 204, 21, 0.16);
 
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
     --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.6);
@@ -120,21 +120,21 @@
     --bg-card-subtle: #F1F5F9;
     --bg-input: #FFFFFF;
 
-    --primary: #0284C7;
-    --primary-hover: #0369A1;
-    --primary-contrast: #FFFFFF;
-    --accent: #F59E0B;
-    --accent-hover: #D97706;
+    --primary: #EAB308;
+    --primary-hover: #CA8A04;
+    --primary-contrast: #0F172A;
+    --accent: #FACC15;
+    --accent-hover: #EAB308;
     --accent-contrast: #0F172A;
-    --accent-dim: rgba(245, 158, 11, 0.16);
+    --accent-dim: rgba(250, 204, 21, 0.18);
 
     --text-main: #0F172A;
     --text-muted: #475569;
     --text-dim: #94A3B8;
 
     --border-subtle: rgba(15, 23, 42, 0.08);
-    --border-strong: rgba(2, 132, 199, 0.35);
-    --border-focus: #0284C7;
+    --border-strong: rgba(234, 179, 8, 0.35);
+    --border-focus: #EAB308;
 
     --shaft-bg: #E2E8F0;
     --shaft-grid: rgba(15, 23, 42, 0.06);
@@ -146,8 +146,8 @@
     --status-warning-dim: rgba(217, 119, 6, 0.15);
     --status-danger: #DC2626;
     --status-danger-dim: rgba(220, 38, 38, 0.15);
-    --status-info: #0284C7;
-    --status-info-dim: rgba(2, 132, 199, 0.15);
+    --status-info: #EAB308;
+    --status-info-dim: rgba(234, 179, 8, 0.15);
 
     --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
     --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.1);
@@ -164,24 +164,24 @@
     --bg-card-subtle: #111B30;
     --bg-input: #0B1222;
 
-    --primary: #2563EB;
-    --primary-hover: #3B82F6;
-    --primary-contrast: #FFFFFF;
-    --accent: #38BDF8;
-    --accent-hover: #60A5FA;
+    --primary: #EAB308;
+    --primary-hover: #FACC15;
+    --primary-contrast: #090E17;
+    --accent: #FACC15;
+    --accent-hover: #FDE047;
     --accent-contrast: #090E17;
-    --accent-dim: rgba(56, 189, 248, 0.16);
+    --accent-dim: rgba(250, 204, 21, 0.18);
 
     --text-main: #F8FAFC;
     --text-muted: #94A3B8;
     --text-dim: #64748B;
 
     --border-subtle: rgba(255, 255, 255, 0.09);
-    --border-strong: rgba(56, 189, 248, 0.35);
-    --border-focus: #38BDF8;
+    --border-strong: rgba(250, 204, 21, 0.35);
+    --border-focus: #FACC15;
 
     --shaft-bg: #070B14;
-    --shaft-grid: rgba(56, 189, 248, 0.04);
+    --shaft-grid: rgba(250, 204, 21, 0.04);
     --shaft-rail: rgba(255, 255, 255, 0.12);
 
     --status-success: #10B981;
@@ -190,8 +190,8 @@
     --status-warning-dim: rgba(245, 158, 11, 0.15);
     --status-danger: #EF4444;
     --status-danger-dim: rgba(239, 68, 68, 0.18);
-    --status-info: #38BDF8;
-    --status-info-dim: rgba(56, 189, 248, 0.15);
+    --status-info: #FACC15;
+    --status-info-dim: rgba(250, 204, 21, 0.16);
 
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
     --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.6);
@@ -1311,7 +1311,7 @@
       id: 'daylight',
       label: 'High-Tech Technical Daylight',
       sub: 'Crisp High-Visibility Laboratory Environment',
-      swatches: ['#FFFFFF', '#0284C7', '#F59E0B', '#E2E8F0', '#0F172A']
+      swatches: ['#FFFFFF', '#EAB308', '#FACC15', '#E2E8F0', '#0F172A']
     },
     {
       id: 'obsidian',
@@ -1323,7 +1323,7 @@
       id: 'slate',
       label: 'Industrial Slate Control',
       sub: 'Midnight Navy Operations',
-      swatches: ['#090E17', '#15223D', '#38BDF8', '#94A3B8', '#F8FAFC']
+      swatches: ['#090E17', '#15223D', '#FACC15', '#94A3B8', '#F8FAFC']
     }
   ];
 
@@ -1786,14 +1786,14 @@
       const isParking = snapshot.building.parkingFloors && snapshot.building.parkingFloors.includes(f);
 
       const floorActive = hasCarHere || hasWaiting || hasCalls;
-      ctx.fillStyle = floorActive ? '#FF6B00' : (isLobby ? '#FFA040' : (isVip ? '#FF8533' : floorTextColor));
+      ctx.fillStyle = floorActive ? '#FF6B00' : (isLobby ? '#FFA040' : (isVip ? '#FF8533' : (isParking ? '#FACC15' : floorTextColor)));
       ctx.font = '700 12px monospace';
       ctx.textAlign = 'left';
       ctx.fillText(formatFloor(f), 10, y + rowH / 2 - 4);
 
       const tag = floorTag(f);
       if (tag) {
-        ctx.fillStyle = floorActive ? '#FFA040' : (isLobby ? '#FF6B00' : (isLight ? '#64748B' : '#94A3B8'));
+        ctx.fillStyle = floorActive ? '#FFA040' : (isLobby ? '#FF6B00' : (isParking ? '#FACC15' : (isLight ? '#64748B' : '#94A3B8')));
         ctx.font = '700 8.5px sans-serif';
         ctx.fillText(tag, 10, y + rowH / 2 + 10);
       }
@@ -1985,7 +1985,7 @@
 
   function getPriorityColor(priority) {
     switch (priority) {
-      case 'staff': return '#38BDF8';
+      case 'staff': return '#FACC15';
       case 'elderly': return '#F59E0B';
       case 'disabled': return '#0D9488';
       case 'vip': return '#8B5CF6';
