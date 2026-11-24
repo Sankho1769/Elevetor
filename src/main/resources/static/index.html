@@ -17,8 +17,8 @@
   ---------------------------------------------------- */
   /* ----------------------------------------------------
      50% / 40% / 10% THREE-COLOR SCADA SYSTEM (ORANGE LAYERS)
-       - 50% Dominant Base: Deep Carbon Obsidian (#0B0E14)
-       - 40% Structural Layers: Architectural Slate (#141822 / #191E2C)
+       - 50% Dominant Base: Deep Carbon Obsidian (#0A0A0D)
+       - 40% Structural Layers: Architectural Slate (#141418 / #1A1A22)
        - 10% High-Energy Accent: Electric Safety Orange (#FF6B00 / #FF7700)
   ---------------------------------------------------- */
   :root, body.theme-aubergine, body.theme-orange {
@@ -36,7 +36,7 @@
     --primary-contrast: #FFFFFF;
     --accent: #FF7700;
     --accent-hover: #FFA040;
-    --accent-contrast: #0B0E14;
+    --accent-contrast: #0A0A0D;
     --accent-dim: rgba(255, 107, 0, 0.18);
 
     --text-main: #F3F4F6;
@@ -47,7 +47,7 @@
     --border-strong: rgba(255, 107, 0, 0.38);
     --border-focus: #FF6B00;
 
-    --shaft-bg: #0B0E14;        /* 50% Dominant Base */
+    --shaft-bg: #0A0A0D;        /* 50% Dominant Base */
     --shaft-grid: rgba(255, 255, 255, 0.035);
     --shaft-rail: rgba(255, 255, 255, 0.12);
 
@@ -67,31 +67,31 @@
 
   body.theme-obsidian {
     --theme-name: 'obsidian';
-    --bg-base: #0B0E14;
-    --bg-app: #0F131D;
-    --bg-topbar: #141926;
-    --bg-panel: #121722;
-    --bg-card: #18202F;
-    --bg-card-subtle: #131A26;
-    --bg-input: #0E141F;
+    --bg-base: #0A0A0D;
+    --bg-app: #0E0E12;
+    --bg-topbar: #141418;
+    --bg-panel: #141418;
+    --bg-card: #1A1A22;
+    --bg-card-subtle: #141418;
+    --bg-input: #0E0E12;
 
     --primary: #E5A93C;
     --primary-hover: #F2B74B;
-    --primary-contrast: #0B0E14;
+    --primary-contrast: #0A0A0D;
     --accent: #E5A93C;
     --accent-hover: #F2B74B;
-    --accent-contrast: #0B0E14;
+    --accent-contrast: #0A0A0D;
     --accent-dim: rgba(229, 169, 60, 0.16);
 
     --text-main: #F1F5F9;
     --text-muted: #94A3B8;
-    --text-dim: #64748B;
+    --text-dim: #FACC15;
 
     --border-subtle: rgba(255, 255, 255, 0.08);
     --border-strong: rgba(229, 169, 60, 0.3);
     --border-focus: #E5A93C;
 
-    --shaft-bg: #090C12;
+    --shaft-bg: #0A0A0D;
     --shaft-grid: rgba(255, 255, 255, 0.025);
     --shaft-rail: rgba(255, 255, 255, 0.1);
 
@@ -129,7 +129,7 @@
     --accent-dim: rgba(250, 204, 21, 0.18);
 
     --text-main: #0F172A;
-    --text-muted: #475569;
+    --text-muted: #FACC15;
     --text-dim: #94A3B8;
 
     --border-subtle: rgba(15, 23, 42, 0.08);
@@ -156,31 +156,31 @@
 
   body.theme-slate {
     --theme-name: 'slate';
-    --bg-base: #090E17;
-    --bg-app: #0D1424;
-    --bg-topbar: #111A30;
-    --bg-panel: #10182C;
-    --bg-card: #15223D;
-    --bg-card-subtle: #111B30;
-    --bg-input: #0B1222;
+    --bg-base: #0A0A0D;
+    --bg-app: #0E0E12;
+    --bg-topbar: #141418;
+    --bg-panel: #141418;
+    --bg-card: #1A1A22;
+    --bg-card-subtle: #141418;
+    --bg-input: #0E0E12;
 
     --primary: #EAB308;
     --primary-hover: #FACC15;
-    --primary-contrast: #090E17;
+    --primary-contrast: #0A0A0D;
     --accent: #FACC15;
     --accent-hover: #FDE047;
-    --accent-contrast: #090E17;
+    --accent-contrast: #0A0A0D;
     --accent-dim: rgba(250, 204, 21, 0.18);
 
     --text-main: #F8FAFC;
     --text-muted: #94A3B8;
-    --text-dim: #64748B;
+    --text-dim: #FACC15;
 
     --border-subtle: rgba(255, 255, 255, 0.09);
     --border-strong: rgba(250, 204, 21, 0.35);
     --border-focus: #FACC15;
 
-    --shaft-bg: #070B14;
+    --shaft-bg: #0A0A0D;
     --shaft-grid: rgba(250, 204, 21, 0.04);
     --shaft-rail: rgba(255, 255, 255, 0.12);
 
@@ -710,7 +710,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #FACC15; /* High-contrast Electric Yellow section title */
+    color: #FACC15; /* High-contrast Electric Yellow section headers */
   }
 
   /* Form Elements */
@@ -1097,7 +1097,7 @@
   }
   .toast {
     pointer-events: auto;
-    background: #18202F;
+    background: #1A1A22;
     border: 1px solid var(--border-strong);
     color: #FFFFFF;
     padding: 10px 16px;
@@ -1305,7 +1305,7 @@
       id: 'aubergine',
       label: 'Industrial Carbon & Electric Orange (50-40-10)',
       sub: 'Strict 3-Color Ratio: 50% Carbon Base · 40% Slate Layers · 10% Orange Accent',
-      swatches: ['#0B0E14', '#141822', '#FF6B00', '#191E2C', '#FFFFFF']
+      swatches: ['#0A0A0D', '#141418', '#FF6B00', '#1A1A22', '#FFFFFF']
     },
     {
       id: 'daylight',
@@ -1317,13 +1317,13 @@
       id: 'obsidian',
       label: 'Industrial Obsidian SCADA',
       sub: 'High-Contrast Telemetry Center',
-      swatches: ['#0B0E14', '#18202F', '#E5A93C', '#94A3B8', '#F1F5F9']
+      swatches: ['#0A0A0D', '#1A1A22', '#E5A93C', '#94A3B8', '#F1F5F9']
     },
     {
       id: 'slate',
       label: 'Industrial Slate Control',
       sub: 'Midnight Navy Operations',
-      swatches: ['#090E17', '#15223D', '#FACC15', '#94A3B8', '#F8FAFC']
+      swatches: ['#0A0A0D', '#1A1A22', '#FACC15', '#94A3B8', '#F8FAFC']
     }
   ];
 
@@ -1720,14 +1720,14 @@
     const floorTextColor = isLight ? '#0F172A' : '#F1F5F9';
     const machineRoomBg = isLight ? 'rgba(15, 23, 42, 0.04)' : 'rgba(255, 255, 255, 0.03)';
     const machineRoomBorder = isLight ? 'rgba(15, 23, 42, 0.14)' : 'rgba(255, 255, 255, 0.12)';
-    const machineRoomText = isLight ? '#475569' : '#94A3B8';
+    const machineRoomText = isLight ? '#FACC15' : '#94A3B8';
     const railColor = isLight ? 'rgba(15, 23, 42, 0.22)' : 'rgba(255, 255, 255, 0.12)';
     const cableColor = isLight ? 'rgba(15, 23, 42, 0.45)' : 'rgba(255, 255, 255, 0.35)';
     const colHeaderBg = isLight ? 'rgba(15, 23, 42, 0.05)' : 'rgba(255, 255, 255, 0.04)';
     const colHeaderBorder = isLight ? 'rgba(15, 23, 42, 0.14)' : 'rgba(255, 255, 255, 0.1)';
     const colHeaderText = isLight ? '#0F172A' : '#F1F5F9';
     const cabinBg = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(18, 24, 38, 0.92)';
-    const badgeBg = isLight ? '#FFFFFF' : '#0B0E14';
+    const badgeBg = isLight ? '#FFFFFF' : '#0A0A0D';
 
     // Machine Room Header Box
     ctx.save();
@@ -1741,7 +1741,7 @@
     ctx.font = '700 10px monospace';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillText('◤ OVERHEAD MACHINE ROOM · DUAL BRAKE TRACTION HOISTS', labelW + 12, topMargin + machineRoomH / 2);
+    ctx.fillStyle = '#FACC15'; ctx.fillText('◤ OVERHEAD MACHINE ROOM · DUAL BRAKE TRACTION HOISTS', labelW + 12, topMargin + machineRoomH / 2);
     ctx.restore();
 
     // Floor Rows & Hall Calls
@@ -1793,7 +1793,7 @@
 
       const tag = floorTag(f);
       if (tag) {
-        ctx.fillStyle = floorActive ? '#FFA040' : (isLobby ? '#FF6B00' : (isParking ? '#FACC15' : (isLight ? '#64748B' : '#94A3B8')));
+        ctx.fillStyle = floorActive ? '#FFA040' : (isLobby ? '#FF6B00' : (isParking ? '#FACC15' : (isLight ? '#FACC15' : '#94A3B8')));
         ctx.font = '700 8.5px sans-serif';
         ctx.fillText(tag, 10, y + rowH / 2 + 10);
       }
@@ -1903,6 +1903,9 @@
       ctx.strokeStyle = '#EAB308';
       ctx.lineWidth = 0.8;
       ctx.stroke();
+      ctx.strokeStyle = '#EAB308';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
 
       // Cabin Border & State Color (10% High-Energy Accent)
       let cabinColor = '#FF6B00'; // Default Orange Accent
@@ -1930,7 +1933,7 @@
       const doorProgress = se ? se.doorProgress : (e.doorState === 'open' ? 1.0 : (e.doorState === 'closed' ? 0.0 : e.doorProgress));
       const doorGap = doorProgress * (carW * 0.42);
       if (e.doorState !== 'closed' || doorProgress > 0.01) {
-        ctx.fillStyle = isLight ? '#CBD5E1' : '#0F131D';
+        ctx.fillStyle = isLight ? '#CBD5E1' : '#0E0E12';
         ctx.fillRect(x0 + 2, carY + 2, Math.max(0, doorGap), carH - 4);
         ctx.fillRect(x0 + carW - 2 - doorGap, carY + 2, Math.max(0, doorGap), carH - 4);
       }
@@ -1976,11 +1979,11 @@
       ctx.fillRect(x0, barY, carW * Math.min(1, occFrac), 3);
 
       ctx.font = '600 8.5px monospace';
-      ctx.fillStyle = isLight ? '#475569' : '#94A3B8';
+      ctx.fillStyle = isLight ? '#FACC15' : '#94A3B8';
       ctx.textAlign = 'left';
       ctx.fillText(`${e.passengerCount}/${snapshot.building.capacity}`, x0, barY + 11);
       ctx.textAlign = 'right';
-      ctx.fillStyle = weightFrac > 0.9 ? (isLight ? '#DC2626' : '#EF4444') : (isLight ? '#475569' : '#94A3B8');
+      ctx.fillStyle = weightFrac > 0.9 ? (isLight ? '#DC2626' : '#EF4444') : (isLight ? '#FACC15' : '#94A3B8');
       ctx.fillText(`${Math.round(e.weight)}kg`, x0 + carW, barY + 11);
       ctx.textAlign = 'left';
     });
@@ -1991,7 +1994,7 @@
       case 'staff': return '#FACC15';
       case 'elderly': return '#F59E0B';
       case 'disabled': return '#0D9488';
-      case 'vip': return '#8B5CF6';
+      case 'vip': return '#FACC15';
       case 'medical': return '#EF4444';
       case 'emergency': return '#EF4444';
       case 'firefighter': return '#EA580C';
