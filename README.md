@@ -37,22 +37,23 @@ Actuator Health: http://localhost:8080/actuator/health
 
 The supervisory interface provides continuous live visualization of elevator car positions, velocity vectors, passenger loads, door cycles, machine room traction hoist states, and hoistway safety sensors.
 
-![Supervisory SCADA Dashboard Preview](docs/images/ui-dashboard-preview.svg)
+![Infinity Tower Luxury Claymorphic Supervisory SCADA Dashboard](docs/images/dashboard-preview.jpg)
 
-### SCADA UI/UX Engineering Modernization
+### SCADA UI/UX Engineering & Luxury Claymorphic Architecture
 
-The interface was overhauled from informal "vibe-coded" prototypes into an industrial-grade engineering dashboard:
+The interface is engineered as an ultra-clean, high-visibility luxury claymorphic engineering deck with warm golden-amber accents, 3D sapphire pods, and real-time kinematic telemetry:
 
-| Dimension | Previous Layout (Issue) | Modernized SCADA Engineering UI |
+| Dimension | Previous Layout (Issue) | Modernized SCADA Engineering & Luxury Clay Architecture |
 |---|---|---|
+| **Aesthetics & Atmosphere** | Generic dark palette with contrast clashes and visual clutter. | **Pearlescent Light Porcelain Surface** (`#F4F7FB` / `#F8FAFD`) with floating 3D white clay cards, inset specular sheens, and warm golden-amber accents (`#D4902A`). |
 | **Shaft Header Legibility** | Severe text collisions where `OVERHEAD TRACTION MOTORS` overlapped directly onto `CAR A..D` labels at identical y-coordinates (`y = 33-40px`). | Dedicated overhead machine room mezzanine with decoupled vertical offsets (`y = 20px` for machine room status, `y = 52px` for car telemetry cards). |
+| **Elevator Pod Kinematics** | Flat rectangles without depth or passenger load clarity. | **3D Sapphire Metallic Blue Capsules** (`#1E40AF` / `#2563EB`) with glossy specular glass highlights, white car caps (`A`..`D`), animated split doors, passenger icons, and kinetic amber underglow. |
+| **Active Floor & Telemetry** | Monotonous grid without clear spatial awareness. | **Warm Peach Active Layer Bands** (`rgba(254, 215, 170, 0.70)`) with orange call accents, cyan VIP floor badges (`F10`..`F12`), peach Lobby pill (`F1`), and circular directional waiting beacons. |
 | **Vertical Aspect Scaling** | Cabin pods clipped at the lower boundary; basement floors (B1, B2) cut off on standard viewports. | Dynamic programmatic shaft height normalization (`rowH = shaftH / totalFloors`) guaranteeing 100% visible hoistways from B2 to F12 without viewport scrollbars. |
-| **Control Deck Navigation** | Overlapping single-line tab row cut off on standard widescreen displays. | Segmented 2-row × 4-column responsive grid providing instant one-click access across all 8 control subsystems. |
+| **Control Deck Navigation** | Overlapping single-line tab row cut off on standard widescreen displays. | Segmented 2-row × 4-column responsive grid providing instant one-click access across all 8 control subsystems (`Config`, `Requests`, `Algorithm`, `Safety`, `Analytics`, `Reports`, `Logs`, `Theme`). |
 | **User Feedback & Errors** | Blocking browser `alert()` modal dialogs interrupting real-time simulation loops. | Non-blocking, animated industrial toast notifications with precise error handling and graceful fallbacks. |
 | **Button State & Handlers** | Fragile pause/resume state binding causing unresponsive controls if clicked before manual start; potential `TypeError` on fault injection bounds. | Fully defensive state handlers with boundary protection (`Math.min(carIndex, elevators.length - 1)`), seamless pause/resume/start toggles, and dedicated topbar emergency reset. |
 | **Animation Fidelity & Lag** | Choppy 6.6 FPS canvas jumps tied directly to 150ms WebSocket packet arrivals; layout thrashing from per-frame `resizeCanvas()` and `innerHTML` reconstruction. | Hardware-accelerated 60/120 FPS `requestAnimationFrame` loop with smooth exponential kinematic interpolation, zero forced layout thrashing, $\mathcal{O}(1)$ pre-bucketed passenger lookups, and CSS containment. |
-
-> **Previous Layout Defect Reference**: For defect audit records, see [docs/images/previous-layout-issue.jpg](docs/images/previous-layout-issue.jpg).
 
 ---
 
