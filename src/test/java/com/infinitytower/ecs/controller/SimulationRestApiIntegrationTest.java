@@ -65,12 +65,14 @@ public class SimulationRestApiIntegrationTest {
     }
 
     @Test
-    @DisplayName("GET / returns 200 OK and serves index.html with Aubergine theme")
+    @DisplayName("GET / returns 200 OK and serves index.html with Aubergine theme and theme switcher")
     void testRootEndpointServesStaticSpa() throws Exception {
         HttpResponse<String> res = get("/");
         assertEquals(200, res.statusCode());
         assertTrue(res.body().contains("Infinity Tower"), "Should serve Infinity Tower SPA");
         assertTrue(res.body().contains("theme-aubergine"), "Should contain Aubergine theme definition");
+        assertTrue(res.body().contains("theme-obsidian"), "Should contain Obsidian theme definition");
+        assertTrue(res.body().contains("themeShortcutBtn"), "Should contain theme shortcut toggle button");
     }
 
     @Test

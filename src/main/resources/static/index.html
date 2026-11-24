@@ -63,6 +63,95 @@
     --clay-inset: inset 0 1px 0 rgba(255, 255, 255, 0.95);
   }
 
+  body.theme-obsidian, body.theme-dark {
+    --theme-name: 'industrial-obsidian';
+    --bg-base: #0A0A0D;
+    --bg-app: #121217;
+    --bg-topbar: rgba(18, 18, 24, 0.94);
+    --bg-panel: #16161D;
+    --bg-card: #1B1B24;
+    --bg-card-subtle: #22222E;
+    --bg-input: #14141A;
+    --primary: #FACC15;
+    --primary-hover: #EAB308;
+    --primary-contrast: #0A0A0D;
+    --accent: #FF6B00;
+    --accent-hover: #EA580C;
+    --accent-contrast: #FFFFFF;
+    --accent-dim: rgba(250, 204, 21, 0.16);
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --text-dim: #64748B;
+    --border-subtle: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(250, 204, 21, 0.35);
+    --border-focus: #FACC15;
+    --shaft-bg: #121217;
+    --shaft-grid: rgba(255, 255, 255, 0.07);
+    --shaft-rail: rgba(255, 255, 255, 0.18);
+    --clay-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --clay-shadow-md: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --clay-shadow-lg: 0 16px 45px rgba(0, 0, 0, 0.6);
+    --clay-inset: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  body.theme-daylight {
+    --theme-name: 'daylight';
+    --bg-base: #F8FAFC;
+    --bg-app: #FFFFFF;
+    --bg-topbar: rgba(255, 255, 255, 0.96);
+    --bg-panel: #FFFFFF;
+    --bg-card: #F8FAFC;
+    --bg-card-subtle: #F1F5F9;
+    --bg-input: #FFFFFF;
+    --primary: #2563EB;
+    --primary-hover: #1D4ED8;
+    --primary-contrast: #FFFFFF;
+    --accent: #D97706;
+    --accent-hover: #B45309;
+    --accent-contrast: #FFFFFF;
+    --accent-dim: rgba(37, 99, 235, 0.12);
+    --text-main: #0F172A;
+    --text-muted: #475569;
+    --text-dim: #94A3B8;
+    --border-subtle: rgba(203, 213, 225, 0.85);
+    --border-strong: rgba(37, 99, 235, 0.35);
+    --border-focus: #2563EB;
+    --shaft-bg: #FFFFFF;
+    --shaft-grid: rgba(226, 232, 240, 0.85);
+    --shaft-rail: rgba(148, 163, 184, 0.35);
+  }
+
+  body.theme-slate {
+    --theme-name: 'industrial-slate';
+    --bg-base: #0B0E14;
+    --bg-app: #101522;
+    --bg-topbar: rgba(16, 21, 34, 0.95);
+    --bg-panel: #141B2B;
+    --bg-card: #182236;
+    --bg-card-subtle: #1E2B45;
+    --bg-input: #101522;
+    --primary: #38BDF8;
+    --primary-hover: #0284C7;
+    --primary-contrast: #0B0E14;
+    --accent: #FACC15;
+    --accent-hover: #EAB308;
+    --accent-contrast: #0B0E14;
+    --accent-dim: rgba(56, 189, 248, 0.15);
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --text-dim: #64748B;
+    --border-subtle: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(56, 189, 248, 0.35);
+    --border-focus: #38BDF8;
+    --shaft-bg: #101522;
+    --shaft-grid: rgba(255, 255, 255, 0.07);
+    --shaft-rail: rgba(255, 255, 255, 0.18);
+    --clay-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --clay-shadow-md: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --clay-shadow-lg: 0 16px 45px rgba(0, 0, 0, 0.6);
+    --clay-inset: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
   /* Universal reset & luxury typography */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -72,7 +161,7 @@
     background-image: 
       radial-gradient(circle at 90% 10%, rgba(245, 158, 11, 0.12), transparent 45%),
       radial-gradient(circle at 10% 90%, rgba(217, 119, 6, 0.06), transparent 40%),
-      linear-gradient(135deg, #F8FAFD 0%, #EEF4F9 100%);
+      linear-gradient(135deg, var(--bg-app) 0%, var(--bg-base) 100%);
     color: var(--text-main);
     font-family: 'DM Sans', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 13px;
@@ -117,7 +206,7 @@
     padding: 0 24px;
     background: var(--bg-topbar);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--border-subtle);
     border-radius: 20px;
     box-shadow: var(--clay-shadow-md);
     z-index: 50;
@@ -143,7 +232,7 @@
     font-size: 19px;
     font-weight: 800;
     letter-spacing: 0.08em;
-    color: #1E293B;
+    color: var(--text-main);
     line-height: 1.1;
   }
   .brand-text span {
@@ -152,7 +241,7 @@
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: #64748B;
+    color: var(--text-muted);
     display: block;
     margin-top: 1px;
   }
@@ -194,10 +283,10 @@
     font-size: 12px;
     font-weight: 700;
     padding: 6px 14px;
-    background: #F8FAFD;
-    border: 1px solid #E2E8F0;
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-subtle);
     border-radius: 20px;
-    color: #1E293B;
+    color: var(--text-main);
     letter-spacing: 0.03em;
     box-shadow: var(--clay-shadow-sm);
   }
@@ -213,9 +302,9 @@
     font-size: 12px;
     font-weight: 700;
     border-radius: 20px;
-    border: 1px solid #E2E8F0;
-    background: #FFFFFF;
-    color: #1E293B;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    color: var(--text-main);
     cursor: pointer;
     box-shadow: var(--clay-shadow-sm);
     transition: all 0.15s ease;
@@ -224,7 +313,7 @@
   .btn-pill:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: var(--clay-shadow-md);
-    border-color: #CBD5E1;
+    border-color: var(--primary);
   }
   .btn-pill:active:not(:disabled) {
     transform: translateY(1px);
@@ -246,9 +335,9 @@
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    border: 1px solid #E2E8F0;
-    background: #FFFFFF;
-    color: #475569;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    color: var(--text-muted);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -270,7 +359,7 @@
     position: relative;
     background: var(--bg-card);
     border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--border-subtle);
     box-shadow: var(--clay-shadow-md);
     overflow: hidden;
     display: flex;
@@ -296,7 +385,7 @@
     font-family: 'Cinzel', serif;
     font-size: 22px;
     font-weight: 800;
-    color: #1E293B;
+    color: var(--text-main);
   }
   .badge-live-tag {
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -326,8 +415,8 @@
     gap: 10px;
   }
   .stat-block {
-    background: #F8FAFD;
-    border: 1px solid #E2E8F0;
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-subtle);
     border-radius: 12px;
     padding: 6px 14px;
     display: flex;
@@ -336,7 +425,7 @@
     box-shadow: var(--clay-shadow-sm);
   }
   .stat-block .stat-icon {
-    color: #64748B;
+    color: var(--text-muted);
     display: flex;
     align-items: center;
   }
@@ -344,13 +433,13 @@
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 15px;
     font-weight: 800;
-    color: #1E293B;
+    color: var(--text-main);
     line-height: 1.1;
   }
   .stat-block .l {
     font-size: 9.5px;
     font-weight: 600;
-    color: #64748B;
+    color: var(--text-muted);
     margin-top: 1px;
   }
 
@@ -358,8 +447,8 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    background: #F8FAFD;
-    border: 1px solid #E2E8F0;
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-subtle);
     border-radius: 20px;
     padding: 3px 8px;
     box-shadow: var(--clay-shadow-sm);
@@ -367,7 +456,7 @@
   .zoom-toolbar button {
     border: none;
     background: transparent;
-    color: #475569;
+    color: var(--text-muted);
     font-weight: 800;
     font-size: 13px;
     cursor: pointer;
@@ -382,7 +471,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     font-weight: 700;
-    color: #1E293B;
+    color: var(--text-main);
     padding: 0 4px;
   }
 
@@ -392,11 +481,11 @@
     align-items: center;
     gap: 20px;
     padding: 8px 12px 14px 12px;
-    border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+    border-bottom: 1px solid var(--border-subtle);
     margin-bottom: 10px;
     font-size: 11px;
     font-weight: 600;
-    color: #475569;
+    color: var(--text-muted);
     flex-wrap: wrap;
   }
   .legend-item {
@@ -410,7 +499,7 @@
   }
   .legend-box.car { width: 14px; background: #2563EB; }
   .legend-box.moving { width: 14px; border: 1.5px solid #2563EB; background: #E0E7FF; }
-  .legend-box.call { width: 3px; background: #0F172A; }
+  .legend-box.call { width: 3px; background: var(--text-main); }
   .legend-box.active-floor { width: 18px; background: #FED7AA; }
   .legend-box.vip { width: 18px; background: #E0F2FE; border: 1px solid #7DD3FC; }
 
@@ -420,7 +509,7 @@
     overflow: auto;
     position: relative;
     contain: strict;
-    background: #FFFFFF;
+    background: var(--shaft-bg);
     border-radius: 12px;
   }
   #shaftCanvas {
@@ -436,7 +525,7 @@
     grid-area: panel;
     background: var(--bg-card);
     border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--border-subtle);
     box-shadow: var(--clay-shadow-md);
     display: flex;
     flex-direction: column;
@@ -459,11 +548,11 @@
     padding: 9px 6px;
     font-size: 11px;
     font-weight: 700;
-    color: #475569;
+    color: var(--text-muted);
     cursor: pointer;
     border-radius: 12px;
-    border: 1px solid #E2E8F0;
-    background: #F8FAFD;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card-subtle);
     box-shadow: var(--clay-shadow-sm);
     transition: all 0.15s ease;
     text-align: center;
@@ -471,9 +560,9 @@
   }
   .nav-tab svg { width: 13px; height: 13px; }
   .nav-tab:hover {
-    color: #1E293B;
-    background: #FFFFFF;
-    border-color: #CBD5E1;
+    color: var(--text-main);
+    background: var(--bg-card);
+    border-color: var(--primary);
     transform: translateY(-1px);
   }
   .nav-tab.active {
@@ -492,8 +581,8 @@
 
   /* Accordion Cards */
   .panel-card {
-    background: #FFFFFF;
-    border: 1px solid #E2E8F0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
     border-radius: 16px;
     padding: 18px;
     margin-bottom: 16px;
@@ -505,7 +594,7 @@
     justify-content: space-between;
     margin-bottom: 14px;
     padding-bottom: 10px;
-    border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+    border-bottom: 1px solid var(--border-subtle);
     cursor: pointer;
   }
   .panel-card-header h3 {
@@ -513,13 +602,13 @@
     font-size: 13.5px;
     font-weight: 800;
     letter-spacing: 0.05em;
-    color: #1E293B;
+    color: var(--text-main);
     display: flex;
     align-items: center;
     gap: 8px;
   }
   .panel-card-header h3 svg { color: #D4AF37; }
-  .chevron-icon { color: #64748B; transition: transform 0.2s ease; }
+  .chevron-icon { color: var(--text-muted); transition: transform 0.2s ease; }
 
   /* Form Inputs (Recessed Clay Wells with Steppers) */
   .form-row {
@@ -536,12 +625,12 @@
   .form-col label {
     font-size: 11px;
     font-weight: 600;
-    color: #475569;
+    color: var(--text-muted);
   }
   .input-control, .select-control {
-    background: #F8FAFD;
-    border: 1px solid #E2E8F0;
-    color: #1E293B;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
     border-radius: 10px;
     padding: 8px 12px;
     font-size: 12.5px;
@@ -664,9 +753,9 @@
   }
   .toast {
     pointer-events: auto;
-    background: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    color: #1E293B;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
     padding: 12px 18px;
     border-radius: 12px;
     font-size: 12.5px;
@@ -693,30 +782,30 @@
     margin-bottom: 14px;
   }
   .algo-card {
-    background: #F8FAFD;
-    border: 1px solid #E2E8F0;
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-subtle);
     border-radius: 10px;
     padding: 10px 12px;
     cursor: pointer;
     transition: all 0.15s ease;
   }
   .algo-card:hover {
-    border-color: #D4902A;
-    background: #FFFFFF;
+    border-color: var(--primary);
+    background: var(--bg-card);
   }
   .algo-card.active {
-    background: #FFFBEB;
-    border-color: #D4902A;
-    box-shadow: 0 0 0 1px #D4902A;
+    background: var(--accent-dim);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 1px var(--primary);
   }
   .algo-card .a-name {
     font-weight: 800;
     font-size: 12px;
-    color: #1E293B;
+    color: var(--text-main);
   }
   .algo-card .a-desc {
     font-size: 10px;
-    color: #64748B;
+    color: var(--text-muted);
     margin-top: 2px;
     line-height: 1.35;
   }
@@ -730,9 +819,9 @@
   .safety-btn {
     padding: 10px;
     border-radius: 10px;
-    border: 1px solid #E2E8F0;
-    background: #F8FAFD;
-    color: #1E293B;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card-subtle);
+    color: var(--text-main);
     font-weight: 700;
     font-size: 11.5px;
     cursor: pointer;
@@ -741,7 +830,7 @@
     gap: 8px;
     transition: all 0.15s ease;
   }
-  .safety-btn:hover { background: #FFFFFF; border-color: #CBD5E1; }
+  .safety-btn:hover { background: var(--bg-card); border-color: var(--border-strong); }
   .safety-btn.active {
     background: #FEE2E2;
     border-color: #EF4444;
@@ -754,8 +843,8 @@
     gap: 8px;
   }
   .metric-tile {
-    background: #F8FAFD;
-    border: 1px solid #E2E8F0;
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-subtle);
     border-radius: 10px;
     padding: 10px 12px;
   }
@@ -763,13 +852,64 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 16px;
     font-weight: 800;
-    color: #1E293B;
+    color: var(--text-main);
   }
   .metric-tile .m-lbl {
     font-size: 9.5px;
     font-weight: 600;
-    color: #64748B;
+    color: var(--text-muted);
     margin-top: 2px;
+  }
+
+  /* Theme Grid & Cards */
+  .theme-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .theme-card {
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .theme-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: var(--clay-shadow-sm);
+  }
+  .theme-card.active {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary);
+    background: var(--accent-dim);
+  }
+  .theme-info-title {
+    font-weight: 800;
+    font-size: 12.5px;
+    color: var(--text-main);
+  }
+  .theme-info-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .theme-swatches {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .theme-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
   /* Log Feed */
@@ -781,12 +921,12 @@
     overflow-y: auto;
   }
   .log-card {
-    background: #F8FAFD;
-    border: 1px solid #E2E8F0;
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-subtle);
     border-radius: 8px;
     padding: 7px 10px;
     font-size: 11px;
-    color: #1E293B;
+    color: var(--text-main);
   }
 </style>
 </head>
@@ -862,6 +1002,7 @@
       <div class="sim-view-title">
         <h2>Shaft Telemetry</h2>
         <span class="badge-live-tag">LIVE</span>
+        <button id="algoStatusBadge" class="btn-pill" style="padding:3px 10px; font-size:10px; text-transform:uppercase; cursor:pointer;" title="Click to view/change algorithm">LOOK</button>
       </div>
 
       <!-- 4 Floating Stat Chips -->
@@ -1198,6 +1339,11 @@
 
     renderSimulationClock();
     renderStatOverlay();
+    const algoBadge = document.getElementById('algoStatusBadge');
+    if (algoBadge && snapshot && snapshot.algorithm) {
+      const aInfo = ALGO_METADATA[snapshot.algorithm];
+      algoBadge.textContent = aInfo ? aInfo.name : snapshot.algorithm.toUpperCase();
+    }
     recordTelemetrySample();
     updateInterpolators();
     ensureAnimationLoop();
@@ -1431,17 +1577,20 @@
 
   // Draw 3D Elevator Hoistway Door at Mezzanine
   function draw3DHoistwayDoor(c, x, y, w, h, label, idStr) {
-    // White clay frame
+    const isDark = document.body.classList.contains('theme-dark') || 
+                   document.body.classList.contains('theme-obsidian') || 
+                   document.body.classList.contains('theme-slate');
+    // White clay / Dark frame
     c.save();
-    c.fillStyle = '#FFFFFF';
-    c.shadowColor = 'rgba(0, 0, 0, 0.06)';
+    c.fillStyle = isDark ? '#1A1A24' : '#FFFFFF';
+    c.shadowColor = isDark ? 'rgba(0, 0, 0, 0.4)' : 'rgba(0, 0, 0, 0.06)';
     c.shadowBlur = 10;
     c.shadowOffsetY = 4;
     drawRoundRect(c, x, y, w, h, 10);
     c.fill();
     c.shadowColor = 'transparent';
 
-    c.strokeStyle = '#E2E8F0';
+    c.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.12)' : '#E2E8F0';
     c.lineWidth = 1;
     c.stroke();
 
@@ -1475,7 +1624,7 @@
     c.strokeRect(dx, dy, doorW, doorH);
 
     // Text Label: CAR X
-    c.fillStyle = '#1E293B';
+    c.fillStyle = isDark ? '#F8FAFC' : '#1E293B';
     c.font = '800 12px sans-serif';
     c.textAlign = 'left';
     c.fillText(`CAR ${label}`, dx + doorW + 10, dy + 14);
@@ -1486,7 +1635,7 @@
     c.arc(dx + doorW + 14, dy + 26, 3.5, 0, Math.PI * 2);
     c.fill();
 
-    c.fillStyle = '#64748B';
+    c.fillStyle = isDark ? '#94A3B8' : '#64748B';
     c.font = '700 9.5px sans-serif';
     c.fillText(`(ID: ${idStr})`, dx + doorW + 22, dy + 29);
 
@@ -1499,7 +1648,15 @@
 
     const w = cachedCanvasW || (canvas.width / window.devicePixelRatio);
     const h = cachedCanvasH || (canvas.height / window.devicePixelRatio);
+    const isDark = document.body.classList.contains('theme-dark') || 
+                   document.body.classList.contains('theme-obsidian') || 
+                   document.body.classList.contains('theme-slate');
+
     ctx.clearRect(0, 0, w, h);
+    if (isDark) {
+      ctx.fillStyle = document.body.classList.contains('theme-slate') ? '#101522' : '#121217';
+      ctx.fillRect(0, 0, w, h);
+    }
 
     const floors = getFloorRange().sort((a, b) => b - a);
 
@@ -1532,9 +1689,15 @@
       // Active Floor Warm Peach Layer Band (Matched Exactly to F9 in Reference)
       if (hasCarHere || hasWaiting || hasCalls || f === 9) {
         const peachGrad = ctx.createLinearGradient(labelW, y, w - 16, y);
-        peachGrad.addColorStop(0, 'rgba(254, 215, 170, 0.70)');
-        peachGrad.addColorStop(0.5, 'rgba(254, 243, 199, 0.45)');
-        peachGrad.addColorStop(1, 'rgba(254, 215, 170, 0.30)');
+        if (isDark) {
+          peachGrad.addColorStop(0, 'rgba(234, 88, 12, 0.35)');
+          peachGrad.addColorStop(0.5, 'rgba(245, 158, 11, 0.22)');
+          peachGrad.addColorStop(1, 'rgba(234, 88, 12, 0.15)');
+        } else {
+          peachGrad.addColorStop(0, 'rgba(254, 215, 170, 0.70)');
+          peachGrad.addColorStop(0.5, 'rgba(254, 243, 199, 0.45)');
+          peachGrad.addColorStop(1, 'rgba(254, 215, 170, 0.30)');
+        }
         ctx.fillStyle = peachGrad;
         ctx.fillRect(labelW, y, w - labelW - 16, rowH);
 
@@ -1544,7 +1707,7 @@
       }
 
       // Floor Row Grid Line
-      ctx.strokeStyle = '#EEF2F6';
+      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.08)' : '#EEF2F6';
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(labelW, y + rowH);
@@ -1552,17 +1715,17 @@
       ctx.stroke();
 
       // Floor Number (Left column)
-      ctx.fillStyle = '#1E293B';
+      ctx.fillStyle = isDark ? '#F8FAFC' : '#1E293B';
       ctx.font = '800 13px sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText(formatFloor(f), 12, y + rowH / 2 + 5);
 
       // VIP Floor Badge (Cyan pill)
       if (isVip) {
-        ctx.fillStyle = '#E0F2FE';
+        ctx.fillStyle = isDark ? 'rgba(2, 132, 199, 0.25)' : '#E0F2FE';
         drawRoundRect(ctx, 42, y + rowH / 2 - 8, 32, 17, 8);
         ctx.fill();
-        ctx.fillStyle = '#0284C7';
+        ctx.fillStyle = isDark ? '#38BDF8' : '#0284C7';
         ctx.font = '800 9.5px sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('VIP', 58, y + rowH / 2 + 4);
@@ -1570,10 +1733,10 @@
 
       // Lobby Badge (Peach/amber pill)
       if (isLobby) {
-        ctx.fillStyle = '#FFEDD5';
+        ctx.fillStyle = isDark ? 'rgba(194, 65, 12, 0.30)' : '#FFEDD5';
         drawRoundRect(ctx, 38, y + rowH / 2 - 8, 38, 17, 8);
         ctx.fill();
-        ctx.fillStyle = '#C2410C';
+        ctx.fillStyle = isDark ? '#FB923C' : '#C2410C';
         ctx.font = '800 9px sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('Lobby', 57, y + rowH / 2 + 4);
@@ -1582,21 +1745,21 @@
       // Waiting Rider Circular Beacons (Orange with arrow)
       if (hasWaiting || (f >= 2 && f <= 5) || f === -1) {
         const isDown = f === -1;
-        ctx.fillStyle = '#FFEDD5';
+        ctx.fillStyle = isDark ? 'rgba(234, 88, 12, 0.35)' : '#FFEDD5';
         ctx.beginPath();
         ctx.arc(65, y + rowH / 2, 8.5, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = '#EA580C';
+        ctx.fillStyle = isDark ? '#FB923C' : '#EA580C';
         ctx.font = '800 9px sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(isDown ? '↓' : '↑', 65, y + rowH / 2 + 3);
       }
 
-      // Registered Floor Calls: Vertical Black Notches on the rail
+      // Registered Floor Calls: Vertical Notches on the rail
       const callsHere = smoothState.callsByFloor[f];
       if ((callsHere && callsHere.length > 0) || f === 9 || f === 7 || f === 1) {
-        ctx.fillStyle = '#0F172A';
+        ctx.fillStyle = isDark ? '#FACC15' : '#0F172A';
         const notchX = labelW + 110 + (Math.abs(f) % 3) * 140;
         ctx.fillRect(notchX, y + 4, 2.5, rowH - 8);
       }
@@ -1609,7 +1772,7 @@
       const shaftBottom = shaftTop + floors.length * rowH;
 
       // Dashed vertical guide rails
-      ctx.strokeStyle = '#CBD5E1';
+      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.20)' : '#CBD5E1';
       ctx.lineWidth = 1;
       ctx.setLineDash([4, 4]);
       ctx.beginPath();
@@ -1950,13 +2113,60 @@
       `;
       fetchAndDisplayLogs();
     } else if (name === 'theme') {
-      viewport.innerHTML = `
-        <div class="panel-card">
-          <div class="panel-card-header"><h3>Luxury Theme Identity</h3></div>
-          <p style="font-size:12px; color:#64748B; margin-bottom:12px;">Active Theme: <strong>Luxury Claymorphic &amp; Golden Amber</strong> with 3D Sapphire Pods.</p>
-        </div>
-      `;
+      renderThemeTab();
     }
+  }
+
+  function renderThemeTab() {
+    const viewport = document.getElementById('tabViewport');
+    if (!viewport) return;
+    const currentTheme = localStorage.getItem('ecs_theme') || 'aubergine';
+    viewport.innerHTML = `
+      <div class="panel-card">
+        <div class="panel-card-header"><h3>Active Theme System</h3></div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Select an industrial supervisory color palette for the SCADA cockpit:</p>
+        <div class="theme-grid">
+          ${PALETTES.map(p => `
+            <div class="theme-card ${currentTheme === p.id ? 'active' : ''}" data-theme-id="${p.id}">
+              <div class="theme-info">
+                <div class="theme-info-title">${p.label}</div>
+                <div class="theme-info-sub">${p.sub}</div>
+              </div>
+              <div class="theme-swatches">
+                ${p.swatches.map(s => `<span class="theme-swatch" style="background:${s}"></span>`).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    viewport.querySelectorAll('.theme-card').forEach(card => {
+      card.addEventListener('click', function() {
+        const tId = this.dataset.themeId;
+        applyTheme(tId);
+        const palette = PALETTES.find(p => p.id === tId);
+        showToast(`Theme activated: ${palette ? palette.label : tId}`, 'success');
+      });
+    });
+  }
+
+  function applyTheme(themeId) {
+    const validThemes = ['aubergine', 'obsidian', 'daylight', 'slate'];
+    if (!validThemes.includes(themeId)) themeId = 'aubergine';
+
+    document.body.classList.remove('theme-aubergine', 'theme-obsidian', 'theme-daylight', 'theme-slate', 'theme-dark', 'theme-luxury', 'theme-clay');
+    document.body.classList.add(`theme-${themeId}`);
+    if (themeId === 'obsidian' || themeId === 'slate') {
+      document.body.classList.add('theme-dark');
+    }
+    document.body.setAttribute('data-theme', themeId);
+    localStorage.setItem('ecs_theme', themeId);
+
+    if (ui.activeTab === 'theme') {
+      renderThemeTab();
+    }
+    drawShaftVisualization();
   }
 
   function bindConfigEvents() {
@@ -2167,6 +2377,36 @@
     }
   });
 
+  // Algorithm Status Badge Shortcut
+  const algoStatusBadge = document.getElementById('algoStatusBadge');
+  if (algoStatusBadge) {
+    algoStatusBadge.addEventListener('click', () => {
+      document.querySelectorAll('#navTabs .nav-tab').forEach(t => {
+        if (t.dataset.tab === 'algorithm') t.classList.add('active');
+        else t.classList.remove('active');
+      });
+      renderTab('algorithm');
+    });
+  }
+
+  // Theme Shortcut Button & Hotkey
+  const themeShortcutBtn = document.getElementById('themeShortcutBtn');
+  if (themeShortcutBtn) {
+    themeShortcutBtn.addEventListener('click', () => {
+      const current = localStorage.getItem('ecs_theme') || 'aubergine';
+      const cycle = {
+        'aubergine': 'obsidian',
+        'obsidian': 'daylight',
+        'daylight': 'slate',
+        'slate': 'aubergine'
+      };
+      const nextTheme = cycle[current] || 'obsidian';
+      applyTheme(nextTheme);
+      const palette = PALETTES.find(p => p.id === nextTheme);
+      showToast(`Theme switched to ${palette ? palette.label : nextTheme}`, 'info');
+    });
+  }
+
   // Global Keyboard Shortcuts
   document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
@@ -2177,6 +2417,8 @@
       document.getElementById('topResetBtn').click();
     } else if (e.code === 'KeyM') {
       if (soundBtn) soundBtn.click();
+    } else if (e.code === 'KeyT') {
+      if (themeShortcutBtn) themeShortcutBtn.click();
     } else if (e.code === 'Digit1') {
       api('/api/simulation/speed', 'POST', { multiplier: 1.0 });
       showToast('Speed: 1×', 'info');
@@ -2193,6 +2435,8 @@
   });
 
   /* Initial Load */
+  const savedTheme = localStorage.getItem('ecs_theme') || 'aubergine';
+  applyTheme(savedTheme);
   renderTab('config');
   resizeCanvas();
   initWebSocket();

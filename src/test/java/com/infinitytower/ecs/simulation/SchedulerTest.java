@@ -115,4 +115,25 @@ class SchedulerTest {
         assertEquals(10, ids.size());
         assertEquals(10, ids.stream().distinct().count(), "All algorithm ids must be unique");
     }
+
+    @Test
+    void allTenAlgorithmsSuccessfullyDispatchCalls() {
+        SchedulerRegistry registry = new SchedulerRegistry();
+        BuildingModel building = new BuildingModel();
+        ElevatorModel a = elevatorAt(0, 1);
+        ElevatorModel b = elevatorAt(1, 5);
+        ElevatorModel c = elevatorAt(2, 9);
+        List<ElevatorModel> available = List.of(a, b, c);
+        DispatchContext ctx = new DispatchContext(available, 3, new SafetyStateModel());
+
+        for (SchedulingAlgorithm algo : registry.all()) {
+            ElevatorModel chosenUp = algo.selectElevator(available, callAt(4, "up"), building, ctx);
+            assertNotNull(chosenUp, algo.id() + " should select a car for UP call");
+            assertTrue(available.contains(chosenUp), algo.id() + " must select from available cars");
+
+            ElevatorModel chosenDown = algo.selectElevator(available, callAt(7, "down"), building, ctx);
+            assertNotNull(chosenDown, algo.id() + " should select a car for DOWN call");
+            assertTrue(available.contains(chosenDown), algo.id() + " must select from available cars");
+        }
+    }
 }

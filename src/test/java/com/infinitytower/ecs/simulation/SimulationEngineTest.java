@@ -112,6 +112,10 @@ class SimulationEngineTest {
         for (String id : expected) {
             engine.setAlgorithm(id);
             assertEquals(id, engine.getAlgorithm(), "Should switch to algorithm: " + id);
+            // Verify call dispatching under each algorithm
+            engine.spawnPassenger(1, 8, "normal", 1);
+            engine.tick(0.1);
+            assertFalse(engine.getSnapshot().elevators.isEmpty());
         }
     }
 
