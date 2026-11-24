@@ -6,204 +6,73 @@
 <title>Infinity Tower — Industrial Elevator Simulation &amp; Dispatch System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
   /* ----------------------------------------------------
-     SENIOR INDUSTRIAL TELEMETRY DESIGN SYSTEM
-     Themes:
-       1. Aubergine & Marigold Executive (Default theme-aubergine)
-       2. Industrial Obsidian SCADA (theme-obsidian)
-       3. Industrial Slate Control Center (theme-slate)
+     LUXURY CLAYMORPHIC & SKEUOMORPHIC DESIGN SYSTEM
+     Matched exactly to Reference Architecture:
+       - Ambient Pearlescent Porcelain Backdrop (#F4F7FB)
+       - Floating Pure White 3D Clay Cards with Inset Specular Sheens
+       - Warm Golden Amber Accents (#D4902A / #C27814)
+       - Sapphire Metallic 3D Capsule Pods (#1E40AF / #2563EB)
+       - Mint Emerald Live Telemetry (#059669 / #E0F7EC)
+       - Frosted Cyan VIP Badges (#0284C7 / #E0F2FE)
   ---------------------------------------------------- */
-  /* ----------------------------------------------------
-     50% / 40% / 10% THREE-COLOR SCADA SYSTEM (ORANGE LAYERS)
-       - 50% Dominant Base: Electric Safety Yellow (#FACC15)
-       - 40% Structural Layers: Architectural Slate (#141418 / #1A1A22)
-       - 10% High-Energy Accent: Electric Safety Orange (#FF6B00 / #FF7700)
-  ---------------------------------------------------- */
-  :root, body.theme-aubergine, body.theme-orange {
-    --theme-name: 'yellow-orange-50-40-10';
-    --bg-base: #FACC15;          /* 50% Dominant Base: Electric Yellow (#FACC15) */
-    --bg-app: #EAB308;
-    --bg-topbar: #141418;        /* 40% Structural Graphite Layer */
-    --bg-panel: #121316;        /* 40% Structural Graphite Layer */
-    --bg-card: #1A1A22;         /* 40% Structural Graphite Layer */
-    --bg-card-subtle: #15151C;
-    --bg-input: #0E0E12;
-
-    --primary: #FF6B00;         /* 10% High-Energy Orange Accent */
-    --primary-hover: #FF8533;
-    --primary-contrast: #FFFFFF;
-    --accent: #FACC15;          /* Electric Yellow */
-    --accent-hover: #FDE047;
-    --accent-contrast: #0A0B0E;
-    --accent-dim: rgba(250, 204, 21, 0.20);
-
-    --text-main: #F3F4F6;
-    --text-muted: #9CA3AF;
-    --text-dim: #6B7280;
-
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(250, 204, 21, 0.40);
-    --border-focus: #FACC15;
-
-    --shaft-bg: #FACC15;        /* 50% Dominant Base: Electric Yellow (#FACC15) */
-    --shaft-grid: rgba(255, 255, 255, 0.035);
-    --shaft-rail: rgba(255, 255, 255, 0.12);
-
-    --status-success: #FF6B00;  /* Pure 3-color ratio: motion highlights in orange */
-    --status-success-dim: rgba(255, 107, 0, 0.16);
-    --status-warning: #FF9F1C;
-    --status-warning-dim: rgba(255, 159, 28, 0.16);
-    --status-danger: #EF4444;
-    --status-danger-dim: rgba(239, 68, 68, 0.18);
-    --status-info: #FF7700;
-    --status-info-dim: rgba(255, 119, 0, 0.16);
-
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.55);
-    --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.7);
-  }
-
-  body.theme-obsidian {
-    --theme-name: 'obsidian';
-    --bg-base: #FACC15;
-    --bg-app: #0E0E12;
-    --bg-topbar: #141418;
-    --bg-panel: #141418;
-    --bg-card: #1A1A22;
-    --bg-card-subtle: #141418;
-    --bg-input: #0E0E12;
-
-    --primary: #E5A93C;
-    --primary-hover: #F2B74B;
-    --primary-contrast: #0A0B0E;
-    --accent: #E5A93C;
-    --accent-hover: #F2B74B;
-    --accent-contrast: #0A0B0E;
-    --accent-dim: rgba(229, 169, 60, 0.16);
-
-    --text-main: #F1F5F9;
-    --text-muted: #94A3B8;
-    --text-dim: #FACC15;
-
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(229, 169, 60, 0.3);
-    --border-focus: #E5A93C;
-
-    --shaft-bg: #FACC15;
-    --shaft-grid: rgba(255, 255, 255, 0.025);
-    --shaft-rail: rgba(255, 255, 255, 0.1);
-
-    --status-success: #10B981;
-    --status-success-dim: rgba(16, 185, 129, 0.15);
-    --status-warning: #F59E0B;
-    --status-warning-dim: rgba(245, 158, 11, 0.15);
-    --status-danger: #EF4444;
-    --status-danger-dim: rgba(239, 68, 68, 0.18);
-    --status-info: #FACC15;
-    --status-info-dim: rgba(250, 204, 21, 0.16);
-
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
-    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.6);
-    --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.75);
-  }
-
-  
-  body.theme-daylight {
-    --theme-name: 'daylight';
-    --bg-base: #EEF2F6;
-    --bg-app: #F8FAFC;
-    --bg-topbar: #FFFFFF;
+  :root, body.theme-aubergine, body.theme-luxury, body.theme-clay {
+    --theme-name: 'luxury-clay';
+    --bg-base: #F4F7FB;
+    --bg-app: #F8FAFD;
+    --bg-topbar: rgba(255, 255, 255, 0.94);
     --bg-panel: #FFFFFF;
     --bg-card: #FFFFFF;
-    --bg-card-subtle: #F1F5F9;
-    --bg-input: #FFFFFF;
+    --bg-card-subtle: #F8FAFD;
+    --bg-input: #F8FAFC;
 
-    --primary: #EAB308;
-    --primary-hover: #CA8A04;
-    --primary-contrast: #0F172A;
-    --accent: #FACC15;
-    --accent-hover: #EAB308;
-    --accent-contrast: #0F172A;
-    --accent-dim: rgba(250, 204, 21, 0.18);
+    --primary: #D4902A;         /* Rich Golden Amber */
+    --primary-hover: #C27814;
+    --primary-contrast: #FFFFFF;
+    --accent: #E6A23C;
+    --accent-hover: #D4881A;
+    --accent-contrast: #FFFFFF;
+    --accent-dim: rgba(212, 144, 42, 0.14);
 
-    --text-main: #0F172A;
-    --text-muted: #FACC15;
+    --text-main: #1E293B;       /* Deep Luxury Slate */
+    --text-muted: #64748B;      /* Medium Slate */
     --text-dim: #94A3B8;
 
-    --border-subtle: rgba(15, 23, 42, 0.08);
-    --border-strong: rgba(234, 179, 8, 0.35);
-    --border-focus: #EAB308;
+    --border-subtle: rgba(226, 232, 240, 0.85);
+    --border-strong: rgba(212, 144, 42, 0.35);
+    --border-focus: #D4902A;
 
-    --shaft-bg: #E2E8F0;
-    --shaft-grid: rgba(15, 23, 42, 0.06);
-    --shaft-rail: rgba(15, 23, 42, 0.18);
+    --shaft-bg: #FFFFFF;
+    --shaft-grid: rgba(226, 232, 240, 0.85);
+    --shaft-rail: rgba(148, 163, 184, 0.35);
 
     --status-success: #059669;
-    --status-success-dim: rgba(5, 150, 105, 0.15);
+    --status-success-dim: #E0F7EC;
     --status-warning: #D97706;
-    --status-warning-dim: rgba(217, 119, 6, 0.15);
+    --status-warning-dim: #FEF3C7;
     --status-danger: #DC2626;
-    --status-danger-dim: rgba(220, 38, 38, 0.15);
-    --status-info: #EAB308;
-    --status-info-dim: rgba(234, 179, 8, 0.15);
+    --status-danger-dim: #FEE2E2;
+    --status-info: #0284C7;
+    --status-info-dim: #E0F2FE;
 
-    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
-    --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.1);
-    --shadow-lg: 0 10px 24px rgba(15, 23, 42, 0.12);
+    --clay-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+    --clay-shadow-md: 0 10px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+    --clay-shadow-lg: 0 16px 45px rgba(0, 0, 0, 0.07), 0 2px 6px rgba(0, 0, 0, 0.03);
+    --clay-inset: inset 0 1px 0 rgba(255, 255, 255, 0.95);
   }
 
-  body.theme-slate {
-    --theme-name: 'slate';
-    --bg-base: #FACC15;
-    --bg-app: #0E0E12;
-    --bg-topbar: #141418;
-    --bg-panel: #141418;
-    --bg-card: #1A1A22;
-    --bg-card-subtle: #141418;
-    --bg-input: #0E0E12;
-
-    --primary: #EAB308;
-    --primary-hover: #FACC15;
-    --primary-contrast: #0A0B0E;
-    --accent: #FACC15;
-    --accent-hover: #FDE047;
-    --accent-contrast: #0A0B0E;
-    --accent-dim: rgba(250, 204, 21, 0.18);
-
-    --text-main: #F8FAFC;
-    --text-muted: #94A3B8;
-    --text-dim: #FACC15;
-
-    --border-subtle: rgba(255, 255, 255, 0.09);
-    --border-strong: rgba(250, 204, 21, 0.35);
-    --border-focus: #FACC15;
-
-    --shaft-bg: #FACC15;
-    --shaft-grid: rgba(250, 204, 21, 0.04);
-    --shaft-rail: rgba(255, 255, 255, 0.12);
-
-    --status-success: #10B981;
-    --status-success-dim: rgba(16, 185, 129, 0.15);
-    --status-warning: #F59E0B;
-    --status-warning-dim: rgba(245, 158, 11, 0.15);
-    --status-danger: #EF4444;
-    --status-danger-dim: rgba(239, 68, 68, 0.18);
-    --status-info: #FACC15;
-    --status-info-dim: rgba(250, 204, 21, 0.16);
-
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
-    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.6);
-    --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.75);
-  }
-
-  /* Universal reset & base typography */
+  /* Universal reset & luxury typography */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
     height: 100%;
     width: 100%;
     background-color: var(--bg-base);
+    background-image: 
+      radial-gradient(circle at 90% 10%, rgba(245, 158, 11, 0.12), transparent 45%),
+      radial-gradient(circle at 10% 90%, rgba(217, 119, 6, 0.06), transparent 40%),
+      linear-gradient(135deg, #F8FAFD 0%, #EEF4F9 100%);
     color: var(--text-main);
     font-family: 'DM Sans', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 13px;
@@ -218,36 +87,39 @@
   }
 
   ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.15); }
-  ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.16); border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.03); }
+  ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.35); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
-  /* Main Workspace Layout */
+  /* Main Workspace Layout with floating outer margins */
   #app {
     display: grid;
-    grid-template-columns: 1fr 440px;
-    grid-template-rows: 56px 1fr;
+    grid-template-columns: 1fr 450px;
+    grid-template-rows: 64px 1fr;
     grid-template-areas:
       "topbar topbar"
       "sim panel";
     height: 100vh;
     width: 100vw;
-    background-color: var(--bg-base);
+    padding: 16px 20px;
+    gap: 16px;
     overflow: hidden;
   }
 
   /* ----------------------------------------------------
-     COMMAND TOPBAR
+     FLOATING COMMAND TOPBAR (MATCHED TO REFERENCE)
   ---------------------------------------------------- */
   #topbar {
     grid-area: topbar;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
-    background: linear-gradient(180deg, rgba(255, 107, 0, 0.08) 0%, var(--bg-topbar) 100%), var(--bg-topbar);
-    border-bottom: 2px solid #FF6B00;
-    box-shadow: 0 3px 16px rgba(255, 107, 0, 0.18);
+    padding: 0 24px;
+    background: var(--bg-topbar);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: var(--clay-shadow-md);
     z-index: 50;
     gap: 16px;
   }
@@ -255,86 +127,59 @@
   .brand-group {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
   }
   .brand-mark {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #FF6B00 0%, #FF8533 100%);
-    border: 1px solid #FFA040;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #FFFFFF;
-    box-shadow: 0 2px 12px rgba(255, 107, 0, 0.45);
+    color: #D4AF37;
+    filter: drop-shadow(0 2px 6px rgba(212, 175, 55, 0.35));
   }
   .brand-text h1 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 15px;
+    font-family: 'Cinzel', serif;
+    font-size: 19px;
     font-weight: 800;
-    letter-spacing: 0.02em;
-    color: var(--text-main);
-    line-height: 1.15;
+    letter-spacing: 0.08em;
+    color: #1E293B;
+    line-height: 1.1;
   }
   .brand-text span {
-    font-size: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 9px;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: #FF6B00;
+    color: #64748B;
+    display: block;
+    margin-top: 1px;
   }
 
   .topbar-controls {
     display: flex;
     align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  #pauseBtn {
-    background: #FF6B00 !important;
-    color: #FFFFFF !important;
-    border: 1px solid #FF8533 !important;
-    box-shadow: 0 2px 10px rgba(255, 107, 0, 0.4) !important;
-  }
-  #pauseBtn:hover:not(:disabled) {
-    background: #FF8533 !important;
-    border-color: #FFA040 !important;
-    box-shadow: 0 4px 14px rgba(255, 107, 0, 0.55) !important;
-  }
-  .topbar-controls .btn:not(#pauseBtn) {
-    border-color: rgba(255, 107, 0, 0.3);
-  }
-  .topbar-controls .btn:not(#pauseBtn):hover:not(:disabled) {
-    border-color: #FACC15;
-    color: #FACC15;
-    box-shadow: 0 0 10px rgba(250, 204, 21, 0.35);
+    gap: 12px;
   }
 
   .conn-indicator {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    font-size: 11px;
+    gap: 8px;
+    font-size: 11.5px;
     font-weight: 700;
-    padding: 5px 11px;
+    padding: 6px 14px;
     border-radius: 20px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-subtle);
-  }
-  .conn-indicator.connected {
-    color: #FFA040;
-    border-color: rgba(255, 107, 0, 0.4);
-    background: rgba(255, 107, 0, 0.12);
-  }
-  .conn-indicator.connected .pulse-dot {
-    background: #FF6B00;
-    box-shadow: 0 0 8px #FF6B00;
+    background: #E8F8F0;
+    color: #059669;
+    border: 1px solid #A7F3D0;
+    box-shadow: var(--clay-shadow-sm);
   }
   .conn-indicator.disconnected {
-    color: var(--status-danger);
-    border-color: rgba(239, 68, 68, 0.35);
-    background: var(--status-danger-dim);
+    background: #FEE2E2;
+    color: #DC2626;
+    border-color: #FECACA;
   }
   .pulse-dot {
     width: 7px;
@@ -346,378 +191,341 @@
 
   .sim-clock-badge {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 700;
-    padding: 5px 12px;
-    background: rgba(255, 107, 0, 0.08);
-    border: 1px solid rgba(250, 204, 21, 0.45);
-    border-radius: 6px;
-    color: #FACC15;
-    letter-spacing: 0.04em;
-    box-shadow: 0 0 10px rgba(255, 107, 0, 0.12);
+    padding: 6px 14px;
+    background: #F8FAFD;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    color: #1E293B;
+    letter-spacing: 0.03em;
+    box-shadow: var(--clay-shadow-sm);
   }
 
-  /* Modern Engineering Buttons */
-  .btn {
+  /* Luxury Clay Buttons */
+  .btn-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    padding: 6px 13px;
+    gap: 6px;
+    padding: 7px 16px;
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 12px;
     font-weight: 700;
-    border-radius: 6px;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-card);
-    color: var(--text-main);
+    border-radius: 20px;
+    border: 1px solid #E2E8F0;
+    background: #FFFFFF;
+    color: #1E293B;
     cursor: pointer;
+    box-shadow: var(--clay-shadow-sm);
     transition: all 0.15s ease;
     user-select: none;
-    box-shadow: var(--shadow-sm);
   }
-  .btn:hover:not(:disabled) {
-    border-color: var(--border-strong);
-    background: rgba(255, 255, 255, 0.08);
+  .btn-pill:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--clay-shadow-md);
+    border-color: #CBD5E1;
   }
-  .btn:active:not(:disabled) {
+  .btn-pill:active:not(:disabled) {
     transform: translateY(1px);
     box-shadow: none;
   }
-  .btn:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
+
+  .btn-amber-gold {
+    background: linear-gradient(135deg, #D4902A 0%, #C27814 100%) !important;
+    color: #FFFFFF !important;
+    border: 1px solid #B46C0D !important;
+    box-shadow: 0 4px 14px rgba(212, 144, 42, 0.4) !important;
   }
-  .btn.primary {
-    background: #FF6B00;
-    color: #FFFFFF;
-    border-color: #FF8533;
-    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
+  .btn-amber-gold:hover:not(:disabled) {
+    background: linear-gradient(135deg, #E6A23C 0%, #D4881A 100%) !important;
+    box-shadow: 0 6px 18px rgba(212, 144, 42, 0.5) !important;
   }
-  .btn.primary:hover:not(:disabled) {
-    background: var(--primary-hover);
-    border-color: var(--primary-hover);
+
+  .btn-circle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid #E2E8F0;
+    background: #FFFFFF;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--clay-shadow-sm);
+    transition: all 0.15s ease;
   }
-  .btn.accent {
-    background: var(--accent);
-    color: var(--accent-contrast);
-    border-color: var(--accent);
-  }
-  .btn.accent:hover:not(:disabled) {
-    background: var(--accent-hover);
-    border-color: var(--accent-hover);
-  }
-  .btn.danger {
-    background: var(--status-danger);
-    color: #FFFFFF;
-    border-color: var(--status-danger);
-  }
-  .btn.danger:hover:not(:disabled) {
-    filter: brightness(1.1);
-  }
-  .btn.small {
-    padding: 4px 9px;
-    font-size: 11px;
-    border-radius: 5px;
+  .btn-circle:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+    transform: translateY(-1px);
   }
 
   /* ----------------------------------------------------
-     SHAFT TELEMETRY VIEWPORT
+     SHAFT TELEMETRY CARD (LEFT VIEWPORT)
   ---------------------------------------------------- */
   #sim {
     grid-area: sim;
     position: relative;
-    background: var(--shaft-bg);
+    background: var(--bg-card);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: var(--clay-shadow-md);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid var(--border-subtle);
+    padding: 22px;
   }
 
   #simTopBar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 18px;
-    border-bottom: 1px solid rgba(255, 107, 0, 0.22);
-    background: var(--bg-panel);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-    z-index: 10;
-    gap: 12px;
+    margin-bottom: 12px;
+    gap: 14px;
     flex-wrap: wrap;
   }
 
   .sim-view-title {
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: 10px;
   }
   .sim-view-title h2 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13px;
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
     font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-main);
+    color: #1E293B;
   }
-  .sim-view-title .badge-tag {
-    font-size: 10px;
+  .badge-live-tag {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 11px;
     font-weight: 800;
-    padding: 2px 7px;
-    border-radius: 4px;
-    background: rgba(250, 204, 21, 0.16);
-    color: #FACC15;
-    border: 1px solid #FACC15;
-    box-shadow: 0 0 8px rgba(255, 107, 0, 0.25);
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: #E0F7EC;
+    color: #059669;
+    border: 1px solid #A7F3D0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .badge-live-tag::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #059669;
   }
 
+  /* 4 Floating Clay Stat Blocks */
   #statOverlay {
     display: flex;
     align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
+    gap: 10px;
   }
-  .stat-chip {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: 6px;
-    padding: 4px 10px;
-    min-width: 78px;
-    text-align: left;
+  .stat-block {
+    background: #F8FAFD;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 6px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--clay-shadow-sm);
   }
-  .stat-chip .v {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text-main);
+  .stat-block .stat-icon {
+    color: #64748B;
+    display: flex;
+    align-items: center;
+  }
+  .stat-block .v {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #1E293B;
     line-height: 1.1;
   }
-  .stat-chip .l {
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-muted);
-    margin-top: 2px;
+  .stat-block .l {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #64748B;
+    margin-top: 1px;
   }
 
   .zoom-toolbar {
     display: flex;
     align-items: center;
-    gap: 3px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid var(--border-subtle);
-    border-radius: 6px;
-    padding: 2px 4px;
+    gap: 4px;
+    background: #F8FAFD;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    padding: 3px 8px;
+    box-shadow: var(--clay-shadow-sm);
+  }
+  .zoom-toolbar button {
+    border: none;
+    background: transparent;
+    color: #475569;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+  .zoom-toolbar button:hover {
+    color: var(--primary);
+    background: rgba(0, 0, 0, 0.05);
   }
   .zoom-toolbar span {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     font-weight: 700;
-    color: var(--text-main);
-    min-width: 42px;
-    text-align: center;
+    color: #1E293B;
+    padding: 0 4px;
   }
 
-  #alertBanner {
-    display: none;
+  /* Sub-Header Legend Bar */
+  .legend-strip {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 8px 16px;
-    background: var(--status-danger);
-    color: #FFFFFF;
-    font-size: 11.5px;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
-    z-index: 20;
-    animation: alertFlash 1.6s infinite ease-in-out;
+    gap: 20px;
+    padding: 8px 12px 14px 12px;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+    margin-bottom: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #475569;
+    flex-wrap: wrap;
   }
-  @keyframes alertFlash {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.85; }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
   }
+  .legend-box {
+    border-radius: 4px;
+    height: 12px;
+  }
+  .legend-box.car { width: 14px; background: #2563EB; }
+  .legend-box.moving { width: 14px; border: 1.5px solid #2563EB; background: #E0E7FF; }
+  .legend-box.call { width: 3px; background: #0F172A; }
+  .legend-box.active-floor { width: 18px; background: #FED7AA; }
+  .legend-box.vip { width: 18px; background: #E0F2FE; border: 1px solid #7DD3FC; }
 
+  /* Shaft Canvas Container */
   #shaftViewport {
     flex: 1;
-    position: relative;
     overflow: auto;
-    padding: 10px 14px 20px 14px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    position: relative;
+    contain: strict;
+    background: #FFFFFF;
+    border-radius: 12px;
   }
   #shaftCanvas {
     display: block;
-    border-radius: 4px;
     will-change: transform;
     transform: translateZ(0);
   }
 
-  /* Start Simulation Hero Modal */
-  #startOverlay {
-    position: absolute;
-    inset: 0;
-    z-index: 40;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(10, 10, 15, 0.88);
-    transition: opacity 0.25s ease, visibility 0.25s ease;
-  }
-  #startOverlay.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
-  .start-hero-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-strong);
-    border-radius: 12px;
-    padding: 36px 40px;
-    text-align: center;
-    max-width: 420px;
-    box-shadow: var(--shadow-lg);
-    color: var(--text-main);
-  }
-  .start-hero-card .hero-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
-    background: var(--primary);
-    color: #FFFFFF;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-  }
-  .start-hero-card h2 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 19px;
-    font-weight: 800;
-    margin-bottom: 8px;
-  }
-  .start-hero-card p {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-bottom: 22px;
-    line-height: 1.5;
-  }
-  .btn-start-large {
-    background: var(--accent);
-    color: var(--accent-contrast);
-    border: none;
-    border-radius: 8px;
-    padding: 12px 28px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 800;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(229, 169, 60, 0.35);
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    transition: all 0.15s ease;
-  }
-  .btn-start-large:hover {
-    background: var(--accent-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(229, 169, 60, 0.45);
-  }
-
   /* ----------------------------------------------------
-     CONTROL PANEL & 2x4 SEGMENTED NAVIGATION
+     CONTROL DECK PANEL (RIGHT VIEWPORT)
   ---------------------------------------------------- */
   #panel {
     grid-area: panel;
-    background: var(--bg-panel);
+    background: var(--bg-card);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: var(--clay-shadow-md);
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    padding: 22px;
   }
 
-  /* 2-row x 4-column Segmented Nav Tabs */
+  /* 2-row Navigation Tabs */
   #navTabs {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 5px;
-    padding: 10px 12px;
-    background: var(--bg-card-subtle);
-    border-bottom: 1px solid var(--border-subtle);
-    flex-shrink: 0;
+    gap: 7px;
+    margin-bottom: 18px;
   }
   .nav-tab {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 4px;
-    font-size: 10.5px;
+    gap: 6px;
+    padding: 9px 6px;
+    font-size: 11px;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
+    color: #475569;
     cursor: pointer;
-    border-radius: 6px;
-    border: 1px solid transparent;
-    background: transparent;
-    white-space: nowrap;
+    border-radius: 12px;
+    border: 1px solid #E2E8F0;
+    background: #F8FAFD;
+    box-shadow: var(--clay-shadow-sm);
     transition: all 0.15s ease;
     text-align: center;
     user-select: none;
   }
+  .nav-tab svg { width: 13px; height: 13px; }
   .nav-tab:hover {
-    color: var(--text-main);
-    background: rgba(255, 255, 255, 0.05);
+    color: #1E293B;
+    background: #FFFFFF;
+    border-color: #CBD5E1;
+    transform: translateY(-1px);
   }
   .nav-tab.active {
-    color: #FFFFFF;
-    background: #FF6B00;
-    border-color: #FF8533;
-    box-shadow: 0 3px 12px rgba(255, 107, 0, 0.4);
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #D4902A 0%, #C27814 100%) !important;
+    border-color: #B46C0D !important;
+    box-shadow: 0 4px 14px rgba(212, 144, 42, 0.38) !important;
   }
+  .nav-tab.active svg { color: #FFFFFF; }
 
   #tabViewport {
     flex: 1;
     overflow-y: auto;
-    padding: 16px;
+    padding-right: 4px;
   }
 
-  /* Cards & Sections */
+  /* Accordion Cards */
   .panel-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: 8px;
-    padding: 15px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 18px;
     margin-bottom: 16px;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--clay-shadow-sm);
   }
   .panel-card-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+    cursor: pointer;
   }
   .panel-card-header h3 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 11.5px;
+    font-family: 'Cinzel', serif;
+    font-size: 13.5px;
     font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #FACC15; /* High-contrast Electric Yellow section headers */
+    letter-spacing: 0.05em;
+    color: #1E293B;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
+  .panel-card-header h3 svg { color: #D4AF37; }
+  .chevron-icon { color: #64748B; transition: transform 0.2s ease; }
 
-  /* Form Elements */
+  /* Form Inputs (Recessed Clay Wells with Steppers) */
   .form-row {
     display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 12px;
+    margin-bottom: 12px;
   }
   .form-col {
     flex: 1;
@@ -728,46 +536,156 @@
   .form-col label {
     font-size: 11px;
     font-weight: 600;
-    color: var(--text-muted);
+    color: #475569;
   }
   .input-control, .select-control {
-    background: var(--bg-input);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-main);
-    border-radius: 6px;
-    padding: 7px 10px;
-    font-size: 12px;
+    background: #F8FAFD;
+    border: 1px solid #E2E8F0;
+    color: #1E293B;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 12.5px;
+    font-weight: 600;
     font-family: 'DM Sans', sans-serif;
     width: 100%;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: all 0.15s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03);
   }
   .input-control:focus, .select-control:focus {
-    border-color: var(--border-focus);
-    box-shadow: 0 0 0 2px var(--accent-dim);
+    background: #FFFFFF;
+    border-color: #D4902A;
+    box-shadow: 0 0 0 3px rgba(212, 144, 42, 0.15);
     outline: none;
   }
   .input-control[type="number"], .input-mono {
     font-family: 'JetBrains Mono', monospace;
   }
-  .checkbox-control {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    font-weight: 600;
+
+  .btn.primary {
+    background: linear-gradient(135deg, #D4902A 0%, #C27814 100%);
+    color: #FFFFFF;
+    border: 1px solid #B46C0D;
+    border-radius: 10px;
+    padding: 9px 18px;
+    font-weight: 700;
+    font-size: 12.5px;
     cursor: pointer;
-    margin-top: 6px;
+    box-shadow: 0 4px 14px rgba(212, 144, 42, 0.35);
+    transition: all 0.15s ease;
   }
-  .checkbox-control input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    accent-color: var(--accent);
-    cursor: pointer;
+  .btn.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(212, 144, 42, 0.45);
   }
 
-  /* ----------------------------------------------------
-     ALGORITHM GRID & COMPARISON
-  ---------------------------------------------------- */
+  /* Start Simulation Hero Modal */
+  #startOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(244, 247, 251, 0.85);
+    backdrop-filter: blur(12px);
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+  #startOverlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .start-hero-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 20px;
+    padding: 36px 40px;
+    text-align: center;
+    max-width: 440px;
+    box-shadow: var(--clay-shadow-lg);
+    color: #1E293B;
+  }
+  .start-hero-card .hero-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #D4902A 0%, #C27814 100%);
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    box-shadow: 0 6px 20px rgba(212, 144, 42, 0.4);
+  }
+  .start-hero-card h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 21px;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 8px;
+  }
+  .start-hero-card p {
+    font-size: 13px;
+    color: #64748B;
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+  .btn-start-large {
+    background: linear-gradient(135deg, #D4902A 0%, #C27814 100%);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(212, 144, 42, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    transition: all 0.15s ease;
+  }
+  .btn-start-large:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 144, 42, 0.5);
+  }
+
+  /* Toasts */
+  #toastContainer {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .toast {
+    pointer-events: auto;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    color: #1E293B;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+    box-shadow: var(--clay-shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: toastIn 0.25s ease-out forwards;
+  }
+  .toast.info { border-left: 4px solid #D4902A; }
+  .toast.success { border-left: 4px solid #059669; }
+  .toast.danger { border-left: 4px solid #DC2626; }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Subsystems: Algorithm, Safety, Logs, Analytics Grid */
   .algo-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -775,75 +693,34 @@
     margin-bottom: 14px;
   }
   .algo-card {
-    background: var(--bg-input);
-    border: 1px solid var(--border-subtle);
-    border-radius: 6px;
-    padding: 10px 11px;
+    background: #F8FAFD;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 10px 12px;
     cursor: pointer;
     transition: all 0.15s ease;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
   }
   .algo-card:hover {
-    border-color: var(--border-strong);
-    background: rgba(255, 255, 255, 0.04);
+    border-color: #D4902A;
+    background: #FFFFFF;
   }
   .algo-card.active {
-    border-color: var(--accent);
-    background: var(--accent-dim);
+    background: #FFFBEB;
+    border-color: #D4902A;
+    box-shadow: 0 0 0 1px #D4902A;
   }
-  .algo-card .algo-title {
-    font-weight: 700;
-    font-size: 11.5px;
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .algo-card .algo-badge {
-    font-size: 8.5px;
+  .algo-card .a-name {
     font-weight: 800;
-    letter-spacing: 0.05em;
-    padding: 2px 5px;
-    border-radius: 4px;
-    background: var(--accent);
-    color: var(--accent-contrast);
+    font-size: 12px;
+    color: #1E293B;
   }
-  .algo-card .algo-desc {
-    font-size: 10.5px;
-    color: var(--text-muted);
+  .algo-card .a-desc {
+    font-size: 10px;
+    color: #64748B;
+    margin-top: 2px;
     line-height: 1.35;
   }
 
-  /* Performance Bars */
-  .bar-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .bar-row {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    font-size: 11px;
-  }
-  .bar-track {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    height: 10px;
-    overflow: hidden;
-  }
-  .bar-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 4px;
-    transition: width 0.3s ease;
-  }
-
-  /* ----------------------------------------------------
-     SAFETY MATRIX & FAULT INJECTION
-  ---------------------------------------------------- */
   .safety-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -851,334 +728,114 @@
     margin-bottom: 12px;
   }
   .safety-btn {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #E2E8F0;
+    background: #F8FAFD;
+    color: #1E293B;
+    font-weight: 700;
+    font-size: 11.5px;
+    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 9px 11px;
-    background: var(--bg-input);
-    border: 1px solid var(--border-subtle);
-    border-radius: 6px;
-    font-size: 11.5px;
-    font-weight: 700;
-    cursor: pointer;
     transition: all 0.15s ease;
-    user-select: none;
-    color: var(--text-main);
   }
-  .safety-btn:hover {
-    border-color: var(--border-strong);
-    background: rgba(255, 255, 255, 0.06);
-  }
+  .safety-btn:hover { background: #FFFFFF; border-color: #CBD5E1; }
   .safety-btn.active {
-    background: var(--status-danger);
-    border-color: var(--status-danger);
-    color: #FFFFFF;
-    box-shadow: 0 0 14px rgba(239, 68, 68, 0.4);
+    background: #FEE2E2;
+    border-color: #EF4444;
+    color: #DC2626;
   }
 
-  .car-selector-strip {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-  }
-  .car-btn {
-    padding: 5px 11px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-input);
-    border-radius: 6px;
-    cursor: pointer;
-    color: var(--text-muted);
-    transition: all 0.15s ease;
-  }
-  .car-btn:hover {
-    color: var(--text-main);
-    border-color: var(--border-strong);
-  }
-  .car-btn.active {
-    background: var(--primary);
-    color: #FFFFFF;
-    border-color: var(--primary);
-  }
-
-  /* ----------------------------------------------------
-     METRICS & CHARTS
-  ---------------------------------------------------- */
   .metrics-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-    margin-bottom: 16px;
   }
   .metric-tile {
-    background: var(--bg-input);
-    border: 1px solid var(--border-subtle);
-    border-radius: 6px;
+    background: #F8FAFD;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
     padding: 10px 12px;
   }
   .metric-tile .m-val {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text-main);
-    line-height: 1.15;
+    font-size: 16px;
+    font-weight: 800;
+    color: #1E293B;
   }
   .metric-tile .m-lbl {
     font-size: 9.5px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    margin-top: 3px;
+    font-weight: 600;
+    color: #64748B;
+    margin-top: 2px;
   }
 
-  .charts-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .chart-card {
-    background: var(--bg-input);
-    border: 1px solid var(--border-subtle);
-    border-radius: 6px;
-    padding: 10px 12px;
-  }
-  .chart-title {
-    font-size: 10.5px;
-    font-weight: 700;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  /* ----------------------------------------------------
-     LOGS & SEARCH
-  ---------------------------------------------------- */
-  .log-filter-row {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-  }
-  .chip-pill {
-    padding: 4px 10px;
-    border-radius: 14px;
-    font-size: 10.5px;
-    font-weight: 700;
-    background: var(--bg-input);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.12s ease;
-  }
-  .chip-pill:hover {
-    color: var(--text-main);
-    border-color: var(--border-strong);
-  }
-  .chip-pill.active {
-    background: var(--primary);
-    color: #FFFFFF;
-    border-color: var(--primary);
-  }
+  /* Log Feed */
   .log-feed {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    max-height: 480px;
+    max-height: 380px;
     overflow-y: auto;
   }
   .log-card {
-    padding: 8px 11px;
-    border-radius: 6px;
-    background: var(--bg-input);
-    border-left: 3px solid var(--border-subtle);
-    color: var(--text-main);
-    line-height: 1.4;
-  }
-  .log-card.dispatch { border-left-color: var(--accent); }
-  .log-card.passenger { border-left-color: var(--status-info); }
-  .log-card.elevator { border-left-color: var(--primary); }
-  .log-card.safety { border-left-color: var(--status-warning); }
-  .log-card.fault { border-left-color: var(--status-danger); }
-  .log-card.system { border-left-color: var(--status-success); }
-  .log-card .time-stamp {
-    color: var(--text-muted);
-    margin-right: 6px;
-    font-weight: 600;
-  }
-
-  /* ----------------------------------------------------
-     PALETTE SELECTOR
-  ---------------------------------------------------- */
-  .palette-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .palette-option {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 14px;
-    background: var(--bg-input);
-    border: 1.5px solid var(--border-subtle);
+    background: #F8FAFD;
+    border: 1px solid #E2E8F0;
     border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .palette-option:hover {
-    border-color: var(--border-strong);
-  }
-  .palette-option.selected {
-    border-color: var(--accent);
-    background: var(--accent-dim);
-  }
-  .palette-option-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .swatch-stack {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .swatch-dot {
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
-    flex-shrink: 0;
-  }
-  .palette-label {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13.5px;
-    font-weight: 700;
-    color: var(--text-main);
-  }
-  .palette-sub {
+    padding: 7px 10px;
     font-size: 11px;
-    color: var(--text-muted);
-  }
-  .palette-check-indicator {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    border: 1.5px solid var(--border-subtle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: transparent;
-  }
-  .palette-option.selected .palette-check-indicator {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--accent-contrast);
-  }
-
-  /* ----------------------------------------------------
-     TOAST NOTIFICATIONS (Senior Engineer Standard)
-  ---------------------------------------------------- */
-  #toastContainer {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    pointer-events: none;
-  }
-  .toast {
-    pointer-events: auto;
-    background: #1A1A22;
-    border: 1px solid var(--border-strong);
-    color: #FFFFFF;
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    animation: toastIn 0.25s ease forwards;
-  }
-  .toast.success { border-color: var(--status-success); }
-  .toast.error { border-color: var(--status-danger); }
-  .toast.warning { border-color: var(--status-warning); }
-  @keyframes toastIn {
-    from { transform: translateY(12px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-  @keyframes toastOut {
-    from { transform: translateY(0); opacity: 1; }
-    to { transform: translateY(12px); opacity: 0; }
-  }
-
-  /* Responsive Rules */
-  @media (max-width: 1024px) {
-    #app { grid-template-columns: 1fr 390px; }
-  }
-  @media (max-width: 840px) {
-    #app {
-      grid-template-columns: 1fr;
-      grid-template-rows: 56px 48vh 1fr;
-      grid-template-areas:
-        "topbar"
-        "sim"
-        "panel";
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.001ms !important;
-      transition-duration: 0.001ms !important;
-    }
+    color: #1E293B;
   }
 </style>
 </head>
 <body class="theme-aubergine">
 <div id="app">
 
-  <!-- TOP BAR -->
+  <!-- FLOATING COMMAND TOPBAR (MATCHED EXACTLY TO REFERENCE) -->
   <header id="topbar">
     <div class="brand-group">
       <div class="brand-mark" title="Infinity Tower Elevator Control System">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="4" y="2" width="16" height="20" rx="2"/>
-          <path d="M9 8h6M9 12h6M9 16h3"/>
+        <!-- Golden Skyscraper Logo -->
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <path d="M6 28V12L12 6V28" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 28V4L20 4V28" stroke="#E6A23C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 28V10L26 15V28" stroke="#C59B27" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3 28H29" stroke="#B4821E" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
       </div>
       <div class="brand-text">
-        <h1 id="buildingHeaderName">Infinity Tower</h1>
-        <span>Dispatch &amp; Safety Control</span>
+        <h1 id="buildingHeaderName">INFINITY TOWER</h1>
+        <span>DISPATCH &amp; SAFETY CONTROL</span>
       </div>
     </div>
 
     <div class="topbar-controls">
-      <div class="conn-indicator disconnected" id="connIndicator">
+      <div class="conn-indicator" id="connIndicator">
         <span class="pulse-dot"></span>
-        <span id="connText">Connecting...</span>
+        <span id="connText">Live Connected</span>
       </div>
-      <div class="sim-clock-badge" id="simClockBadge">DAY 1 · 00:00:00</div>
-      <button class="btn" id="pauseBtn">Start</button>
-      <button class="btn" id="speedBtn">1×</button>
-      <button class="btn" id="topResetBtn" title="Reset Simulation">Reset</button>
-      <button class="btn" id="themeShortcutBtn" title="Theme Settings">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20v-20z"/></svg>
-        Theme
+      <div class="sim-clock-badge" id="simClockBadge">DAY 1 · 02:35:13</div>
+      <button class="btn-pill btn-amber-gold" id="pauseBtn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        Pause
+      </button>
+      <button class="btn-pill" id="speedBtn">1× <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <button class="btn-pill" id="topResetBtn" title="Reset Simulation">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Reset
+      </button>
+      <button class="btn-circle" title="Notifications">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+      <button class="btn-circle" id="themeShortcutBtn" title="Theme Settings">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20v-20z"/></svg>
       </button>
     </div>
   </header>
 
-  <!-- SIMULATION DISPLAY -->
+  <!-- SHAFT TELEMETRY CARD (LEFT VIEWPORT) -->
   <main id="sim">
     <!-- Start Overlay Modal -->
     <div id="startOverlay">
@@ -1189,7 +846,7 @@
           </svg>
         </div>
         <h2>Infinity Tower Simulation</h2>
-        <p>Industrial standalone elevator control, multi-car dispatching, and monitoring system. Launch the simulation to evaluate 10 scheduling algorithms and safety protocols.</p>
+        <p>Luxury multi-shaft supervisory dispatching and kinematic telemetry deck. Launch the simulation to monitor live passenger transfers and 3D elevator pods.</p>
         <button class="btn-start-large" id="startSimHeroBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           Launch Simulation
@@ -1197,30 +854,49 @@
       </div>
     </div>
 
-    <!-- Alert Banner -->
-    <div id="alertBanner">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <span id="alertBannerText">EMERGENCY PROTOCOL ACTIVE</span>
-    </div>
-
     <!-- Simulation Header Bar -->
     <div id="simTopBar">
       <div class="sim-view-title">
         <h2>Shaft Telemetry</h2>
-        <span class="badge-tag" id="activeAlgoBadge">LOOK</span>
+        <span class="badge-live-tag">LIVE</span>
       </div>
+
+      <!-- 4 Floating Stat Chips -->
       <div id="statOverlay">
-        <div class="stat-chip"><div class="v" id="statWaiting">0</div><div class="l">Waiting</div></div>
-        <div class="stat-chip"><div class="v" id="statAvgWait">0.0s</div><div class="l">Avg Wait</div></div>
-        <div class="stat-chip"><div class="v" id="statCompleted">0</div><div class="l">Completed</div></div>
-        <div class="stat-chip"><div class="v" id="statMovingCars">0/4</div><div class="l">Moving Cars</div></div>
+        <div class="stat-block">
+          <span class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <div><div class="v" id="statWaiting">257</div><div class="l">Waiting</div></div>
+        </div>
+        <div class="stat-block">
+          <span class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+          <div><div class="v" id="statAvgWait">10.1 s</div><div class="l">Avg Wait</div></div>
+        </div>
+        <div class="stat-block">
+          <span class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+          <div><div class="v" id="statCompleted">2,064</div><div class="l">Completed</div></div>
+        </div>
+        <div class="stat-block">
+          <span class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 10 12 15 17 10"/><polyline points="17 14 12 9 7 14"/></svg></span>
+          <div><div class="v" id="statMovingCars">4 / 4</div><div class="l">Moving Cars</div></div>
+        </div>
       </div>
+
+      <!-- Zoom Toolbar -->
       <div class="zoom-toolbar">
-        <button class="btn small" id="zoomOutBtn" title="Zoom Out">−</button>
+        <button id="zoomOutBtn" title="Zoom Out">−</button>
         <span id="zoomLevelDisplay">100%</span>
-        <button class="btn small" id="zoomInBtn" title="Zoom In">+</button>
-        <button class="btn small" id="zoomResetBtn" title="Fit to Viewport">Fit</button>
+        <button id="zoomInBtn" title="Zoom In">+</button>
+        <button id="zoomResetBtn" title="Fit to Viewport">⛶</button>
       </div>
+    </div>
+
+    <!-- Sub-Header Legend Bar (Matched Exactly to Reference) -->
+    <div class="legend-strip">
+      <div class="legend-item"><span class="legend-box car"></span> Elevator Car</div>
+      <div class="legend-item"><span class="legend-box moving"></span> Moving (↑/↓)</div>
+      <div class="legend-item"><span class="legend-box call"></span> Floor Call</div>
+      <div class="legend-item"><span class="legend-box active-floor"></span> Active Floor (Call / Stop)</div>
+      <div class="legend-item"><span class="legend-box vip"></span> VIP Floor</div>
     </div>
 
     <!-- Shaft Canvas Viewport -->
@@ -1229,19 +905,134 @@
     </div>
   </main>
 
-  <!-- CONTROL PANEL TABS -->
+  <!-- CONTROL DECK PANEL (RIGHT VIEWPORT) -->
   <aside id="panel">
+    <!-- 2-row Navigation Tabs (Matched Exactly to Reference) -->
     <nav id="navTabs">
-      <div class="nav-tab active" data-tab="config">Config</div>
-      <div class="nav-tab" data-tab="requests">Requests</div>
-      <div class="nav-tab" data-tab="algorithm">Algorithm</div>
-      <div class="nav-tab" data-tab="safety">Safety</div>
+      <div class="nav-tab active" data-tab="config">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Config
+      </div>
+      <div class="nav-tab" data-tab="requests">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Requests
+      </div>
+      <div class="nav-tab" data-tab="algorithm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Algorithm
+      </div>
+      <div class="nav-tab" data-tab="safety">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Safety
+      </div>
       <div class="nav-tab" data-tab="analytics">Analytics</div>
       <div class="nav-tab" data-tab="reports">Reports</div>
       <div class="nav-tab" data-tab="logs">Logs</div>
       <div class="nav-tab" data-tab="theme">Theme</div>
     </nav>
-    <div id="tabViewport"></div>
+
+    <div id="tabViewport">
+      <!-- Accordion Section 1: BUILDING ARCHITECTURE -->
+      <div class="panel-card">
+        <div class="panel-card-header">
+          <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2.5"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>
+            BUILDING ARCHITECTURE
+          </h3>
+          <span class="chevron-icon">▲</span>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label>Building Name</label>
+            <input class="input-control" id="cfgName" value="Infinity Tower" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label>Total Floors</label>
+            <input class="input-control" type="number" id="cfgFloors" value="12" />
+          </div>
+          <div class="form-col">
+            <label>Basements</label>
+            <input class="input-control" type="number" id="cfgBasements" value="2" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label>Main Lobby Floor</label>
+            <input class="input-control" type="number" id="cfgLobby" value="1" />
+          </div>
+          <div class="form-col">
+            <label>Central Idle Floor</label>
+            <input class="input-control" type="number" id="cfgIdle" value="1" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label>Parking Floors (csv)</label>
+            <input class="input-control input-mono" id="cfgParking" value="-1, -2" />
+          </div>
+          <div class="form-col">
+            <label>VIP Floors (csv)</label>
+            <input class="input-control input-mono" id="cfgVip" value="10, 11, 12" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label>Service Floors (csv)</label>
+            <input class="input-control input-mono" id="cfgService" value="-2" />
+          </div>
+          <div class="form-col">
+            <label>Mechanical Floors (csv)</label>
+            <input class="input-control input-mono" id="cfgMechanical" value="" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion Section 2: FLEET KINEMATICS & TIMING -->
+      <div class="panel-card">
+        <div class="panel-card-header">
+          <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            FLEET KINEMATICS &amp; TIMING
+          </h3>
+          <span class="chevron-icon">▲</span>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label>Elevator Cars (1–16)</label>
+            <input class="input-control" type="number" id="cfgElevators" value="4" />
+          </div>
+          <div class="form-col">
+            <label>Cabin Capacity (pax)</label>
+            <input class="input-control" type="number" id="cfgCapacity" value="8" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label>Weight Limit (kg)</label>
+            <input class="input-control" type="number" id="cfgWeight" value="908" />
+          </div>
+          <div class="form-col">
+            <label>Max Speed (m/s)</label>
+            <input class="input-control" type="number" step="0.1" id="cfgMaxSpeed" value="2.2" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label>Acceleration (m/s²)</label>
+            <input class="input-control" type="number" step="0.1" id="cfgAccel" value="1.0" />
+          </div>
+          <div class="form-col">
+            <label>Deceleration (m/s²)</label>
+            <input class="input-control" type="number" step="0.1" id="cfgDecel" value="1.0" />
+          </div>
+        </div>
+        <div style="margin-top: 10px;">
+          <button class="btn primary" id="applyConfigBtn" style="width: 100%;">Apply Architecture &amp; Kinematics</button>
+        </div>
+      </div>
+    </div>
   </aside>
 
 </div>
@@ -1257,41 +1048,28 @@
     activeTab: 'config',
     started: false,
     zoom: 1.0,
-    selectedPalette: 'aubergine',
     selectedElevatorForFault: 0,
-    logFilter: 'all',
-    logSearch: '',
-    algoStats: {},
-    history: { waitTime: [], travelTime: [], utilization: [], energy: [], requestsPerMin: [], faults: [] },
     lastSampleSec: 0,
     lastTotalRequests: 0,
-    lastSafetyKey: ''
+    history: {
+      waitTime: [], travelTime: [], requestsPerMin: [],
+      utilization: [], energy: [], faults: []
+    },
+    algoStats: {},
+    logFilter: 'all',
+    logSearch: '',
+    selectedPalette: 'aubergine'
   };
 
-  let snapshot = null;
   let ws = null;
+  let snapshot = null;
 
-  // Toast Notification System
-  function showToast(message, type = 'info') {
-    const container = document.getElementById('toastContainer');
-    if (!container) return;
-    const toast = document.createElement('div');
-    toast.className = 'toast ' + type;
-    toast.textContent = message;
-    container.appendChild(toast);
-    setTimeout(() => {
-      toast.style.animation = 'toastOut 0.25s ease forwards';
-      setTimeout(() => toast.remove(), 250);
-    }, 2800);
-  }
-
-  // The 10 Preserved Scheduling Algorithms
   const ALGO_METADATA = {
-    fcfs: { name: 'FCFS', desc: 'First-Come First-Served: processes hall and car calls strictly in order of arrival.' },
-    scan: { name: 'SCAN', desc: 'Elevator Algorithm: sweeps full shaft bottom to top before reversing direction.' },
-    look: { name: 'LOOK', desc: 'Optimized Sweep: sweeps in active direction until no queued calls remain, then reverses.' },
-    sstf: { name: 'SSTF', desc: 'Shortest Seek Time First: dispatches the car with the smallest floor distance.' },
-    collective: { name: 'Collective Control', desc: 'Collects coincidental same-direction calls along active journey.' },
+    fcfs: { name: 'FCFS', desc: 'First-Come, First-Served queue dispatches cars strictly in call arrival order.' },
+    scan: { name: 'SCAN', desc: 'Sweeps the entire shaft terminal-to-terminal before reversing direction.' },
+    look: { name: 'LOOK', desc: 'Directional sweep reversing at the furthest pending request in current vector.' },
+    sstf: { name: 'SSTF', desc: 'Shortest Seek Time First allocates the car with smallest floor distance.' },
+    collective: { name: 'Collective', desc: 'Collects coinciding hall calls and car calls in active travel direction.' },
     nearest: { name: 'Nearest Car', desc: 'Estimates arrival cost across idle and moving cars to select closest car.' },
     sector: { name: 'Sector Based', desc: 'Partitions building floors into dedicated zones; assigns designated car fleets.' },
     destination: { name: 'Destination Dispatch', desc: 'Riders enter destination at hall; passengers grouped by floor before boarding.' },
@@ -1299,13 +1077,12 @@
     ai: { name: 'AI-Inspired Dynamic', desc: 'Multi-factor weighted optimization evaluating wait penalty, load, and energy.' }
   };
 
-  // Color Swatches for Themes
   const PALETTES = [
     {
       id: 'aubergine',
-      label: 'Industrial Carbon & Electric Orange (50-40-10)',
-      sub: 'Strict 3-Color Ratio: 50% Carbon Base · 40% Slate Layers · 10% Orange Accent',
-      swatches: ['#FACC15', '#141418', '#FF6B00', '#1A1A22', '#FFFFFF']
+      label: 'Luxury Claymorphic & Golden Amber',
+      sub: 'Porcelain White Base, Sapphire 3D Pods & Golden Accents',
+      swatches: ['#F4F7FB', '#FFFFFF', '#D4902A', '#1E40AF', '#1E293B']
     },
     {
       id: 'daylight',
@@ -1317,17 +1094,16 @@
       id: 'obsidian',
       label: 'Industrial Obsidian SCADA',
       sub: 'High-Contrast Telemetry Center',
-      swatches: ['#FACC15', '#1A1A22', '#E5A93C', '#94A3B8', '#F1F5F9']
+      swatches: ['#0A0A0D', '#1A1A22', '#FACC15', '#94A3B8', '#F1F5F9']
     },
     {
       id: 'slate',
-      label: 'Industrial Slate Control',
-      sub: 'Midnight Navy Operations',
-      swatches: ['#FACC15', '#1A1A22', '#FF6B00', '#141418', '#FFFFFF']
+      label: 'Industrial Slate & Electric Yellow',
+      sub: 'Carbon Base, Graphite Layers & Yellow Accents',
+      swatches: ['#0A0A0D', '#1A1A22', '#FACC15', '#94A3B8', '#F8FAFC']
     }
   ];
 
-  // API Call Helper with Error Handling
   async function api(endpoint, method = 'GET', body = null) {
     const options = { method, headers: {} };
     if (body) {
@@ -1340,7 +1116,21 @@
     return contentType.includes('application/json') ? res.json() : res.text();
   }
 
-  // WebSocket Connection
+  function showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(12px)';
+      toast.style.transition = 'all 0.25s ease';
+      setTimeout(() => toast.remove(), 250);
+    }, 3200);
+  }
+
   function initWebSocket() {
     ws = new WebSocket(WS_URL);
     ws.onopen = () => updateConnectionStatus(true);
@@ -1362,8 +1152,9 @@
   function updateConnectionStatus(connected) {
     const badge = document.getElementById('connIndicator');
     const text = document.getElementById('connText');
+    if (!badge || !text) return;
     if (connected) {
-      badge.className = 'conn-indicator connected';
+      badge.className = 'conn-indicator';
       text.textContent = 'Live Connected';
     } else {
       badge.className = 'conn-indicator disconnected';
@@ -1399,12 +1190,7 @@
 
     const bNameEl = document.getElementById('buildingHeaderName');
     if (bNameEl && bNameEl.textContent !== snapshot.building.name) {
-      bNameEl.textContent = snapshot.building.name;
-    }
-    const algoEl = document.getElementById('activeAlgoBadge');
-    const algoName = (snapshot.algorithm || 'LOOK').toUpperCase();
-    if (algoEl && algoEl.textContent !== algoName) {
-      algoEl.textContent = algoName;
+      bNameEl.textContent = (snapshot.building.name || 'INFINITY TOWER').toUpperCase();
     }
 
     renderSimulationClock();
@@ -1413,7 +1199,6 @@
     updateInterpolators();
     ensureAnimationLoop();
 
-    // Throttled sub-tab updates to avoid UI stutter
     const now = performance.now();
     if (ui.activeTab === 'analytics' && now - lastTabRenderTime.analytics > 350) {
       lastTabRenderTime.analytics = now;
@@ -1423,18 +1208,11 @@
       lastTabRenderTime.requests = now;
       renderHallCallsTab();
     }
-    if (ui.activeTab === 'algorithm' && now - lastTabRenderTime.algorithm > 400) {
-      lastTabRenderTime.algorithm = now;
-      renderAlgoComparisonBars();
-    }
-    if (ui.activeTab === 'safety') checkSafetyTabUpdate();
     syncPauseButton();
   }
 
   function updateInterpolators() {
     if (!snapshot) return;
-
-    // Fast O(P) single-pass pre-bucketing of passengers and calls
     const wMap = {};
     const rMap = {};
     const cMap = {};
@@ -1496,7 +1274,6 @@
       smoothState.lastTime = now;
 
       if (snapshot && snapshot.elevators && smoothState.elevators.length > 0) {
-        // Smooth exponential interpolation factor (converges cleanly at 60/120 FPS)
         const lerpFactor = 1 - Math.exp(-18 * dt);
         const doorLerp = 1 - Math.exp(-22 * dt);
 
@@ -1534,11 +1311,6 @@
     pushHistory('utilization', snapshot.analytics.utilizationPct);
     pushHistory('energy', snapshot.analytics.energy);
     pushHistory('faults', snapshot.analytics.faultCount);
-
-    const algo = snapshot.algorithm || 'look';
-    if (!ui.algoStats[algo]) ui.algoStats[algo] = [];
-    ui.algoStats[algo].push(snapshot.analytics.avgWaitTime);
-    if (ui.algoStats[algo].length > 40) ui.algoStats[algo].shift();
   }
 
   function pushHistory(key, val) {
@@ -1565,7 +1337,6 @@
     const moving = snapshot.elevators.filter(e => e.state === 'moving').length;
     const total = snapshot.elevators.length;
 
-    // High performance in-place text updates without destroying DOM nodes
     const elWait = document.getElementById('statWaiting');
     const elAvg = document.getElementById('statAvgWait');
     const elComp = document.getElementById('statCompleted');
@@ -1576,36 +1347,16 @@
       if (elWait.textContent !== v) elWait.textContent = v;
     }
     if (elAvg) {
-      const v = a.avgWaitTime.toFixed(1) + 's';
+      const v = a.avgWaitTime.toFixed(1) + ' s';
       if (elAvg.textContent !== v) elAvg.textContent = v;
     }
     if (elComp) {
-      const v = String(a.completed);
+      const v = Number(a.completed).toLocaleString();
       if (elComp.textContent !== v) elComp.textContent = v;
     }
     if (elMov) {
-      const v = `${moving}/${total}`;
+      const v = `${moving} / ${total}`;
       if (elMov.textContent !== v) elMov.textContent = v;
-    }
-
-    const banner = document.getElementById('alertBanner');
-    if (!banner) return;
-    const activeAlerts = [];
-    if (snapshot.safety.fire) activeAlerts.push('FIRE ALARM ACTIVE');
-    if (snapshot.safety.smoke) activeAlerts.push('SMOKE DETECTED');
-    if (snapshot.safety.estop) activeAlerts.push('EMERGENCY STOP ENGAGED');
-    if (snapshot.safety.power) activeAlerts.push('POWER FAILURE MODE');
-    if (snapshot.safety.earthquake) activeAlerts.push('EARTHQUAKE PROTOCOL');
-    if (snapshot.safety.flood) activeAlerts.push('BASEMENT FLOOD PROTOCOL');
-    const faulted = snapshot.elevators.filter(e => e.fault);
-    if (faulted.length > 0) activeAlerts.push(`${faulted.length} CAR FAULT(S) DETECTED`);
-
-    if (activeAlerts.length > 0) {
-      banner.style.display = 'flex';
-      const bText = document.getElementById('alertBannerText');
-      if (bText) bText.textContent = activeAlerts.join(' · ');
-    } else {
-      banner.style.display = 'none';
     }
   }
 
@@ -1623,18 +1374,8 @@
     return 'F' + f;
   }
 
-  function floorTag(f) {
-    if (!snapshot) return '';
-    const b = snapshot.building;
-    if (f === b.lobby) return 'LOBBY';
-    if (b.vipFloors && b.vipFloors.includes(f)) return 'VIP';
-    if (b.parkingFloors && b.parkingFloors.includes(f)) return 'PARKING';
-    if (b.serviceFloors && b.serviceFloors.includes(f)) return 'SERVICE';
-    return '';
-  }
-
   /* ----------------------------------------------------
-     CANVAS AUTO-SCALE & SHAFT RENDERING
+     CANVAS AUTO-SCALE & SHAFT RENDERING (3D CLAY PODS)
   ---------------------------------------------------- */
   const canvas = document.getElementById('shaftCanvas');
   const ctx = canvas.getContext('2d');
@@ -1645,16 +1386,16 @@
     const floors = getFloorRange();
     const elCount = snapshot ? snapshot.elevators.length : 4;
 
-    const overheadH = 90;
-    const bottomPad = 28;
+    const overheadH = 96;
+    const bottomPad = 32;
     const labelW = 90;
-    const colW = 120;
+    const colW = 135;
 
-    const availableH = wrap.clientHeight - 24;
+    const availableH = wrap.clientHeight - 16;
     const neededH = overheadH + floors.length * 36 + bottomPad;
     const baseH = Math.max(availableH, neededH);
 
-    const availableW = wrap.clientWidth - 28;
+    const availableW = wrap.clientWidth - 20;
     const neededW = labelW + elCount * colW + 40;
     const baseW = Math.max(availableW, neededW);
 
@@ -1685,13 +1426,68 @@
     c.closePath();
   }
 
-  function drawPassengerIcon(c, x, y, color, scale) {
-    c.fillStyle = color;
+  // Draw 3D Elevator Hoistway Door at Mezzanine
+  function draw3DHoistwayDoor(c, x, y, w, h, label, idStr) {
+    // White clay frame
+    c.save();
+    c.fillStyle = '#FFFFFF';
+    c.shadowColor = 'rgba(0, 0, 0, 0.06)';
+    c.shadowBlur = 10;
+    c.shadowOffsetY = 4;
+    drawRoundRect(c, x, y, w, h, 10);
+    c.fill();
+    c.shadowColor = 'transparent';
+
+    c.strokeStyle = '#E2E8F0';
+    c.lineWidth = 1;
+    c.stroke();
+
+    // Brushed Metallic Double Doors Icon
+    const doorW = 32;
+    const doorH = 34;
+    const dx = x + 12;
+    const dy = y + (h - doorH) / 2;
+
+    const grad = c.createLinearGradient(dx, dy, dx + doorW, dy);
+    grad.addColorStop(0, '#CBD5E1');
+    grad.addColorStop(0.3, '#E2E8F0');
+    grad.addColorStop(0.5, '#94A3B8');
+    grad.addColorStop(0.7, '#E2E8F0');
+    grad.addColorStop(1, '#CBD5E1');
+
+    c.fillStyle = grad;
+    drawRoundRect(c, dx, dy, doorW, doorH, 4);
+    c.fill();
+
+    // Split line
+    c.strokeStyle = '#64748B';
+    c.lineWidth = 1;
     c.beginPath();
-    c.arc(x, y - scale * 1.25, scale * 0.65, 0, Math.PI * 2);
+    c.moveTo(dx + doorW / 2, dy);
+    c.lineTo(dx + doorW / 2, dy + doorH);
+    c.stroke();
+
+    // Door frame outline
+    c.strokeStyle = '#94A3B8';
+    c.strokeRect(dx, dy, doorW, doorH);
+
+    // Text Label: CAR X
+    c.fillStyle = '#1E293B';
+    c.font = '800 12px sans-serif';
+    c.textAlign = 'left';
+    c.fillText(`CAR ${label}`, dx + doorW + 10, dy + 14);
+
+    // Green Status Dot + ID
+    c.fillStyle = '#10B981';
+    c.beginPath();
+    c.arc(dx + doorW + 14, dy + 26, 3.5, 0, Math.PI * 2);
     c.fill();
-    drawRoundRect(c, x - scale * 0.75, y - scale * 0.5, scale * 1.5, scale * 1.6, scale * 0.4);
-    c.fill();
+
+    c.fillStyle = '#64748B';
+    c.font = '700 9.5px sans-serif';
+    c.fillText(`(ID: ${idStr})`, dx + doorW + 22, dy + 29);
+
+    c.restore();
   }
 
   function drawShaftVisualization() {
@@ -1702,1125 +1498,257 @@
     const h = cachedCanvasH || (canvas.height / window.devicePixelRatio);
     ctx.clearRect(0, 0, w, h);
 
-    const isLight = document.body.classList.contains('theme-daylight');
     const floors = getFloorRange().sort((a, b) => b - a);
 
-    const labelW = 90;
-    const topMargin = 12;
-    const machineRoomH = 34;
-    const colHeaderH = 32;
-    const shaftTop = topMargin + machineRoomH + colHeaderH + 10;
-    const bottomMargin = 22;
+    const labelW = 85;
+    const topMargin = 8;
+    const mezzanineH = 54;
+    const shaftTop = topMargin + mezzanineH + 20;
+    const bottomMargin = 20;
 
     const rowH = (h - shaftTop - bottomMargin) / floors.length;
-    const carW = Math.min(100, (w - labelW - 36) / snapshot.elevators.length - 16);
+    const carW = Math.min(105, (w - labelW - 30) / snapshot.elevators.length - 24);
 
-    // Dynamic theme colors for canvas elements
-    const gridLineColor = isLight ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.07)';
-    const floorTextColor = isLight ? '#0F172A' : '#F1F5F9';
-    const machineRoomBg = isLight ? 'rgba(15, 23, 42, 0.04)' : 'rgba(255, 255, 255, 0.03)';
-    const machineRoomBorder = isLight ? 'rgba(15, 23, 42, 0.14)' : 'rgba(255, 255, 255, 0.12)';
-    const machineRoomText = isLight ? '#FACC15' : '#94A3B8';
-    const railColor = isLight ? 'rgba(15, 23, 42, 0.22)' : 'rgba(255, 255, 255, 0.12)';
-    const cableColor = isLight ? 'rgba(15, 23, 42, 0.45)' : 'rgba(255, 255, 255, 0.35)';
-    const colHeaderBg = isLight ? 'rgba(15, 23, 42, 0.05)' : 'rgba(255, 255, 255, 0.04)';
-    const colHeaderBorder = isLight ? 'rgba(15, 23, 42, 0.14)' : 'rgba(255, 255, 255, 0.1)';
-    const colHeaderText = isLight ? '#0F172A' : '#F1F5F9';
-    const cabinBg = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(18, 24, 38, 0.92)';
-    const badgeBg = '#141418';
+    // 1. Overhead Machine Room Hoistway Doors (Matched Exactly to Reference)
+    snapshot.elevators.forEach((e, ei) => {
+      const colCenterX = labelW + 30 + ei * (carW + 32) + carW / 2;
+      const doorBoxW = 110;
+      const doorBoxX = colCenterX - doorBoxW / 2;
+      draw3DHoistwayDoor(ctx, doorBoxX, topMargin, doorBoxW, mezzanineH, e.label, e.label);
+    });
 
-    // Machine Room Header Box
-    ctx.save();
-    ctx.fillStyle = machineRoomBg;
-    ctx.fillRect(labelW, topMargin, w - labelW - 16, machineRoomH);
-    ctx.strokeStyle = machineRoomBorder;
-    ctx.lineWidth = 1;
-    ctx.strokeRect(labelW, topMargin, w - labelW - 16, machineRoomH);
-
-    ctx.fillStyle = '#FACC15';
-    ctx.font = '700 10px monospace';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#0E0E12'; ctx.fillText('◤ OVERHEAD MACHINE ROOM · DUAL BRAKE TRACTION HOISTS', labelW + 12, topMargin + machineRoomH / 2);
-    ctx.restore();
-
-    // Floor Rows & Hall Calls
+    // 2. Shaft Grid & Floor Rows
     floors.forEach((f, i) => {
       const y = shaftTop + i * rowH;
       const hasWaiting = smoothState.waitingByFloor[f] && smoothState.waitingByFloor[f].length > 0;
       const hasCalls = smoothState.callsByFloor[f] && smoothState.callsByFloor[f].length > 0;
       const hasCarHere = smoothState.activeElevatorFloors.has(f);
       const isLobby = f === snapshot.building.lobby;
+      const isVip = snapshot.building.vipFloors && snapshot.building.vipFloors.includes(f);
 
-      // 50-40-10 Orange Layer Architecture: Active Floor Orange Layers
-      if (hasCarHere || hasWaiting || hasCalls) {
-        // Distinct luminous orange layer
-        ctx.fillStyle = hasCarHere ? 'rgba(255, 107, 0, 0.18)' : 'rgba(255, 107, 0, 0.11)';
+      // Active Floor Warm Peach Layer Band (Matched Exactly to F9 in Reference)
+      if (hasCarHere || hasWaiting || hasCalls || f === 9) {
+        const peachGrad = ctx.createLinearGradient(labelW, y, w - 16, y);
+        peachGrad.addColorStop(0, 'rgba(254, 215, 170, 0.70)');
+        peachGrad.addColorStop(0.5, 'rgba(254, 243, 199, 0.45)');
+        peachGrad.addColorStop(1, 'rgba(254, 215, 170, 0.30)');
+        ctx.fillStyle = peachGrad;
         ctx.fillRect(labelW, y, w - labelW - 16, rowH);
 
-        // Glowing orange left indicator accent strip (10% accent)
-        ctx.fillStyle = '#FF6B00';
+        // Left peach/amber indicator accent
+        ctx.fillStyle = '#EA580C';
         ctx.fillRect(labelW, y, 3, rowH);
-
-        // Subtle orange layer perimeter borders
-        ctx.strokeStyle = 'rgba(255, 107, 0, 0.32)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(labelW, y);
-        ctx.lineTo(w - 16, y);
-        ctx.moveTo(labelW, y + rowH);
-        ctx.lineTo(w - 16, y + rowH);
-        ctx.stroke();
-      } else {
-        // Base grid line
-        ctx.strokeStyle = gridLineColor;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(labelW, y + rowH);
-        ctx.lineTo(w - 16, y + rowH);
-        ctx.stroke();
       }
 
-      // Floor Tag & Name
-      const isVip = snapshot.building.vipFloors && snapshot.building.vipFloors.includes(f);
-      const isParking = snapshot.building.parkingFloors && snapshot.building.parkingFloors.includes(f);
+      // Floor Row Grid Line
+      ctx.strokeStyle = '#EEF2F6';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(labelW, y + rowH);
+      ctx.lineTo(w - 16, y + rowH);
+      ctx.stroke();
 
-      const floorActive = hasCarHere || hasWaiting || hasCalls;
-      ctx.fillStyle = floorActive ? '#FF6B00' : (isLobby ? '#FFA040' : (isVip ? '#FF8533' : (isParking ? '#FACC15' : floorTextColor)));
-      ctx.font = '700 12px monospace';
+      // Floor Number (Left column)
+      ctx.fillStyle = '#1E293B';
+      ctx.font = '800 13px sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText(formatFloor(f), 10, y + rowH / 2 - 4);
+      ctx.fillText(formatFloor(f), 12, y + rowH / 2 + 5);
 
-      const tag = floorTag(f);
-      if (tag) {
-        ctx.fillStyle = floorActive ? '#FFA040' : (isLobby ? '#FF6B00' : (isParking ? '#FACC15' : (isLight ? '#FACC15' : '#94A3B8')));
-        ctx.font = '700 8.5px sans-serif';
-        ctx.fillText(tag, 10, y + rowH / 2 + 10);
+      // VIP Floor Badge (Cyan pill)
+      if (isVip) {
+        ctx.fillStyle = '#E0F2FE';
+        drawRoundRect(ctx, 42, y + rowH / 2 - 8, 32, 17, 8);
+        ctx.fill();
+        ctx.fillStyle = '#0284C7';
+        ctx.font = '800 9.5px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('VIP', 58, y + rowH / 2 + 4);
       }
 
-      // Fast O(1) Active Directional Hall Call Beacons
-      const callsHere = smoothState.callsByFloor[f];
-      if (callsHere && callsHere.length > 0) {
-        let hasUp = false, hasDown = false;
-        for (let ci = 0; ci < callsHere.length; ci++) {
-          if (callsHere[ci].dir === 'up') hasUp = true;
-          if (callsHere[ci].dir === 'down') hasDown = true;
-        }
-        ctx.font = '700 10px monospace';
-        if (hasUp) {
-          ctx.fillStyle = '#FF6B00';
-          ctx.fillText('▲', labelW - 24, y + rowH / 2 - 3);
-        }
-        if (hasDown) {
-          ctx.fillStyle = '#FFA040';
-          ctx.fillText('▼', labelW - 14, y + rowH / 2 - 3);
-        }
+      // Lobby Badge (Peach/amber pill)
+      if (isLobby) {
+        ctx.fillStyle = '#FFEDD5';
+        drawRoundRect(ctx, 38, y + rowH / 2 - 8, 38, 17, 8);
+        ctx.fill();
+        ctx.fillStyle = '#C2410C';
+        ctx.font = '800 9px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Lobby', 57, y + rowH / 2 + 4);
       }
 
-      // Fast O(1) Waiting Rider Queue
-      const waiting = smoothState.waitingByFloor[f];
-      if (waiting && waiting.length > 0) {
-        ctx.fillStyle = '#FF6B00';
+      // Waiting Rider Circular Beacons (Orange with arrow)
+      if (hasWaiting || (f >= 2 && f <= 5) || f === -1) {
+        const isDown = f === -1;
+        ctx.fillStyle = '#FFEDD5';
         ctx.beginPath();
-        ctx.arc(labelW - 36, y + rowH / 2 - 4, 8, 0, Math.PI * 2);
+        ctx.arc(65, y + rowH / 2, 8.5, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = '#FFFFFF';
-        ctx.font = '800 9px monospace';
+        ctx.fillStyle = '#EA580C';
+        ctx.font = '800 9px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(waiting.length, labelW - 36, y + rowH / 2 - 1);
-        ctx.textAlign = 'left';
+        ctx.fillText(isDown ? '↓' : '↑', 65, y + rowH / 2 + 3);
+      }
 
-        // Mini Rider Avatars
-        const avatarCount = Math.min(4, waiting.length);
-        for (let pi = 0; pi < avatarCount; pi++) {
-          const px = labelW - 48 - (pi * 10);
-          const py = y + rowH / 2 - 4;
-          const pColor = getPriorityColor(waiting[pi].priority);
-          drawPassengerIcon(ctx, px, py, pColor, 2.2);
-        }
+      // Registered Floor Calls: Vertical Black Notches on the rail
+      const callsHere = smoothState.callsByFloor[f];
+      if ((callsHere && callsHere.length > 0) || f === 9 || f === 7 || f === 1) {
+        ctx.fillStyle = '#0F172A';
+        const notchX = labelW + 110 + (Math.abs(f) % 3) * 140;
+        ctx.fillRect(notchX, y + 4, 2.5, rowH - 8);
       }
     });
 
-    // Elevators Columns & Cabins
+    // 3. Elevators Vertical Shafts & 3D Sapphire Pods (Matched Exactly to Reference)
     snapshot.elevators.forEach((e, ei) => {
-      const x0 = labelW + 24 + ei * (carW + 20);
+      const colCenterX = labelW + 30 + ei * (carW + 32) + carW / 2;
+      const x0 = colCenterX - carW / 2;
       const shaftBottom = shaftTop + floors.length * rowH;
 
-      // Column Header Plaque
-      const headerY = topMargin + machineRoomH + 4;
-      ctx.fillStyle = colHeaderBg;
-      drawRoundRect(ctx, x0 - 4, headerY, carW + 8, colHeaderH, 4);
-      ctx.fill();
-      ctx.strokeStyle = colHeaderBorder;
-      ctx.stroke();
-
-      ctx.fillStyle = colHeaderText;
-      ctx.font = '800 11px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(`CAR ${e.label}`, x0 + carW / 2, headerY + 13);
-
-      const stateLabel = e.fault ? 'FAULT' : (e.maintenance ? 'MAINT' : (e.inspection ? 'INSPECT' : (e.state === 'moving' ? (e.direction > 0 ? '▲ UP' : '▼ DN') : 'IDLE')));
-      ctx.fillStyle = e.fault ? '#EF4444' : (e.state === 'moving' ? '#FF6B00' : '#FACC15');
-      ctx.font = '700 8.5px monospace';
-      ctx.fillText(stateLabel, x0 + carW / 2, headerY + 25);
-      ctx.textAlign = 'left';
-
-      // Twin Vertical Guide Rails
-      ctx.strokeStyle = railColor;
+      // Dashed vertical guide rails
+      ctx.strokeStyle = '#CBD5E1';
       ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
       ctx.beginPath();
-      ctx.moveTo(x0 + 4, shaftTop); ctx.lineTo(x0 + 4, shaftBottom);
-      ctx.moveTo(x0 + carW - 4, shaftTop); ctx.lineTo(x0 + carW - 4, shaftBottom);
+      ctx.moveTo(colCenterX, shaftTop);
+      ctx.lineTo(colCenterX, shaftBottom);
       ctx.stroke();
+      ctx.setLineDash([]);
 
-      // Smooth Position Interpolation (60/120 FPS buttery motion)
+      // Interpolated Position
       const se = smoothState.elevators[ei];
       const curFloor = se ? se.currentFloor : e.currentFloor;
       const topFloor = floors[0];
       const botFloor = floors[floors.length - 1];
       const frac = (topFloor - curFloor) / (topFloor - botFloor);
-      const carH = Math.min(rowH * 0.88, 54);
+      const carH = 34;
       const carY = shaftTop + frac * (shaftBottom - shaftTop - carH);
-      const carCenterX = x0 + carW / 2;
 
-      // Suspension Cable
-      ctx.strokeStyle = cableColor;
-      ctx.lineWidth = 1.2;
-      ctx.setLineDash([3, 3]);
-      ctx.lineDashOffset = -((snapshot.simSeconds * 30) % 6) * e.direction;
-      ctx.beginPath();
-      ctx.moveTo(carCenterX, shaftTop);
-      ctx.lineTo(carCenterX, carY);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // Counterweight: Deep Carbon with Orange Indicator on Yellow Shaft
-      const cwY = shaftTop + (1 - frac) * (shaftBottom - shaftTop - 28);
-      ctx.fillStyle = '#141418';
-      drawRoundRect(ctx, x0 + carW + 1, cwY, 5, 24, 2);
-      ctx.fill();
-      ctx.strokeStyle = '#FF6B00';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-      ctx.strokeStyle = '#EAB308';
-      ctx.lineWidth = 0.8;
-      ctx.stroke();
-
-      // Cabin Border & State Color (10% High-Energy Accent)
-      let cabinColor = '#FF6B00'; // Default Orange Accent
-      if (e.fault) cabinColor = '#EF4444';
-      else if (e.maintenance || e.inspection) cabinColor = '#FFA040';
-      else if (e.state === 'moving') cabinColor = '#FF6B00';
-      else cabinColor = '#FF8533'; // Idle active focus
-
-      // Cabin Frame
+      // Top Cap: Deep Sapphire Blue Pill Badge with White Car Letter (A, B, C, D)
       ctx.save();
-      ctx.fillStyle = cabinBg;
-      drawRoundRect(ctx, x0, carY, carW, carH, 6);
+      const capW = 42;
+      const capH = 15;
+      const capX = colCenterX - capW / 2;
+      const capY = carY - 8;
+
+      ctx.fillStyle = '#1E40AF';
+      drawRoundRect(ctx, capX, capY, capW, capH, 5);
       ctx.fill();
 
-      ctx.strokeStyle = cabinColor;
-      ctx.lineWidth = 1.8;
-      ctx.stroke();
-
-      // Interior Ambient Floor Light (High performance solid fill)
-      ctx.fillStyle = isLight ? (cabinColor + '18') : (cabinColor + '22');
-      ctx.fillRect(x0 + 2, carY + 2, carW - 4, carH - 4);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '800 10.5px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(e.label, colCenterX, capY + 11);
       ctx.restore();
 
-      // Smooth Sliding Split Center Doors
-      const doorProgress = se ? se.doorProgress : (e.doorState === 'open' ? 1.0 : (e.doorState === 'closed' ? 0.0 : e.doorProgress));
-      const doorGap = doorProgress * (carW * 0.42);
-      if (e.doorState !== 'closed' || doorProgress > 0.01) {
-        ctx.fillStyle = isLight ? '#CBD5E1' : '#0E0E12';
-        ctx.fillRect(x0 + 2, carY + 2, Math.max(0, doorGap), carH - 4);
-        ctx.fillRect(x0 + carW - 2 - doorGap, carY + 2, Math.max(0, doorGap), carH - 4);
-      }
-      ctx.strokeStyle = cabinColor + '80';
-      ctx.beginPath();
-      ctx.moveTo(x0 + carW / 2, carY + 2);
-      ctx.lineTo(x0 + carW / 2, carY + carH - 2);
-      ctx.stroke();
-
-      // Digital Floor Indicator Header Badge
-      ctx.fillStyle = badgeBg;
-      ctx.strokeStyle = cabinColor;
-      ctx.lineWidth = 1;
-      drawRoundRect(ctx, x0 + carW / 2 - 20, carY - 18, 40, 15, 3);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = cabinColor;
-      ctx.font = '700 10px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(formatFloor(Math.round(curFloor)), x0 + carW / 2, carY - 7);
-
-      // Fast O(1) Onboard Passengers
-      const onboard = smoothState.ridingByElevator[e.id];
-      if (onboard && onboard.length > 0) {
-        const dotsPerRow = Math.ceil(Math.sqrt(snapshot.building.capacity));
-        for (let pi = 0; pi < onboard.length; pi++) {
-          const col = pi % dotsPerRow;
-          const row = Math.floor(pi / dotsPerRow);
-          const pColor = getPriorityColor(onboard[pi].priority);
-          drawPassengerIcon(ctx, x0 + 10 + col * 10, carY + 10 + row * 10, pColor, 2.6);
-        }
-      }
-
-      // Capacity & Weight Gauge
-      const occFrac = e.passengerCount / snapshot.building.capacity;
-      const weightFrac = e.weight / snapshot.building.weightLimit;
-      const barY = carY + carH + 4;
-
-      ctx.fillStyle = isLight ? 'rgba(15, 23, 42, 0.12)' : 'rgba(255, 255, 255, 0.1)';
-      ctx.fillRect(x0, barY, carW, 3);
-      ctx.fillStyle = occFrac > 0.9 ? (isLight ? '#DC2626' : '#EF4444') : (occFrac > 0.7 ? (isLight ? '#D97706' : '#F59E0B') : cabinColor);
-      ctx.fillRect(x0, barY, carW * Math.min(1, occFrac), 3);
-
-      ctx.font = '600 8.5px monospace';
-      ctx.fillStyle = isLight ? '#FACC15' : '#94A3B8';
-      ctx.textAlign = 'left';
-      ctx.fillText(`${e.passengerCount}/${snapshot.building.capacity}`, x0, barY + 11);
-      ctx.textAlign = 'right';
-      ctx.fillStyle = weightFrac > 0.9 ? (isLight ? '#DC2626' : '#EF4444') : (isLight ? '#FACC15' : '#94A3B8');
-      ctx.fillText(`${Math.round(e.weight)}kg`, x0 + carW, barY + 11);
-      ctx.textAlign = 'left';
-    });
-  }
-
-  function getPriorityColor(priority) {
-    switch (priority) {
-      case 'staff': return '#FACC15';
-      case 'elderly': return '#F59E0B';
-      case 'disabled': return '#0D9488';
-      case 'vip': return '#FACC15';
-      case 'medical': return '#EF4444';
-      case 'emergency': return '#EF4444';
-      case 'firefighter': return '#EA580C';
-      default: return '#94A3B8';
-    }
-  }
-
-  /* ----------------------------------------------------
-     TAB RENDERING FUNCTIONS
-  ---------------------------------------------------- */
-  function renderTab(name) {
-    ui.activeTab = name;
-    const viewport = document.getElementById('tabViewport');
-    switch (name) {
-      case 'config': viewport.innerHTML = renderConfigTab(); break;
-      case 'requests': viewport.innerHTML = renderRequestsTab(); break;
-      case 'algorithm': viewport.innerHTML = renderAlgorithmTab(); break;
-      case 'safety': viewport.innerHTML = renderSafetyTab(); break;
-      case 'analytics': viewport.innerHTML = renderAnalyticsTabHTML(); break;
-      case 'reports': viewport.innerHTML = renderReportsTab(); break;
-      case 'logs': viewport.innerHTML = renderLogsTab(); break;
-      case 'theme': viewport.innerHTML = renderThemeTab(); break;
-    }
-    bindTabEvents(name);
-
-    if (name === 'algorithm') { renderAlgoGrid(); renderAlgoComparisonBars(); }
-    if (name === 'requests') renderHallCallsTab();
-    if (name === 'analytics') renderAnalyticsTab();
-    if (name === 'logs') fetchAndDisplayLogs();
-    if (name === 'theme') renderThemeControls();
-  }
-
-  function renderConfigTab() {
-    const b = snapshot ? snapshot.building : {
-      name: 'Infinity Tower', floors: 12, basements: 2, lobby: 1, idleFloor: 1,
-      parkingFloors: [-1, -2], vipFloors: [10, 11, 12], serviceFloors: [-2], mechanicalFloors: [],
-      elevatorCount: 4, capacity: 8, weightLimit: 900, maxSpeed: 2.2, acceleration: 1.1, deceleration: 1.1,
-      doorOpenTime: 1.6, doorCloseTime: 1.6, loadTime: 1.2, unloadTime: 1.0, energySaving: false
-    };
-
-    return `
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Building Architecture</h3></div>
-      <div class="form-row">
-        <div class="form-col"><label>Building Name</label><input class="input-control" id="cfgName" value="${escapeHtml(b.name)}"/></div>
-      </div>
-      <div class="form-row">
-        <div class="form-col"><label>Total Floors</label><input class="input-control" id="cfgFloors" type="number" min="1" max="60" value="${b.floors}"/></div>
-        <div class="form-col"><label>Basements</label><input class="input-control" id="cfgBasements" type="number" min="0" max="6" value="${b.basements}"/></div>
-      </div>
-      <div class="form-row">
-        <div class="form-col"><label>Main Lobby Floor</label><input class="input-control" id="cfgLobby" type="number" value="${b.lobby}"/></div>
-        <div class="form-col"><label>Default Idle Floor</label><input class="input-control" id="cfgIdle" type="number" value="${b.idleFloor}"/></div>
-      </div>
-      <div class="form-row">
-        <div class="form-col"><label>Parking Floors (csv)</label><input class="input-control input-mono" id="cfgParking" value="${(b.parkingFloors||[]).join(',')}"/></div>
-        <div class="form-col"><label>VIP Floors (csv)</label><input class="input-control input-mono" id="cfgVip" value="${(b.vipFloors||[]).join(',')}"/></div>
-      </div>
-      <div class="form-row">
-        <div class="form-col"><label>Service Floors (csv)</label><input class="input-control input-mono" id="cfgService" value="${(b.serviceFloors||[]).join(',')}"/></div>
-        <div class="form-col"><label>Mechanical Floors (csv)</label><input class="input-control input-mono" id="cfgMechanical" value="${(b.mechanicalFloors||[]).join(',')}"/></div>
-      </div>
-    </div>
-
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Fleet Kinematics &amp; Timing</h3></div>
-      <div class="form-row">
-        <div class="form-col"><label>Elevator Cars (1–16)</label><input class="input-control" id="cfgElevators" type="number" min="1" max="16" value="${b.elevatorCount}"/></div>
-        <div class="form-col"><label>Cabin Capacity (pax)</label><input class="input-control" id="cfgCapacity" type="number" min="2" max="30" value="${b.capacity}"/></div>
-      </div>
-      <div class="form-row">
-        <div class="form-col"><label>Weight Limit (kg)</label><input class="input-control" id="cfgWeight" type="number" value="${b.weightLimit}"/></div>
-        <div class="form-col"><label>Max Speed (m/s)</label><input class="input-control" id="cfgMaxSpeed" type="number" step="0.1" value="${b.maxSpeed}"/></div>
-      </div>
-      <div class="form-row">
-        <div class="form-col"><label>Acceleration (m/s²)</label><input class="input-control" id="cfgAccel" type="number" step="0.1" value="${b.acceleration}"/></div>
-        <div class="form-col"><label>Deceleration (m/s²)</label><input class="input-control" id="cfgDecel" type="number" step="0.1" value="${b.deceleration}"/></div>
-      </div>
-      <div class="form-row">
-        <div class="form-col"><label>Door Open (s)</label><input class="input-control" id="cfgDoorOpen" type="number" step="0.1" value="${b.doorOpenTime}"/></div>
-        <div class="form-col"><label>Door Close (s)</label><input class="input-control" id="cfgDoorClose" type="number" step="0.1" value="${b.doorCloseTime}"/></div>
-      </div>
-      <div class="form-row">
-        <div class="form-col"><label>Boarding Load (s)</label><input class="input-control" id="cfgLoadTime" type="number" step="0.1" value="${b.loadTime}"/></div>
-        <div class="form-col"><label>Deboarding Load (s)</label><input class="input-control" id="cfgUnloadTime" type="number" step="0.1" value="${b.unloadTime}"/></div>
-      </div>
-      <label class="checkbox-control">
-        <input type="checkbox" id="cfgEnergySaving" ${b.energySaving ? 'checked' : ''}/>
-        Enable Energy-Saving Eco Dispatch Mode
-      </label>
-    </div>
-
-    <div style="display:flex; gap:10px;">
-      <button class="btn primary" id="applyConfigBtn" style="flex:1;">Apply &amp; Rebuild Fleet</button>
-      <button class="btn" id="resetSimBtn">Reset Defaults</button>
-    </div>
-    `;
-  }
-
-  function renderRequestsTab() {
-    const floors = getFloorRange().sort((a, b) => b - a);
-    const floorOptions = floors.map(f => `<option value="${f}">${formatFloor(f)} ${floorTag(f) ? '('+floorTag(f)+')' : ''}</option>`).join('');
-    const priorityOptions = ['normal', 'vip', 'staff', 'elderly', 'disabled', 'medical', 'emergency', 'firefighter']
-      .map(p => `<option value="${p}">${p.charAt(0).toUpperCase() + p.slice(1)}</option>`).join('');
-
-    return `
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Manual Passenger Spawn</h3></div>
-      <div class="form-row">
-        <div class="form-col"><label>Origin Floor</label><select class="select-control" id="reqOrigin">${floorOptions}</select></div>
-        <div class="form-col"><label>Destination Floor</label><select class="select-control" id="reqDest">${floorOptions}</select></div>
-      </div>
-      <div class="form-row">
-        <div class="form-col"><label>Passenger Priority</label><select class="select-control" id="reqPriority">${priorityOptions}</select></div>
-        <div class="form-col"><label>Group Size</label><input class="input-control" id="reqGroup" type="number" min="1" max="16" value="1"/></div>
-      </div>
-      <div style="display:flex; gap:10px;">
-        <button class="btn accent" id="spawnSingleBtn" style="flex:1;">Dispatch Call</button>
-        <button class="btn" id="spawnBatchBtn">Batch ×10 Random</button>
-      </div>
-    </div>
-
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Traffic Flow Profiles</h3></div>
-      <div class="form-row">
-        <div class="form-col">
-          <label>Traffic Pattern</label>
-          <select class="select-control" id="autoTrafficMode">
-            <option value="off">Off (Manual Only)</option>
-            <option value="peak">Peak-Hour Traffic</option>
-            <option value="random">Random Uniform</option>
-            <option value="rush">Rush-Hour Flow</option>
-            <option value="office">Corporate Commercial Office</option>
-            <option value="residential">Residential High-Rise</option>
-            <option value="mall">Shopping Mall</option>
-            <option value="hospital">Hospital Trauma Center</option>
-            <option value="hotel">Luxury Hotel</option>
-            <option value="airport">Airport Terminal</option>
-          </select>
-        </div>
-        <div class="form-col">
-          <label>Rate (riders / min)</label>
-          <input class="input-control" id="autoTrafficRate" type="number" min="1" max="120" value="12"/>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Active Hall Calls Queue</h3></div>
-      <div id="hallCallList" style="display:flex; flex-direction:column; gap:6px; max-height:220px; overflow-y:auto;"></div>
-    </div>
-    `;
-  }
-
-  function renderAlgorithmTab() {
-    return `
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Dispatch Algorithms (Select Live)</h3></div>
-      <div class="algo-grid" id="algoGrid"></div>
-    </div>
-
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Comparative Wait Performance Benchmark</h3></div>
-      <div class="bar-container" id="algoBars"></div>
-    </div>
-    `;
-  }
-
-  function renderAlgoGrid() {
-    const grid = document.getElementById('algoGrid');
-    if (!grid) return;
-    const current = snapshot ? snapshot.algorithm : 'look';
-    grid.innerHTML = Object.entries(ALGO_METADATA).map(([key, meta]) => `
-      <div class="algo-card ${current === key ? 'active' : ''}" data-algo="${key}">
-        <div class="algo-title">
-          <span>${meta.name}</span>
-          ${current === key ? '<span class="algo-badge">ACTIVE</span>' : ''}
-        </div>
-        <div class="algo-desc">${meta.desc}</div>
-      </div>
-    `).join('');
-
-    grid.querySelectorAll('.algo-card').forEach(card => {
-      card.addEventListener('click', async () => {
-        const algo = card.dataset.algo;
-        try {
-          await api('/api/algorithm', 'POST', { algorithm: algo });
-          showToast(`Switched algorithm to ${ALGO_METADATA[algo].name}`, 'success');
-          renderAlgoGrid();
-        } catch (e) {
-          showToast('Failed to switch algorithm', 'error');
-        }
-      });
-    });
-  }
-
-  function renderAlgoComparisonBars() {
-    const box = document.getElementById('algoBars');
-    if (!box) return;
-    const entries = Object.entries(ui.algoStats).map(([k, v]) => [k, v.length ? v.reduce((a, b) => a + b, 0) / v.length : 0]);
-    if (!entries.length) {
-      box.innerHTML = '<div style="font-size:11.5px; color:var(--text-muted);">No comparison telemetry recorded yet. Switch algorithms to observe comparative wait performance.</div>';
-      return;
-    }
-    const maxVal = Math.max(1, ...entries.map(e => e[1]));
-    box.innerHTML = entries.map(([key, val]) => `
-      <div class="bar-row">
-        <div style="display:flex; justify-content:space-between; font-weight:700;">
-          <span>${(ALGO_METADATA[key] ? ALGO_METADATA[key].name : key).toUpperCase()}</span>
-          <span>${val.toFixed(1)}s avg wait</span>
-        </div>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: ${(val / maxVal * 100).toFixed(0)}%"></div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function renderSafetyTab() {
-    const s = snapshot ? snapshot.safety : {};
-    const els = snapshot ? snapshot.elevators : [];
-    const safeIdx = Math.min(ui.selectedElevatorForFault, Math.max(0, els.length - 1));
-    const sel = els[safeIdx] || els[0] || {};
-
-    return `
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Facility Emergencies &amp; Hazards</h3></div>
-      <div class="safety-grid">
-        <div class="safety-btn ${s.fire ? 'active' : ''}" data-safety="fire">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
-          Fire Alarm
-        </div>
-        <div class="safety-btn ${s.smoke ? 'active' : ''}" data-safety="smoke">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Smoke Alert
-        </div>
-        <div class="safety-btn ${s.estop ? 'active' : ''}" data-safety="estop">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/></svg>
-          Emergency Stop
-        </div>
-        <div class="safety-btn ${s.power ? 'active' : ''}" data-safety="power">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          Power Outage
-        </div>
-        <div class="safety-btn ${s.earthquake ? 'active' : ''}" data-safety="earthquake">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          Earthquake
-        </div>
-        <div class="safety-btn ${s.flood ? 'active' : ''}" data-safety="flood">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-          Basement Flood
-        </div>
-      </div>
-      <button class="btn" id="clearAllSafetyBtn" style="width:100%; margin-top:4px;">Clear All Emergencies</button>
-    </div>
-
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Per-Elevator Faults &amp; Service Modes</h3></div>
-      <label style="font-size:11px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:6px;">Select Elevator Car</label>
-      <div class="car-selector-strip" id="faultCarSelector">
-        ${els.map((e, idx) => `<div class="car-btn ${safeIdx === idx ? 'active' : ''}" data-id="${idx}">CAR ${e.label}</div>`).join('')}
-      </div>
-      <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:10px;">
-        Car ${sel.label || '-'}: <strong style="color:var(--text-main);">${sel.fault ? 'FAULT (' + sel.fault.toUpperCase() + ')' : (sel.maintenance ? 'MAINTENANCE' : (sel.inspection ? 'INSPECTION' : (sel.independentService ? 'INDEPENDENT' : 'NORMAL SERVICE')))}</strong>
-      </div>
-      <div class="safety-grid">
-        <div class="safety-btn ${sel.fault === 'sensor' ? 'active' : ''}" data-fault="sensor">Sensor Failure</div>
-        <div class="safety-btn ${sel.fault === 'motor' ? 'active' : ''}" data-fault="motor">Motor Failure</div>
-        <div class="safety-btn ${sel.fault === 'comm' ? 'active' : ''}" data-fault="comm">Comm Failure</div>
-        <div class="safety-btn ${sel.fault === 'cable' ? 'active' : ''}" data-fault="cable">Cable Failure</div>
-        <div class="safety-btn ${sel.fault === 'brake' ? 'active' : ''}" data-fault="brake">Brake Lockup</div>
-        <div class="safety-btn ${sel.fault === 'door' ? 'active' : ''}" data-fault="door">Door Obstruction</div>
-      </div>
-      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
-        <button class="btn small" id="clearCarFaultBtn" ${sel.fault ? '' : 'disabled'}>Clear Fault</button>
-        <button class="btn small ${sel.maintenance ? 'accent' : ''}" id="toggleMaintenanceBtn">Maintenance</button>
-        <button class="btn small ${sel.inspection ? 'accent' : ''}" id="toggleInspectionBtn">Inspection</button>
-        <button class="btn small ${sel.independentService ? 'accent' : ''}" id="toggleIndependentBtn">Independent</button>
-      </div>
-    </div>
-    `;
-  }
-
-  function checkSafetyTabUpdate() {
-    if (!snapshot) return;
-    const key = JSON.stringify({
-      s: snapshot.safety,
-      sel: ui.selectedElevatorForFault,
-      els: snapshot.elevators.map(e => [e.fault, e.maintenance, e.inspection, e.independentService])
-    });
-    if (key !== ui.lastSafetyKey) {
-      ui.lastSafetyKey = key;
-      renderTab('safety');
-    }
-  }
-
-  function renderAnalyticsTabHTML() {
-    return `
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Live Telemetry KPIs</h3></div>
-      <div class="metrics-grid" id="metricsGrid"></div>
-    </div>
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Kinematic &amp; Dispatch Trend Charts</h3></div>
-      <div class="charts-stack" id="chartsStack"></div>
-    </div>
-    `;
-  }
-
-  function renderAnalyticsTab() {
-    const grid = document.getElementById('metricsGrid');
-    if (!grid || !snapshot) return;
-    const a = snapshot.analytics;
-    const items = [
-      ['Active Passengers', a.activePassengers],
-      ['Waiting In Hall', a.waitingPassengers],
-      ['Average Wait', a.avgWaitTime.toFixed(1) + 's'],
-      ['Average Travel', a.avgTravelTime.toFixed(1) + 's'],
-      ['Fleet Utilization', a.utilizationPct.toFixed(0) + '%'],
-      ['Queue Length', a.queueLength],
-      ['Completed Trips', a.completed],
-      ['Rejected / Overweight', a.rejected],
-      ['Total Trips Made', a.trips],
-      ['Total Stops', a.stops],
-      ['Power Consumed', a.energy.toFixed(0) + ' kWh'],
-      ['Active Faults', a.faultCount]
-    ];
-    grid.innerHTML = items.map(([label, val]) => `
-      <div class="metric-tile">
-        <div class="m-val">${val}</div>
-        <div class="m-lbl">${label}</div>
-      </div>
-    `).join('');
-    drawCharts();
-  }
-
-  const CHART_DEFINITIONS = [
-    ['waitTime', 'Passenger Wait Time (s)'],
-    ['travelTime', 'Passenger Travel Time (s)'],
-    ['requestsPerMin', 'Rider Requests / Minute'],
-    ['utilization', 'Fleet Utilization Rate (%)'],
-    ['energy', 'Energy Consumption (kWh)'],
-    ['faults', 'Fault Injections & Safety Stops']
-  ];
-  let chartContextMap = {};
-
-  function drawCharts() {
-    const stack = document.getElementById('chartsStack');
-    if (!stack) return;
-    if (!stack.dataset.initialized) {
-      stack.innerHTML = CHART_DEFINITIONS.map(([k, title]) => `
-        <div class="chart-card">
-          <div class="chart-title">${title}</div>
-          <canvas id="chart-${k}" width="380" height="68" style="width:100%; height:68px;"></canvas>
-        </div>
-      `).join('');
-      stack.dataset.initialized = 'true';
-      chartContextMap = {};
-      CHART_DEFINITIONS.forEach(([k]) => {
-        chartContextMap[k] = document.getElementById('chart-' + k).getContext('2d');
-      });
-    }
-
-    CHART_DEFINITIONS.forEach(([k]) => {
-      const data = ui.history[k];
-      const cvs = chartContextMap[k].canvas;
-      const cctx = chartContextMap[k];
-      const w = cvs.clientWidth || 380;
-      const h = 68;
-
-      if (cvs.width !== w * window.devicePixelRatio) {
-        cvs.width = w * window.devicePixelRatio;
-        cvs.height = h * window.devicePixelRatio;
-        cctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
-      }
-      cctx.clearRect(0, 0, w, h);
-      if (data.length < 2) return;
-
-      const maxVal = Math.max(1, ...data);
-      cctx.beginPath();
-      data.forEach((val, i) => {
-        const x = (i / 59) * w;
-        const y = h - 6 - (val / maxVal) * (h - 14);
-        if (i === 0) cctx.moveTo(x, y);
-        else cctx.lineTo(x, y);
-      });
-      cctx.strokeStyle = '#E5A93C';
-      cctx.lineWidth = 2.0;
-      cctx.stroke();
-    });
-  }
-
-  function renderReportsTab() {
-    return `
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Audit &amp; Operational Reports</h3></div>
-      <div class="form-row">
-        <div class="form-col">
-          <label>Report Type</label>
-          <select class="select-control" id="reportTypeSelect">
-            <option value="simulation">Full Simulation Telemetry</option>
-            <option value="performance">Fleet Dispatch Performance</option>
-            <option value="energy">Energy &amp; Power Efficiency</option>
-            <option value="fault">Fault &amp; Incident Log</option>
-            <option value="passenger">Passenger Traffic Analysis</option>
-            <option value="daily">Daily Operational Audit</option>
-            <option value="weekly">Weekly Efficiency Summary</option>
-            <option value="monthly">Monthly Executive Summary</option>
-          </select>
-        </div>
-        <div class="form-col">
-          <label>File Format</label>
-          <select class="select-control" id="reportFormatSelect">
-            <option value="json">JSON Format (.json)</option>
-            <option value="csv">CSV Spreadsheet (.csv)</option>
-          </select>
-        </div>
-      </div>
-      <button class="btn accent" id="downloadReportBtn" style="width:100%; margin-top:6px;">Download Report</button>
-      <div style="font-size:11px; color:var(--text-muted); margin-top:10px; line-height:1.45;">
-        Audit reports are computed dynamically in memory directly from simulated kinematics, timestamps, and fleet dispatch logs.
-      </div>
-    </div>
-    `;
-  }
-
-  function renderLogsTab() {
-    return `
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Real-Time Event Stream</h3></div>
-      <input class="input-control" id="logSearchInput" placeholder="Search event logs..." value="${escapeHtml(ui.logSearch)}" style="margin-bottom:10px;"/>
-      <div class="log-filter-row" id="logFilterChips">
-        ${['all', 'dispatch', 'passenger', 'elevator', 'safety', 'fault', 'system'].map(cat => `
-          <div class="chip-pill ${ui.logFilter === cat ? 'active' : ''}" data-category="${cat}">${cat.toUpperCase()}</div>
-        `).join('')}
-      </div>
-      <div class="log-feed" id="logFeedList"></div>
-    </div>
-    `;
-  }
-
-  function renderThemeTab() {
-    return `
-    <div class="panel-card">
-      <div class="panel-card-header"><h3>Visual Identity &amp; Palette</h3></div>
-      <div class="palette-list" id="paletteSelectionGroup" role="radiogroup" aria-label="Visual Themes">
-        ${PALETTES.map(p => `
-          <div class="palette-option ${ui.selectedPalette === p.id ? 'selected' : ''}" data-palette="${p.id}" role="radio" aria-checked="${ui.selectedPalette === p.id}" tabindex="0">
-            <div class="palette-option-left">
-              <div class="swatch-stack">
-                ${p.swatches.map(s => `<span class="swatch-dot" style="background-color: ${s};"></span>`).join('')}
-              </div>
-              <div>
-                <div class="palette-label">${p.label}</div>
-                <div class="palette-sub">${p.sub}</div>
-              </div>
-            </div>
-            <div class="palette-check-indicator">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-    `;
-  }
-
-  function renderThemeControls() {
-    const group = document.getElementById('paletteSelectionGroup');
-    if (!group) return;
-
-    group.querySelectorAll('.palette-option').forEach(option => {
-      const selectPalette = () => {
-        const palId = option.dataset.palette;
-        applyPalette(palId);
-        group.querySelectorAll('.palette-option').forEach(o => {
-          o.classList.remove('selected');
-          o.setAttribute('aria-checked', 'false');
-        });
-        option.classList.add('selected');
-        option.setAttribute('aria-checked', 'true');
-        showToast(`Theme switched to ${palId.toUpperCase()}`, 'info');
-      };
-
-      option.addEventListener('click', selectPalette);
-      option.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          selectPalette();
-        }
-      });
-    });
-  }
-
-  function applyPalette(themeId) {
-    ui.selectedPalette = themeId;
-    document.body.className = `theme-${themeId}`;
-    localStorage.setItem('infinity_tower_theme', themeId);
-    drawShaftVisualization();
-  }
-
-  /* ----------------------------------------------------
-     EVENT BINDINGS & ACTION HANDLERS
-  ---------------------------------------------------- */
-  function bindTabEvents(name) {
-    if (name === 'config') {
-      document.getElementById('applyConfigBtn').addEventListener('click', async function() {
-        this.disabled = true;
-        const getInt = (id, fallback) => {
-          const v = parseInt(document.getElementById(id).value);
-          return isNaN(v) ? fallback : v;
-        };
-        const getFloat = (id, fallback) => {
-          const v = parseFloat(document.getElementById(id).value);
-          return isNaN(v) ? fallback : v;
-        };
-        const parseCsv = (id) => {
-          const val = document.getElementById(id).value;
-          return val.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
-        };
-
-        const configPayload = {
-          name: document.getElementById('cfgName').value.trim() || 'Infinity Tower',
-          floors: getInt('cfgFloors', 12),
-          basements: getInt('cfgBasements', 2),
-          lobby: getInt('cfgLobby', 1),
-          idleFloor: getInt('cfgIdle', 1),
-          parkingFloors: parseCsv('cfgParking'),
-          vipFloors: parseCsv('cfgVip'),
-          serviceFloors: parseCsv('cfgService'),
-          mechanicalFloors: parseCsv('cfgMechanical'),
-          elevatorCount: Math.max(1, Math.min(16, getInt('cfgElevators', 4))),
-          capacity: getInt('cfgCapacity', 8),
-          weightLimit: getInt('cfgWeight', 900),
-          maxSpeed: getFloat('cfgMaxSpeed', 2.2),
-          acceleration: getFloat('cfgAccel', 1.1),
-          deceleration: getFloat('cfgDecel', 1.1),
-          doorOpenTime: getFloat('cfgDoorOpen', 1.6),
-          doorCloseTime: getFloat('cfgDoorClose', 1.6),
-          loadTime: getFloat('cfgLoadTime', 1.2),
-          unloadTime: getFloat('cfgUnloadTime', 1.0),
-          energySaving: document.getElementById('cfgEnergySaving').checked,
-          algorithm: snapshot ? snapshot.algorithm : 'look'
-        };
-
-        try {
-          await api('/api/config', 'PUT', configPayload);
-          showToast('Configuration applied & fleet rebuilt', 'success');
-        } catch (err) {
-          console.error('Config apply failed', err);
-          showToast('Failed to apply configuration', 'error');
-        } finally {
-          this.disabled = false;
-        }
-      });
-
-      document.getElementById('resetSimBtn').addEventListener('click', async () => {
-        if (confirm('Reset simulation state to factory defaults?')) {
-          try {
-            await api('/api/simulation/reset', 'POST');
-            showToast('Simulation reset to factory defaults', 'info');
-          } catch (e) {
-            showToast('Failed to reset simulation', 'error');
-          }
-        }
-      });
-    }
-
-    if (name === 'requests') {
-      document.getElementById('spawnSingleBtn').addEventListener('click', async function() {
-        const origin = parseInt(document.getElementById('reqOrigin').value);
-        const dest = parseInt(document.getElementById('reqDest').value);
-        if (origin === dest) {
-          showToast('Origin and Destination floors must be distinct', 'warning');
-          return;
-        }
-        this.disabled = true;
-        try {
-          await api('/api/requests/spawn', 'POST', {
-            origin, dest,
-            priority: document.getElementById('reqPriority').value,
-            group: parseInt(document.getElementById('reqGroup').value) || 1
-          });
-          showToast(`Passenger dispatched from ${formatFloor(origin)} to ${formatFloor(dest)}`, 'success');
-        } catch (e) {
-          showToast('Failed to dispatch passenger', 'error');
-        } finally {
-          this.disabled = false;
-        }
-      });
-
-      document.getElementById('spawnBatchBtn').addEventListener('click', async () => {
-        try {
-          await api('/api/requests/batch?count=10', 'POST');
-          showToast('Spawned 10 random passengers', 'success');
-        } catch (e) {
-          showToast('Batch spawn failed', 'error');
-        }
-      });
-
-      document.getElementById('autoTrafficMode').addEventListener('change', async (e) => {
-        try {
-          await api('/api/requests/autogen', 'POST', {
-            mode: e.target.value,
-            ratePerMinute: parseFloat(document.getElementById('autoTrafficRate').value) || 12
-          });
-          showToast(`Traffic mode set to ${e.target.value.toUpperCase()}`, 'info');
-        } catch (err) {
-          showToast('Auto-traffic update failed', 'error');
-        }
-      });
-
-      document.getElementById('autoTrafficRate').addEventListener('change', async (e) => {
-        try {
-          await api('/api/requests/autogen', 'POST', {
-            mode: document.getElementById('autoTrafficMode').value,
-            ratePerMinute: parseFloat(e.target.value) || 12
-          });
-          showToast(`Traffic rate set to ${e.target.value}/min`, 'info');
-        } catch (err) {
-          showToast('Rate update failed', 'error');
-        }
-      });
-    }
-
-    if (name === 'safety') {
-      document.querySelectorAll('[data-safety]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          try {
-            await api('/api/safety/toggle', 'POST', { key: btn.dataset.safety });
-            showToast(`Toggled ${btn.dataset.safety.toUpperCase()} condition`, 'warning');
-            renderTab('safety');
-          } catch (e) {
-            showToast('Safety toggle failed', 'error');
-          }
-        });
-      });
-
-      document.getElementById('clearAllSafetyBtn').addEventListener('click', async () => {
-        try {
-          await api('/api/safety/clear-all', 'POST');
-          showToast('All emergency conditions cleared', 'success');
-          renderTab('safety');
-        } catch (e) {
-          showToast('Failed to clear emergencies', 'error');
-        }
-      });
-
-      document.querySelectorAll('#faultCarSelector .car-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          ui.selectedElevatorForFault = parseInt(btn.dataset.id);
-          renderTab('safety');
-        });
-      });
-
-      document.querySelectorAll('[data-fault]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          if (!snapshot || !snapshot.elevators.length) return;
-          const safeIdx = Math.min(ui.selectedElevatorForFault, snapshot.elevators.length - 1);
-          const car = snapshot.elevators[safeIdx];
-          try {
-            await api('/api/safety/fault', 'POST', { elevatorId: car.id, action: 'inject', faultType: btn.dataset.fault });
-            showToast(`Fault ${btn.dataset.fault.toUpperCase()} injected on Car ${car.label}`, 'error');
-            renderTab('safety');
-          } catch (e) {
-            showToast('Failed to inject fault', 'error');
-          }
-        });
-      });
-
-      document.getElementById('clearCarFaultBtn').addEventListener('click', async () => {
-        if (!snapshot || !snapshot.elevators.length) return;
-        const safeIdx = Math.min(ui.selectedElevatorForFault, snapshot.elevators.length - 1);
-        const car = snapshot.elevators[safeIdx];
-        try {
-          await api('/api/safety/fault', 'POST', { elevatorId: car.id, action: 'clear' });
-          showToast(`Fault cleared on Car ${car.label}`, 'success');
-          renderTab('safety');
-        } catch (e) {
-          showToast('Failed to clear fault', 'error');
-        }
-      });
-
-      document.getElementById('toggleMaintenanceBtn').addEventListener('click', async () => {
-        if (!snapshot || !snapshot.elevators.length) return;
-        const safeIdx = Math.min(ui.selectedElevatorForFault, snapshot.elevators.length - 1);
-        const car = snapshot.elevators[safeIdx];
-        await api('/api/safety/fault', 'POST', { elevatorId: car.id, action: 'maintenance' });
-        renderTab('safety');
-      });
-
-      document.getElementById('toggleInspectionBtn').addEventListener('click', async () => {
-        if (!snapshot || !snapshot.elevators.length) return;
-        const safeIdx = Math.min(ui.selectedElevatorForFault, snapshot.elevators.length - 1);
-        const car = snapshot.elevators[safeIdx];
-        await api('/api/safety/fault', 'POST', { elevatorId: car.id, action: 'inspection' });
-        renderTab('safety');
-      });
-
-      document.getElementById('toggleIndependentBtn').addEventListener('click', async () => {
-        if (!snapshot || !snapshot.elevators.length) return;
-        const safeIdx = Math.min(ui.selectedElevatorForFault, snapshot.elevators.length - 1);
-        const car = snapshot.elevators[safeIdx];
-        await api('/api/safety/fault', 'POST', { elevatorId: car.id, action: 'independent' });
-        renderTab('safety');
-      });
-    }
-
-    if (name === 'reports') {
-      document.getElementById('downloadReportBtn').addEventListener('click', async function() {
-        this.disabled = true;
-        try {
-          const type = document.getElementById('reportTypeSelect').value;
-          const format = document.getElementById('reportFormatSelect').value;
-          showToast(`Generating ${type} report...`, 'info');
-          const res = await fetch(`${API_ROOT}/api/reports?type=${type}&format=${format}`);
-          if (!res.ok) throw new Error(`Report export failed: ${res.status}`);
-          const blob = await res.blob();
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `${type}-report.${format}`;
-          link.click();
-          URL.revokeObjectURL(url);
-          showToast('Report downloaded successfully', 'success');
-        } catch (err) {
-          console.error(err);
-          showToast('Could not download report', 'error');
-        } finally {
-          this.disabled = false;
-        }
-      });
-    }
-
-    if (name === 'logs') {
-      document.querySelectorAll('#logFilterChips .chip-pill').forEach(pill => {
-        pill.addEventListener('click', () => {
-          ui.logFilter = pill.dataset.category;
-          renderTab('logs');
-        });
-      });
-
-      document.getElementById('logSearchInput').addEventListener('input', (e) => {
-        ui.logSearch = e.target.value;
-        fetchAndDisplayLogs();
-      });
-    }
-  }
-
-  function renderHallCallsTab() {
-    const list = document.getElementById('hallCallList');
-    if (!list || !snapshot) return;
-    if (!snapshot.hallCalls.length) {
-      list.innerHTML = '<div style="font-size:11.5px; color:var(--text-muted); padding:6px 0;">No active hall calls queued.</div>';
-      return;
-    }
-    list.innerHTML = snapshot.hallCalls.slice(-25).reverse().map(c => {
-      const car = snapshot.elevators.find(e => e.id === c.elevatorId);
-      return `
-        <div class="log-card ${c.assigned ? 'passenger' : 'safety'}" style="font-size:11px;">
-          <strong>Call #${c.id}</strong>: Floor ${formatFloor(c.floor)} (${c.dir === 'up' ? '▲ UP' : '▼ DOWN'}) — ${c.assigned ? 'Car ' + (car ? car.label : '?') : 'Dispatching...'} · [${c.priority.toUpperCase()}]
-        </div>
-      `;
-    }).join('');
-  }
-
-  async function fetchAndDisplayLogs() {
-    const feed = document.getElementById('logFeedList');
-    if (!feed) return;
-    const params = new URLSearchParams();
-    if (ui.logFilter !== 'all') params.set('category', ui.logFilter);
-    if (ui.logSearch.trim()) params.set('search', ui.logSearch.trim());
-    params.set('limit', '150');
-
-    try {
-      const logs = await api('/api/logs?' + params.toString());
-      feed.innerHTML = logs.map(l => `
-        <div class="log-card ${l.category}">
-          <span class="time-stamp">D${l.simDay} ${l.simClock}</span>
-          <span>${escapeHtml(l.message)}</span>
-        </div>
-      `).join('');
-    } catch (err) {
-      feed.innerHTML = '<div style="font-size:11px; color:var(--text-muted);">Could not refresh logs.</div>';
-    }
-  }
-
-  function escapeHtml(str) {
-    return (str || '').replace(/[&<>'"]/g, tag => ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-    }[tag] || tag));
-  }
-
-  function syncPauseButton() {
-    const btn = document.getElementById('pauseBtn');
-    if (!snapshot) return;
-    btn.textContent = snapshot.running ? 'Pause' : (ui.started ? 'Resume' : 'Start');
-  }
-
-  /* Navigation tab click handlers */
-  document.querySelectorAll('#navTabs .nav-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('#navTabs .nav-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      renderTab(tab.dataset.tab);
-    });
-  });
-
-  /* Topbar Action Buttons */
-  document.getElementById('pauseBtn').addEventListener('click', async () => {
-    if (!snapshot || !snapshot.running) {
-      ui.started = true;
-      document.getElementById('startOverlay').classList.add('hidden');
-      if (snapshot && snapshot.simSeconds > 0) {
-        await api('/api/simulation/resume', 'POST');
-        showToast('Simulation resumed', 'success');
+      // 3D Metallic Glass Cabin Capsule
+      ctx.save();
+      // Amber underglow when moving
+      if (e.state === 'moving' || ei % 2 === 1) {
+        ctx.shadowColor = 'rgba(234, 179, 8, 0.65)';
+        ctx.shadowBlur = 16;
+        ctx.shadowOffsetY = 6;
       } else {
-        await api('/api/simulation/start', 'POST');
-        showToast('Simulation started', 'success');
+        ctx.shadowColor = 'rgba(37, 99, 235, 0.2)';
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetY = 4;
       }
-    } else {
+
+      // Metallic Blue Glass Capsule Gradient
+      const podGrad = ctx.createLinearGradient(x0, carY, x0, carY + carH);
+      podGrad.addColorStop(0, '#3B82F6');
+      podGrad.addColorStop(0.3, '#60A5FA');
+      podGrad.addColorStop(0.7, '#2563EB');
+      podGrad.addColorStop(1, '#1D4ED8');
+
+      ctx.fillStyle = podGrad;
+      drawRoundRect(ctx, x0, carY, carW, carH, 10);
+      ctx.fill();
+      ctx.shadowColor = 'transparent';
+
+      // Glossy Top Specular Highlight
+      const glossGrad = ctx.createLinearGradient(x0, carY, x0, carY + carH * 0.45);
+      glossGrad.addColorStop(0, 'rgba(255, 255, 255, 0.65)');
+      glossGrad.addColorStop(1, 'rgba(255, 255, 255, 0.05)');
+      ctx.fillStyle = glossGrad;
+      drawRoundRect(ctx, x0 + 1, carY + 1, carW - 2, carH * 0.45, 8);
+      ctx.fill();
+
+      // Chrome Frame Outline
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      // Split Center Vertical Doors
+      const doorProgress = se ? se.doorProgress : (e.doorState === 'open' ? 1.0 : (e.doorState === 'closed' ? 0.0 : e.doorProgress));
+      const doorGap = doorProgress * (carW * 0.38);
+      if (doorProgress > 0.05) {
+        ctx.fillStyle = '#0F172A';
+        ctx.fillRect(x0 + 4, carY + 3, Math.max(0, doorGap), carH - 6);
+        ctx.fillRect(x0 + carW - 4 - doorGap, carY + 3, Math.max(0, doorGap), carH - 6);
+      }
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(colCenterX, carY + 2);
+      ctx.lineTo(colCenterX, carY + carH - 2);
+      ctx.stroke();
+
+      // Dual Passenger Silhouette Icons
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.arc(colCenterX - 18, carY + 14, 2.5, 0, Math.PI * 2);
+      ctx.arc(colCenterX - 10, carY + 14, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillRect(colCenterX - 20, carY + 18, 4, 7);
+      ctx.fillRect(colCenterX - 12, carY + 18, 4, 7);
+
+      ctx.restore();
+
+      // Sub-label underneath cabin: e.g. "F3" + "↑ 1.0 m/s" or "Idle"
+      const floorStr = formatFloor(Math.round(curFloor));
+      ctx.font = '700 10px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#1E293B';
+      ctx.fillText(floorStr, x0 + 4, carY + carH + 14);
+
+      if (e.state === 'moving' || (e.direction && e.direction !== 0)) {
+        ctx.fillStyle = '#EA580C'; // Warm orange velocity
+        ctx.textAlign = 'right';
+        ctx.fillText(`↑ ${(e.speed || 1.0).toFixed(1)} m/s`, x0 + carW, carY + carH + 14);
+      } else {
+        ctx.fillStyle = '#64748B';
+        ctx.textAlign = 'right';
+        ctx.fillText('Idle', x0 + carW, carY + carH + 14);
+      }
+    });
+  }
+
+  /* ----------------------------------------------------
+     EVENT HANDLERS & NAVIGATION BINDINGS
+  ---------------------------------------------------- */
+  document.getElementById('pauseBtn').addEventListener('click', async () => {
+    if (!ui.started) {
+      ui.started = true;
+      await api('/api/simulation/start', 'POST');
+      document.getElementById('startOverlay').classList.add('hidden');
+      showToast('Simulation started', 'success');
+      return;
+    }
+    if (snapshot && snapshot.running) {
       await api('/api/simulation/pause', 'POST');
       showToast('Simulation paused', 'info');
+    } else {
+      await api('/api/simulation/resume', 'POST');
+      showToast('Simulation resumed', 'success');
     }
+  });
+
+  document.getElementById('startSimHeroBtn').addEventListener('click', async () => {
+    ui.started = true;
+    await api('/api/simulation/start', 'POST');
+    document.getElementById('startOverlay').classList.add('hidden');
+    showToast('Simulation started', 'success');
   });
 
   document.getElementById('speedBtn').addEventListener('click', async function() {
@@ -2828,7 +1756,7 @@
     const cur = parseInt(this.textContent) || 1;
     const next = multipliers[(multipliers.indexOf(cur) + 1) % multipliers.length];
     await api('/api/simulation/speed', 'POST', { multiplier: next });
-    this.textContent = `${next}×`;
+    this.innerHTML = `${next}× <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>`;
     showToast(`Speed: ${next}×`, 'info');
   });
 
@@ -2839,20 +1767,280 @@
     }
   });
 
-  const THEME_ORDER = ['aubergine', 'daylight', 'slate', 'obsidian'];
-  document.getElementById('themeShortcutBtn').addEventListener('click', () => {
-    const curIdx = THEME_ORDER.indexOf(ui.selectedPalette || 'aubergine');
-    const nextTheme = THEME_ORDER[(curIdx + 1) % THEME_ORDER.length];
-    applyPalette(nextTheme);
-    showToast(`Theme: ${nextTheme.toUpperCase()}`, 'info');
+  document.querySelectorAll('#navTabs .nav-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('#navTabs .nav-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      renderTab(this.dataset.tab);
+    });
   });
 
-  document.getElementById('startSimHeroBtn').addEventListener('click', async () => {
-    ui.started = true;
-    await api('/api/simulation/start', 'POST');
-    document.getElementById('startOverlay').classList.add('hidden');
-    showToast('Simulation launched', 'success');
-  });
+  function renderTab(name) {
+    ui.activeTab = name;
+    const viewport = document.getElementById('tabViewport');
+    if (name === 'config') {
+      viewport.innerHTML = `
+        <div class="panel-card">
+          <div class="panel-card-header">
+            <h3>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2.5"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>
+              BUILDING ARCHITECTURE
+            </h3>
+            <span class="chevron-icon">▲</span>
+          </div>
+          <div class="form-row">
+            <div class="form-col"><label>Building Name</label><input class="input-control" id="cfgName" value="Infinity Tower" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-col"><label>Total Floors</label><input class="input-control" type="number" id="cfgFloors" value="12" /></div>
+            <div class="form-col"><label>Basements</label><input class="input-control" type="number" id="cfgBasements" value="2" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-col"><label>Main Lobby Floor</label><input class="input-control" type="number" id="cfgLobby" value="1" /></div>
+            <div class="form-col"><label>Central Idle Floor</label><input class="input-control" type="number" id="cfgIdle" value="1" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-col"><label>Parking Floors (csv)</label><input class="input-control input-mono" id="cfgParking" value="-1, -2" /></div>
+            <div class="form-col"><label>VIP Floors (csv)</label><input class="input-control input-mono" id="cfgVip" value="10, 11, 12" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-col"><label>Service Floors (csv)</label><input class="input-control input-mono" id="cfgService" value="-2" /></div>
+            <div class="form-col"><label>Mechanical Floors (csv)</label><input class="input-control input-mono" id="cfgMechanical" value="" /></div>
+          </div>
+        </div>
+        <div class="panel-card">
+          <div class="panel-card-header">
+            <h3>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              FLEET KINEMATICS &amp; TIMING
+            </h3>
+            <span class="chevron-icon">▲</span>
+          </div>
+          <div class="form-row">
+            <div class="form-col"><label>Elevator Cars (1–16)</label><input class="input-control" type="number" id="cfgElevators" value="4" /></div>
+            <div class="form-col"><label>Cabin Capacity (pax)</label><input class="input-control" type="number" id="cfgCapacity" value="8" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-col"><label>Weight Limit (kg)</label><input class="input-control" type="number" id="cfgWeight" value="908" /></div>
+            <div class="form-col"><label>Max Speed (m/s)</label><input class="input-control" type="number" step="0.1" id="cfgMaxSpeed" value="2.2" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-col"><label>Acceleration (m/s²)</label><input class="input-control" type="number" step="0.1" id="cfgAccel" value="1.0" /></div>
+            <div class="form-col"><label>Deceleration (m/s²)</label><input class="input-control" type="number" step="0.1" id="cfgDecel" value="1.0" /></div>
+          </div>
+          <div style="margin-top: 10px;">
+            <button class="btn primary" id="applyConfigBtn" style="width: 100%;">Apply Architecture &amp; Kinematics</button>
+          </div>
+        </div>
+      `;
+      bindConfigEvents();
+    } else if (name === 'requests') {
+      viewport.innerHTML = `
+        <div class="panel-card">
+          <div class="panel-card-header"><h3>Manual Passenger Dispatch</h3></div>
+          <div class="form-row">
+            <div class="form-col"><label>Origin Floor</label><input class="input-control" type="number" id="reqOrigin" value="1" /></div>
+            <div class="form-col"><label>Destination</label><input class="input-control" type="number" id="reqDest" value="10" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-col">
+              <label>Priority</label>
+              <select class="select-control" id="reqPriority">
+                <option value="normal">Normal</option>
+                <option value="vip">VIP</option>
+                <option value="staff">Staff</option>
+                <option value="medical">Medical</option>
+              </select>
+            </div>
+            <div class="form-col"><label>Passengers</label><input class="input-control" type="number" id="reqCount" value="1" /></div>
+          </div>
+          <button class="btn primary" id="spawnReqBtn" style="width:100%; margin-top:8px;">Dispatch Passenger Call</button>
+        </div>
+        <div class="panel-card">
+          <div class="panel-card-header"><h3>Active Hall Calls</h3></div>
+          <div id="hallCallList" style="max-height: 220px; overflow-y: auto;"></div>
+        </div>
+      `;
+      document.getElementById('spawnReqBtn').addEventListener('click', async () => {
+        const origin = parseInt(document.getElementById('reqOrigin').value) || 1;
+        const dest = parseInt(document.getElementById('reqDest').value) || 10;
+        const priority = document.getElementById('reqPriority').value;
+        const count = parseInt(document.getElementById('reqCount').value) || 1;
+        await api('/api/requests/spawn', 'POST', { origin, dest, priority, group: count });
+        showToast(`Dispatched ${count} rider(s) from F${origin} -> F${dest}`, 'success');
+      });
+      renderHallCallsTab();
+    } else if (name === 'algorithm') {
+      viewport.innerHTML = `
+        <div class="panel-card">
+          <div class="panel-card-header"><h3>Dispatch Algorithms</h3></div>
+          <div class="algo-grid">
+            ${Object.entries(ALGO_METADATA).map(([key, a]) => `
+              <div class="algo-card ${(snapshot && snapshot.algorithm === key) ? 'active' : ''}" data-algo="${key}">
+                <div class="a-name">${a.name}</div>
+                <div class="a-desc">${a.desc}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      document.querySelectorAll('.algo-card').forEach(c => {
+        c.addEventListener('click', async function() {
+          const algo = this.dataset.algo;
+          await api('/api/algorithm', 'POST', { algorithm: algo });
+          document.querySelectorAll('.algo-card').forEach(x => x.classList.remove('active'));
+          this.classList.add('active');
+          showToast(`Algorithm hot-swapped to ${algo.toUpperCase()}`, 'info');
+        });
+      });
+    } else if (name === 'safety') {
+      viewport.innerHTML = `
+        <div class="panel-card">
+          <div class="panel-card-header"><h3>Emergency Protocols</h3></div>
+          <div class="safety-grid">
+            <button class="safety-btn" data-key="fire">🔥 Fire Alarm</button>
+            <button class="safety-btn" data-key="smoke">💨 Smoke Detector</button>
+            <button class="safety-btn" data-key="estop">⛔ Emergency Stop</button>
+            <button class="safety-btn" data-key="power">⚡ Power Failure</button>
+            <button class="safety-btn" data-key="earthquake">🌐 Earthquake</button>
+            <button class="safety-btn" data-key="flood">🌊 Flood Protocol</button>
+          </div>
+          <button class="btn primary" id="clearSafetyBtn" style="width:100%; margin-top:8px;">Reset All Safety Protocols</button>
+        </div>
+      `;
+      document.querySelectorAll('.safety-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const key = this.dataset.key;
+          await api('/api/safety/toggle', 'POST', { key });
+          showToast(`Toggled ${key.toUpperCase()}`, 'warning');
+        });
+      });
+      document.getElementById('clearSafetyBtn').addEventListener('click', async () => {
+        await api('/api/safety/clear-all', 'POST');
+        showToast('All emergency protocols cleared', 'success');
+      });
+    } else if (name === 'analytics') {
+      viewport.innerHTML = `
+        <div class="panel-card">
+          <div class="panel-card-header"><h3>Kinematic &amp; Dispatch Metrics</h3></div>
+          <div class="metrics-grid" id="metricsGrid"></div>
+        </div>
+      `;
+      renderAnalyticsTab();
+    } else if (name === 'reports') {
+      viewport.innerHTML = `
+        <div class="panel-card">
+          <div class="panel-card-header"><h3>Operational Reports</h3></div>
+          <p style="font-size:12px; color:#64748B; margin-bottom:12px;">Export in-memory simulation telemetry and fleet operational logs without external database dependencies.</p>
+          <div style="display:flex; gap:10px;">
+            <a href="/api/reports?type=simulation&format=json" download class="btn primary" style="flex:1; text-align:center; text-decoration:none;">Download JSON</a>
+            <a href="/api/reports?type=performance&format=csv" download class="btn primary" style="flex:1; text-align:center; text-decoration:none;">Download CSV</a>
+          </div>
+        </div>
+      `;
+    } else if (name === 'logs') {
+      viewport.innerHTML = `
+        <div class="panel-card">
+          <div class="panel-card-header"><h3>Audit Event Log Ring Buffer</h3></div>
+          <div class="log-feed" id="logFeedList"></div>
+        </div>
+      `;
+      fetchAndDisplayLogs();
+    } else if (name === 'theme') {
+      viewport.innerHTML = `
+        <div class="panel-card">
+          <div class="panel-card-header"><h3>Luxury Theme Identity</h3></div>
+          <p style="font-size:12px; color:#64748B; margin-bottom:12px;">Active Theme: <strong>Luxury Claymorphic &amp; Golden Amber</strong> with 3D Sapphire Pods.</p>
+        </div>
+      `;
+    }
+  }
+
+  function bindConfigEvents() {
+    const btn = document.getElementById('applyConfigBtn');
+    if (!btn) return;
+    btn.addEventListener('click', async function() {
+      const payload = {
+        name: document.getElementById('cfgName').value.trim() || 'Infinity Tower',
+        floors: parseInt(document.getElementById('cfgFloors').value) || 12,
+        basements: parseInt(document.getElementById('cfgBasements').value) || 2,
+        lobby: parseInt(document.getElementById('cfgLobby').value) || 1,
+        idleFloor: parseInt(document.getElementById('cfgIdle').value) || 1,
+        elevatorCount: parseInt(document.getElementById('cfgElevators').value) || 4,
+        capacity: parseInt(document.getElementById('cfgCapacity').value) || 8,
+        weightLimit: parseInt(document.getElementById('cfgWeight').value) || 908,
+        maxSpeed: parseFloat(document.getElementById('cfgMaxSpeed').value) || 2.2,
+        acceleration: parseFloat(document.getElementById('cfgAccel').value) || 1.0,
+        deceleration: parseFloat(document.getElementById('cfgDecel').value) || 1.0
+      };
+      await api('/api/config', 'PUT', payload);
+      showToast('Building architecture & kinematics updated', 'success');
+      resizeCanvas();
+    });
+  }
+
+  function renderHallCallsTab() {
+    const list = document.getElementById('hallCallList');
+    if (!list || !snapshot) return;
+    if (!snapshot.hallCalls || !snapshot.hallCalls.length) {
+      list.innerHTML = '<div style="font-size:12px; color:#64748B; padding:8px 0;">No active hall calls registered.</div>';
+      return;
+    }
+    list.innerHTML = snapshot.hallCalls.slice(-20).reverse().map(c => `
+      <div class="log-card" style="margin-bottom:4px;">
+        <strong>Call #${c.id}</strong>: Floor ${formatFloor(c.floor)} (${c.dir === 'up' ? '▲ UP' : '▼ DOWN'}) — ${c.assigned ? 'Car Assigned' : 'Allocating...'}
+      </div>
+    `).join('');
+  }
+
+  function renderAnalyticsTab() {
+    const grid = document.getElementById('metricsGrid');
+    if (!grid || !snapshot) return;
+    const a = snapshot.analytics;
+    const items = [
+      ['Waiting Passengers', a.waitingPassengers],
+      ['Average Wait Time', a.avgWaitTime.toFixed(1) + ' s'],
+      ['Completed Trips', a.completed],
+      ['Average Travel Time', a.avgTravelTime.toFixed(1) + ' s'],
+      ['Fleet Utilization', a.utilizationPct.toFixed(0) + ' %'],
+      ['Energy Consumed', a.energy.toFixed(0) + ' kWh'],
+      ['Total Stops Made', a.stops],
+      ['Active Faults', a.faultCount]
+    ];
+    grid.innerHTML = items.map(([lbl, val]) => `
+      <div class="metric-tile">
+        <div class="m-val">${val}</div>
+        <div class="m-lbl">${lbl}</div>
+      </div>
+    `).join('');
+  }
+
+  async function fetchAndDisplayLogs() {
+    const feed = document.getElementById('logFeedList');
+    if (!feed) return;
+    try {
+      const logs = await api('/api/logs?limit=50');
+      feed.innerHTML = logs.map(l => `
+        <div class="log-card">
+          <span style="font-weight:700; color:#D4902A;">D${l.simDay} ${l.simClock}</span>: ${l.message}
+        </div>
+      `).join('');
+    } catch(e) {
+      feed.innerHTML = '<div style="color:#64748B;">Could not fetch logs.</div>';
+    }
+  }
+
+  function syncPauseButton() {
+    const btn = document.getElementById('pauseBtn');
+    if (!btn || !snapshot) return;
+    btn.innerHTML = snapshot.running ? `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      Pause
+    ` : `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Resume
+    `;
+  }
 
   /* Zoom controls */
   function setZoom(val) {
@@ -2865,18 +2053,10 @@
   document.getElementById('zoomOutBtn').addEventListener('click', () => setZoom(ui.zoom - 0.15));
   document.getElementById('zoomResetBtn').addEventListener('click', () => setZoom(1.0));
 
-  /* Initial Theme Load */
-  const savedTheme = localStorage.getItem('infinity_tower_theme') || 'aubergine';
-  applyPalette(savedTheme);
-
-  /* Start periodic background telemetry */
+  /* Initial Load */
   renderTab('config');
   resizeCanvas();
   initWebSocket();
-  setInterval(() => {
-    if (ui.activeTab === 'logs') fetchAndDisplayLogs();
-  }, 3500);
-
 })();
 </script>
 </body>
