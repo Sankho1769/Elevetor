@@ -15,48 +15,54 @@
        2. Industrial Obsidian SCADA (theme-obsidian)
        3. Industrial Slate Control Center (theme-slate)
   ---------------------------------------------------- */
-  :root, body.theme-aubergine {
-    --theme-name: 'aubergine';
-    --bg-base: #130E14;
-    --bg-app: #19131A;
-    --bg-topbar: #231724;
-    --bg-panel: #1D151F;
-    --bg-card: #251C27;
-    --bg-card-subtle: #1F1722;
-    --bg-input: #18111B;
+  /* ----------------------------------------------------
+     50% / 40% / 10% THREE-COLOR SCADA SYSTEM (ORANGE LAYERS)
+       - 50% Dominant Base: Deep Carbon Obsidian (#0B0E14)
+       - 40% Structural Layers: Architectural Slate (#141822 / #191E2C)
+       - 10% High-Energy Accent: Electric Safety Orange (#FF6B00 / #FF7700)
+  ---------------------------------------------------- */
+  :root, body.theme-aubergine, body.theme-orange {
+    --theme-name: 'orange-50-40-10';
+    --bg-base: #0B0E14;          /* 50% Dominant Base */
+    --bg-app: #0D1017;
+    --bg-topbar: #141822;        /* 40% Structural Layer */
+    --bg-panel: #131722;        /* 40% Structural Layer */
+    --bg-card: #191E2C;         /* 40% Structural Layer */
+    --bg-card-subtle: #151A26;
+    --bg-input: #0F131C;
 
-    --primary: #8E3A75;
-    --primary-hover: #A34587;
+    --primary: #FF6B00;         /* 10% High-Energy Orange Accent */
+    --primary-hover: #FF8533;
     --primary-contrast: #FFFFFF;
-    --accent: #E5A93C;
-    --accent-hover: #F2B74B;
-    --accent-contrast: #18111B;
-    --accent-dim: rgba(229, 169, 60, 0.15);
+    --accent: #FF7700;
+    --accent-hover: #FFA040;
+    --accent-contrast: #0B0E14;
+    --accent-dim: rgba(255, 107, 0, 0.18);
 
-    --text-main: #F5EEF6;
-    --text-muted: #9E8E9F;
-    --text-dim: #6D5F6E;
+    --text-main: #F3F4F6;
+    --text-muted: #9CA3AF;
+    --text-dim: #6B7280;
 
     --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(229, 169, 60, 0.28);
-    --border-focus: #E5A93C;
+    --border-strong: rgba(255, 107, 0, 0.38);
+    --border-focus: #FF6B00;
 
-    --shaft-bg: #140E15;
-    --shaft-grid: rgba(255, 255, 255, 0.03);
+    --shaft-bg: #0B0E14;        /* 50% Dominant Base */
+    --shaft-grid: rgba(255, 255, 255, 0.035);
     --shaft-rail: rgba(255, 255, 255, 0.12);
 
-    --status-success: #10B981;
-    --status-success-dim: rgba(16, 185, 129, 0.15);
-    --status-warning: #F59E0B;
-    --status-warning-dim: rgba(245, 158, 11, 0.15);
+    --status-success: #FF6B00;  /* Pure 3-color ratio: motion highlights in orange */
+    --status-success-dim: rgba(255, 107, 0, 0.16);
+    --status-warning: #FF9F1C;
+    --status-warning-dim: rgba(255, 159, 28, 0.16);
     --status-danger: #EF4444;
     --status-danger-dim: rgba(239, 68, 68, 0.18);
-    --status-info: #38BDF8;
-    --status-info-dim: rgba(56, 189, 248, 0.15);
+    --status-info: #FF7700;
+    --status-info-dim: rgba(255, 119, 0, 0.16);
 
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
-    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
-    --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.6);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.55);
+    --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.7);
   }
 
   body.theme-obsidian {
@@ -359,9 +365,10 @@
     cursor: not-allowed;
   }
   .btn.primary {
-    background: var(--primary);
-    color: var(--primary-contrast);
-    border-color: var(--primary);
+    background: #FF6B00;
+    color: #FFFFFF;
+    border-color: #FF8533;
+    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
   }
   .btn.primary:hover:not(:disabled) {
     background: var(--primary-hover);
@@ -642,9 +649,9 @@
   }
   .nav-tab.active {
     color: #FFFFFF;
-    background: var(--primary);
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: var(--shadow-sm);
+    background: #FF6B00;
+    border-color: #FF8533;
+    box-shadow: 0 3px 12px rgba(255, 107, 0, 0.4);
   }
 
   #tabViewport {
@@ -1269,9 +1276,9 @@
   const PALETTES = [
     {
       id: 'aubergine',
-      label: 'Aubergine & Marigold Executive',
-      sub: 'Industrial Corporate Identity (Default theme-aubergine)',
-      swatches: ['#231724', '#8E3A75', '#E5A93C', '#1D151F', '#F5EEF6']
+      label: 'Industrial Carbon & Electric Orange (50-40-10)',
+      sub: 'Strict 3-Color Ratio: 50% Carbon Base · 40% Slate Layers · 10% Orange Accent',
+      swatches: ['#0B0E14', '#141822', '#FF6B00', '#191E2C', '#FFFFFF']
     },
     {
       id: 'daylight',
@@ -1713,32 +1720,53 @@
     // Floor Rows & Hall Calls
     floors.forEach((f, i) => {
       const y = shaftTop + i * rowH;
-      const activeFloor = smoothState.activeElevatorFloors.has(f);
+      const hasWaiting = smoothState.waitingByFloor[f] && smoothState.waitingByFloor[f].length > 0;
+      const hasCalls = smoothState.callsByFloor[f] && smoothState.callsByFloor[f].length > 0;
+      const hasCarHere = smoothState.activeElevatorFloors.has(f);
+      const isLobby = f === snapshot.building.lobby;
 
-      if (activeFloor) {
-        ctx.fillStyle = isLight ? 'rgba(2, 132, 199, 0.08)' : 'rgba(229, 169, 60, 0.08)';
+      // 50-40-10 Orange Layer Architecture: Active Floor Orange Layers
+      if (hasCarHere || hasWaiting || hasCalls) {
+        // Distinct luminous orange layer
+        ctx.fillStyle = hasCarHere ? 'rgba(255, 107, 0, 0.18)' : 'rgba(255, 107, 0, 0.11)';
         ctx.fillRect(labelW, y, w - labelW - 16, rowH);
+
+        // Glowing orange left indicator accent strip (10% accent)
+        ctx.fillStyle = '#FF6B00';
+        ctx.fillRect(labelW, y, 3, rowH);
+
+        // Subtle orange layer perimeter borders
+        ctx.strokeStyle = 'rgba(255, 107, 0, 0.32)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(labelW, y);
+        ctx.lineTo(w - 16, y);
+        ctx.moveTo(labelW, y + rowH);
+        ctx.lineTo(w - 16, y + rowH);
+        ctx.stroke();
+      } else {
+        // Base grid line
+        ctx.strokeStyle = gridLineColor;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(labelW, y + rowH);
+        ctx.lineTo(w - 16, y + rowH);
+        ctx.stroke();
       }
 
-      ctx.strokeStyle = gridLineColor;
-      ctx.beginPath();
-      ctx.moveTo(labelW, y + rowH);
-      ctx.lineTo(w - 16, y + rowH);
-      ctx.stroke();
-
       // Floor Tag & Name
-      const isLobby = f === snapshot.building.lobby;
       const isVip = snapshot.building.vipFloors && snapshot.building.vipFloors.includes(f);
       const isParking = snapshot.building.parkingFloors && snapshot.building.parkingFloors.includes(f);
 
-      ctx.fillStyle = isLobby ? (isLight ? '#D97706' : '#E5A93C') : (isVip ? '#8B5CF6' : (isParking ? (isLight ? '#0284C7' : '#38BDF8') : floorTextColor));
+      const floorActive = hasCarHere || hasWaiting || hasCalls;
+      ctx.fillStyle = floorActive ? '#FF6B00' : (isLobby ? '#FFA040' : (isVip ? '#FF8533' : floorTextColor));
       ctx.font = '700 12px monospace';
       ctx.textAlign = 'left';
       ctx.fillText(formatFloor(f), 10, y + rowH / 2 - 4);
 
       const tag = floorTag(f);
       if (tag) {
-        ctx.fillStyle = isLobby ? (isLight ? '#D97706' : '#E5A93C') : (isVip ? '#8B5CF6' : (isLight ? '#64748B' : '#94A3B8'));
+        ctx.fillStyle = floorActive ? '#FFA040' : (isLobby ? '#FF6B00' : (isLight ? '#64748B' : '#94A3B8'));
         ctx.font = '700 8.5px sans-serif';
         ctx.fillText(tag, 10, y + rowH / 2 + 10);
       }
@@ -1753,11 +1781,11 @@
         }
         ctx.font = '700 10px monospace';
         if (hasUp) {
-          ctx.fillStyle = isLight ? '#059669' : '#10B981';
+          ctx.fillStyle = '#FF6B00';
           ctx.fillText('▲', labelW - 24, y + rowH / 2 - 3);
         }
         if (hasDown) {
-          ctx.fillStyle = isLight ? '#D97706' : '#F59E0B';
+          ctx.fillStyle = '#FFA040';
           ctx.fillText('▼', labelW - 14, y + rowH / 2 - 3);
         }
       }
@@ -1765,12 +1793,12 @@
       // Fast O(1) Waiting Rider Queue
       const waiting = smoothState.waitingByFloor[f];
       if (waiting && waiting.length > 0) {
-        ctx.fillStyle = isLight ? '#0284C7' : '#E5A93C';
+        ctx.fillStyle = '#FF6B00';
         ctx.beginPath();
         ctx.arc(labelW - 36, y + rowH / 2 - 4, 8, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = isLight ? '#FFFFFF' : '#0B0E14';
+        ctx.fillStyle = '#FFFFFF';
         ctx.font = '800 9px monospace';
         ctx.textAlign = 'center';
         ctx.fillText(waiting.length, labelW - 36, y + rowH / 2 - 1);
@@ -1806,7 +1834,7 @@
       ctx.fillText(`CAR ${e.label}`, x0 + carW / 2, headerY + 13);
 
       const stateLabel = e.fault ? 'FAULT' : (e.maintenance ? 'MAINT' : (e.inspection ? 'INSPECT' : (e.state === 'moving' ? (e.direction > 0 ? '▲ UP' : '▼ DN') : 'IDLE')));
-      ctx.fillStyle = e.fault ? (isLight ? '#DC2626' : '#EF4444') : (e.state === 'moving' ? (isLight ? '#059669' : '#10B981') : (isLight ? '#D97706' : '#E5A93C'));
+      ctx.fillStyle = e.fault ? '#EF4444' : (e.state === 'moving' ? '#FF6B00' : '#9CA3AF');
       ctx.font = '700 8.5px monospace';
       ctx.fillText(stateLabel, x0 + carW / 2, headerY + 25);
       ctx.textAlign = 'left';
@@ -1846,11 +1874,12 @@
       drawRoundRect(ctx, x0 + carW + 1, cwY, 5, 24, 2);
       ctx.fill();
 
-      // Cabin Border & State Color
-      let cabinColor = isLight ? '#0284C7' : '#E5A93C'; // Idle
-      if (e.fault) cabinColor = isLight ? '#DC2626' : '#EF4444';
-      else if (e.maintenance || e.inspection) cabinColor = isLight ? '#D97706' : '#F59E0B';
-      else if (e.state === 'moving') cabinColor = isLight ? '#059669' : '#10B981';
+      // Cabin Border & State Color (10% High-Energy Accent)
+      let cabinColor = '#FF6B00'; // Default Orange Accent
+      if (e.fault) cabinColor = '#EF4444';
+      else if (e.maintenance || e.inspection) cabinColor = '#FFA040';
+      else if (e.state === 'moving') cabinColor = '#FF6B00';
+      else cabinColor = '#FF8533'; // Idle active focus
 
       // Cabin Frame
       ctx.save();
