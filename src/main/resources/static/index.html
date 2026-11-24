@@ -17,37 +17,37 @@
   ---------------------------------------------------- */
   /* ----------------------------------------------------
      50% / 40% / 10% THREE-COLOR SCADA SYSTEM (ORANGE LAYERS)
-       - 50% Dominant Base: Deep Carbon Obsidian (#0A0A0D)
+       - 50% Dominant Base: Electric Safety Yellow (#FACC15)
        - 40% Structural Layers: Architectural Slate (#141418 / #1A1A22)
        - 10% High-Energy Accent: Electric Safety Orange (#FF6B00 / #FF7700)
   ---------------------------------------------------- */
   :root, body.theme-aubergine, body.theme-orange {
-    --theme-name: 'orange-50-40-10';
-    --bg-base: #0A0B0E;          /* 50% Pure Carbon Base (Zero Blue) */
-    --bg-app: #0D0E11;
-    --bg-topbar: #131417;        /* 40% Structural Graphite Layer */
+    --theme-name: 'yellow-orange-50-40-10';
+    --bg-base: #FACC15;          /* 50% Dominant Base: Electric Yellow (#FACC15) */
+    --bg-app: #EAB308;
+    --bg-topbar: #141418;        /* 40% Structural Graphite Layer */
     --bg-panel: #121316;        /* 40% Structural Graphite Layer */
-    --bg-card: #18191E;         /* 40% Structural Graphite Layer */
-    --bg-card-subtle: #141519;
-    --bg-input: #0F1013;
+    --bg-card: #1A1A22;         /* 40% Structural Graphite Layer */
+    --bg-card-subtle: #15151C;
+    --bg-input: #0E0E12;
 
     --primary: #FF6B00;         /* 10% High-Energy Orange Accent */
     --primary-hover: #FF8533;
     --primary-contrast: #FFFFFF;
-    --accent: #FF7700;
-    --accent-hover: #FFA040;
-    --accent-contrast: #0A0A0D;
-    --accent-dim: rgba(255, 107, 0, 0.18);
+    --accent: #FACC15;          /* Electric Yellow */
+    --accent-hover: #FDE047;
+    --accent-contrast: #0A0B0E;
+    --accent-dim: rgba(250, 204, 21, 0.20);
 
     --text-main: #F3F4F6;
     --text-muted: #9CA3AF;
     --text-dim: #6B7280;
 
     --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(255, 107, 0, 0.38);
-    --border-focus: #FF6B00;
+    --border-strong: rgba(250, 204, 21, 0.40);
+    --border-focus: #FACC15;
 
-    --shaft-bg: #0A0A0D;        /* 50% Dominant Base */
+    --shaft-bg: #FACC15;        /* 50% Dominant Base: Electric Yellow (#FACC15) */
     --shaft-grid: rgba(255, 255, 255, 0.035);
     --shaft-rail: rgba(255, 255, 255, 0.12);
 
@@ -67,7 +67,7 @@
 
   body.theme-obsidian {
     --theme-name: 'obsidian';
-    --bg-base: #0A0A0D;
+    --bg-base: #FACC15;
     --bg-app: #0E0E12;
     --bg-topbar: #141418;
     --bg-panel: #141418;
@@ -77,10 +77,10 @@
 
     --primary: #E5A93C;
     --primary-hover: #F2B74B;
-    --primary-contrast: #0A0A0D;
+    --primary-contrast: #0A0B0E;
     --accent: #E5A93C;
     --accent-hover: #F2B74B;
-    --accent-contrast: #0A0A0D;
+    --accent-contrast: #0A0B0E;
     --accent-dim: rgba(229, 169, 60, 0.16);
 
     --text-main: #F1F5F9;
@@ -91,7 +91,7 @@
     --border-strong: rgba(229, 169, 60, 0.3);
     --border-focus: #E5A93C;
 
-    --shaft-bg: #0A0A0D;
+    --shaft-bg: #FACC15;
     --shaft-grid: rgba(255, 255, 255, 0.025);
     --shaft-rail: rgba(255, 255, 255, 0.1);
 
@@ -156,7 +156,7 @@
 
   body.theme-slate {
     --theme-name: 'slate';
-    --bg-base: #0A0A0D;
+    --bg-base: #FACC15;
     --bg-app: #0E0E12;
     --bg-topbar: #141418;
     --bg-panel: #141418;
@@ -166,10 +166,10 @@
 
     --primary: #EAB308;
     --primary-hover: #FACC15;
-    --primary-contrast: #0A0A0D;
+    --primary-contrast: #0A0B0E;
     --accent: #FACC15;
     --accent-hover: #FDE047;
-    --accent-contrast: #0A0A0D;
+    --accent-contrast: #0A0B0E;
     --accent-dim: rgba(250, 204, 21, 0.18);
 
     --text-main: #F8FAFC;
@@ -180,7 +180,7 @@
     --border-strong: rgba(250, 204, 21, 0.35);
     --border-focus: #FACC15;
 
-    --shaft-bg: #0A0A0D;
+    --shaft-bg: #FACC15;
     --shaft-grid: rgba(250, 204, 21, 0.04);
     --shaft-rail: rgba(255, 255, 255, 0.12);
 
@@ -1305,7 +1305,7 @@
       id: 'aubergine',
       label: 'Industrial Carbon & Electric Orange (50-40-10)',
       sub: 'Strict 3-Color Ratio: 50% Carbon Base · 40% Slate Layers · 10% Orange Accent',
-      swatches: ['#0A0A0D', '#141418', '#FF6B00', '#1A1A22', '#FFFFFF']
+      swatches: ['#FACC15', '#141418', '#FF6B00', '#1A1A22', '#FFFFFF']
     },
     {
       id: 'daylight',
@@ -1317,13 +1317,13 @@
       id: 'obsidian',
       label: 'Industrial Obsidian SCADA',
       sub: 'High-Contrast Telemetry Center',
-      swatches: ['#0A0A0D', '#1A1A22', '#E5A93C', '#94A3B8', '#F1F5F9']
+      swatches: ['#FACC15', '#1A1A22', '#E5A93C', '#94A3B8', '#F1F5F9']
     },
     {
       id: 'slate',
       label: 'Industrial Slate Control',
       sub: 'Midnight Navy Operations',
-      swatches: ['#0A0A0D', '#1A1A22', '#FACC15', '#94A3B8', '#F8FAFC']
+      swatches: ['#FACC15', '#1A1A22', '#FF6B00', '#141418', '#FFFFFF']
     }
   ];
 
@@ -1727,7 +1727,7 @@
     const colHeaderBorder = isLight ? 'rgba(15, 23, 42, 0.14)' : 'rgba(255, 255, 255, 0.1)';
     const colHeaderText = isLight ? '#0F172A' : '#F1F5F9';
     const cabinBg = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(18, 24, 38, 0.92)';
-    const badgeBg = isLight ? '#FFFFFF' : '#0A0A0D';
+    const badgeBg = '#141418';
 
     // Machine Room Header Box
     ctx.save();
@@ -1741,7 +1741,7 @@
     ctx.font = '700 10px monospace';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#FACC15'; ctx.fillText('◤ OVERHEAD MACHINE ROOM · DUAL BRAKE TRACTION HOISTS', labelW + 12, topMargin + machineRoomH / 2);
+    ctx.fillStyle = '#0E0E12'; ctx.fillText('◤ OVERHEAD MACHINE ROOM · DUAL BRAKE TRACTION HOISTS', labelW + 12, topMargin + machineRoomH / 2);
     ctx.restore();
 
     // Floor Rows & Hall Calls
@@ -1895,13 +1895,13 @@
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Counterweight: Electric Safety Yellow (#FACC15)
+      // Counterweight: Deep Carbon with Orange Indicator on Yellow Shaft
       const cwY = shaftTop + (1 - frac) * (shaftBottom - shaftTop - 28);
-      ctx.fillStyle = '#FACC15';
+      ctx.fillStyle = '#141418';
       drawRoundRect(ctx, x0 + carW + 1, cwY, 5, 24, 2);
       ctx.fill();
-      ctx.strokeStyle = '#EAB308';
-      ctx.lineWidth = 0.8;
+      ctx.strokeStyle = '#FF6B00';
+      ctx.lineWidth = 1;
       ctx.stroke();
       ctx.strokeStyle = '#EAB308';
       ctx.lineWidth = 0.8;
